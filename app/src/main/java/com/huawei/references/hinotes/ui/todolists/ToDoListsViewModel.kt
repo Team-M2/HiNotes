@@ -1,10 +1,10 @@
-package com.huawei.references.hinotes.ui.todolist
+package com.huawei.references.hinotes.ui.todolists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ToDoListViewModel : ViewModel() {
+class ToDoListsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is to-do list fragment"

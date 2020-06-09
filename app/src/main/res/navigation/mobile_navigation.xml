@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_notes"
-        android:name="com.huawei.references.hinotes.ui.notes.NoteFragment"
+        android:name="com.huawei.references.hinotes.ui.notes.NotesFragment"
         android:label="@string/title_notes"
         tools:layout="@layout/fragment_notes" />
 
     <fragment
         android:id="@+id/navigation_todo_list"
-        android:name="com.huawei.references.hinotes.ui.todolist.ToDoList"
+        android:name="com.huawei.references.hinotes.ui.todolists.ToDoLists"
         android:label="@string/title_todo_list"
         tools:layout="@layout/fragment_todo_list" />
 

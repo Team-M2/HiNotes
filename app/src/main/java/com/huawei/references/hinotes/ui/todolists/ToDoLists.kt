@@ -1,29 +1,29 @@
-package com.huawei.references.hinotes.ui.todolist
+package com.huawei.references.hinotes.ui.todolists
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.base.BaseFragment
 
-class ToDoList : Fragment() {
+class ToDoLists : BaseFragment() {
 
-    private lateinit var toDoListViewModel: ToDoListViewModel
+    private lateinit var toDoListsViewModel: ToDoListsViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        toDoListViewModel =
-                ViewModelProviders.of(this).get(ToDoListViewModel::class.java)
+        toDoListsViewModel =
+                ViewModelProviders.of(this).get(ToDoListsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_todo_list, container, false)
         val templateTextView: TextView = root.findViewById(R.id.text_todolist) //we will delete this textView in next step.
-        toDoListViewModel.text.observe(viewLifecycleOwner, Observer {
+        toDoListsViewModel.text.observe(viewLifecycleOwner, Observer {
             templateTextView.text = it
         })
         return root
