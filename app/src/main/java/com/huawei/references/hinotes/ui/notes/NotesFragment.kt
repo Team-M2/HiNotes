@@ -9,21 +9,22 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.base.BaseFragment
 
-class NoteFragment : Fragment() {
+class NotesFragment : BaseFragment() {
 
-    private lateinit var noteViewModel: NoteViewModel
+    private lateinit var notesViewModel: NotesViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        noteViewModel =
-                ViewModelProviders.of(this).get(NoteViewModel::class.java)
+        notesViewModel =
+                ViewModelProviders.of(this).get(NotesViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_notes, container, false)
         val templateTextView: TextView = root.findViewById(R.id.text_notes) //we will delete this textView in next step.
-        noteViewModel.text.observe(viewLifecycleOwner, Observer {
+        notesViewModel.text.observe(viewLifecycleOwner, Observer {
             templateTextView.text = it
         })
         return root

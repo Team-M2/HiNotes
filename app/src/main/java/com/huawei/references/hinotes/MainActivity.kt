@@ -7,10 +7,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.huawei.agconnect.cloud.database.AGConnectCloudDB
-import com.huawei.agconnect.cloud.database.CloudDBZoneConfig
+import com.huawei.references.hinotes.base.BaseActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +22,5 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_notes, R.id.navigation_todo_list))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
     }
 }
