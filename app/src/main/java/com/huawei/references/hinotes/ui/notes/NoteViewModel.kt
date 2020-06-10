@@ -3,6 +3,7 @@ package com.huawei.references.hinotes.ui.notes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.huawei.references.hinotes.data.note.NoteRepository
 
 class NoteViewModel : ViewModel() {
 
