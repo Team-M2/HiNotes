@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import com.huawei.references.hinotes.data.dataModule
 import com.huawei.references.hinotes.data.note.noteDataModule
+import com.huawei.references.hinotes.ui.uiModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -13,7 +14,7 @@ class HiNoteApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@HiNoteApplication)
-            modules(dataModule, noteDataModule)
+            modules(dataModule + uiModule)
         }
     }
 }

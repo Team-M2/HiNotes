@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_todo_list"
-        android:name="com.huawei.references.hinotes.ui.todolist.ToDoLists"
+        android:name="com.huawei.references.hinotes.ui.todolist.ToDoListsFragment"
         android:label="@string/title_todo_list"
         tools:layout="@layout/fragment_todo_list" />
 

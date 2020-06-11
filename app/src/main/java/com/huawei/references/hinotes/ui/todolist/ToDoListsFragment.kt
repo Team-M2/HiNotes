@@ -10,18 +10,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.base.BaseFragment
+import org.koin.androidx.viewmodel.compat.ScopeCompat.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ToDoLists : BaseFragment() {
+class ToDoListsFragment : BaseFragment() {
 
-    private lateinit var toDoListsViewModel: ToDoListsViewModel
+    private val toDoListsViewModel: ToDoListsViewModel by viewModel()
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        toDoListsViewModel =
-                ViewModelProviders.of(this).get(ToDoListsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_todo_list, container, false)
         val templateTextView: TextView = root.findViewById(R.id.text_todolist) //we will delete this textView in next step.
         toDoListsViewModel.text.observe(viewLifecycleOwner, Observer {
