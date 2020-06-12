@@ -28,9 +28,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:maxLines="3"
         android:ellipsize="end"
-        android:text="Note description Note description Note description Note description Note description Note description Note description Note description Note description Note description Note description Note description Note description Note description "
+        android:maxLines="3"
+        android:text="Note description Note desc description Note description Note description Note description Note description Note description Note description Note description Note description Note description Note description Note description Note description "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/note_title" />
@@ -54,4 +54,17 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/note_created_date" />
+
+    <ImageView
+        android:id="@+id/pin_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:alpha="0.5"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/note_description"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pin" />
 </androidx.constraintlayout.widget.ConstraintLayout>
