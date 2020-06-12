@@ -9,12 +9,21 @@
         android:id="@+id/navigation_notes"
         android:name="com.huawei.references.hinotes.ui.notes.NotesFragment"
         android:label="@string/title_notes"
-        tools:layout="@layout/fragment_notes" />
+        tools:layout="@layout/fragment_notes">
+        <action
+            android:id="@+id/action_navigation_notes_to_addNoteFragment"
+            app:destination="@id/addNoteFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_todo_list"
         android:name="com.huawei.references.hinotes.ui.todolist.ToDoListsFragment"
         android:label="@string/title_todo_list"
         tools:layout="@layout/fragment_todo_list" />
+    <fragment
+        android:id="@+id/addNoteFragment"
+        android:name="com.huawei.references.hinotes.ui.addnote.AddNoteFragment"
+        tools:layout="@layout/fragment_add_note"
+        android:label="AddNoteFragment" />
 
 </navigation>
