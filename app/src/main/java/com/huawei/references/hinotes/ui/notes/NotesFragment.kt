@@ -49,7 +49,7 @@ class NotesFragment : BaseFragment() {
         })
 
         getNotesButton.setOnClickListener {
-            notesViewModel.getNotes(1)
+            notesViewModel.getNotes("")
         }
 
     }

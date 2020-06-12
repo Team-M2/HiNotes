@@ -21,10 +21,10 @@ class NotesViewModel(private val noteRepository: NoteRepository) : ViewModel() {
     val itemsLiveData : LiveData<DataHolder<List<Item>>>
         get() = _itemsLiveData
 
-    fun getNotes(userId: Int){
+    fun getNotes(userId: String){
         _itemsLiveData.value=DataHolder.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _itemsLiveData.postValue(noteRepository.getNotes(userId))
+            _itemsLiveData.postValue(noteRepository.getItems(userId))
         }
     }
 }

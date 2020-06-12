@@ -3,7 +3,7 @@ package com.huawei.references.hinotes.data.note.model
 import java.util.*
 
 data class Item (
-    val itemId:String,
+    val itemId:Int,
     val createdAt:Date?,
     val updatedAt: Date?,
     val type:ItemType,

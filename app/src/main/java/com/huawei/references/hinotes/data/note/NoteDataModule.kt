@@ -7,8 +7,9 @@ import com.huawei.references.hinotes.data.DataConstants.Companion.DB_ZONE_NAME
 import org.koin.dsl.module
 
 val noteDataModule = module{
+
     factory {
-        NoteRepository(get())
+        NoteRepository(get(),get())
     }
 
 }

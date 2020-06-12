@@ -8,7 +8,8 @@ sealed class DataHolder<out T: Any> {
     data class Success<out T : Any>(val data:T) : DataHolder<T>()
 
     data class Fail(val errorResourceId : Int?=null,
-                    val errStr: String=DEFAULT_ERROR_STR
+                    val errStr: String=DEFAULT_ERROR_STR,
+                    val baseError: BaseError?=null
     ) : DataHolder<Nothing>()
 
     data class Loading(val loadingResourceId : Int?=null,
