@@ -13,8 +13,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.references.hinotes.base.BaseActivity
 import com.huawei.references.hinotes.ui.login.LoginActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : BaseActivity() {
 
