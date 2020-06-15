@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -9,8 +10,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.references.hinotes.base.BaseActivity
-import com.huawei.references.hinotes.ui.notes.NotesFragmentDirections
+import com.huawei.references.hinotes.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -19,6 +21,12 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val auth = AGConnectAuth.getInstance().currentUser
+
+        if(auth == null){
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
