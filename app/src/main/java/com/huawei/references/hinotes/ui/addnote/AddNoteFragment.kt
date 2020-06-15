@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.base.BaseFragment
+import com.huawei.references.hinotes.ui.base.BaseFragment
 
 class AddNoteFragment: BaseFragment() {
     override fun onCreateView(

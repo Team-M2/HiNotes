@@ -1,14 +1,15 @@
 package com.huawei.references.hinotes
 
-import android.app.Activity
 import android.app.Application
 import com.huawei.references.hinotes.data.dataModule
-import com.huawei.references.hinotes.data.note.noteDataModule
 import com.huawei.references.hinotes.ui.uiModule
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 
-class HiNoteApplication : Application() {
+class HiNoteApplication : Application(),KoinComponent {
+
+
 
     override fun onCreate() {
         super.onCreate()
@@ -16,5 +17,9 @@ class HiNoteApplication : Application() {
             androidContext(this@HiNoteApplication)
             modules(dataModule + uiModule)
         }
+
+
     }
+
+
 }

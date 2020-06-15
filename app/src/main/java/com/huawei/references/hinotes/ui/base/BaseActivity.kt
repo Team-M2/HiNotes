@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.base
+package com.huawei.references.hinotes.ui.base
 
 import androidx.appcompat.app.AppCompatActivity
 

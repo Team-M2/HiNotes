@@ -1,9 +1,9 @@
-package com.huawei.references.hinotes.data.note.model
+package com.huawei.references.hinotes.data.item.model
 
 import com.huawei.agconnect.cloud.database.CloudDBZoneObject
 import java.util.*
 
-data class ItemDTO(val itemId:Int,
+data class ItemDTO(var itemId:Int,
                    val createdAt: Date?,
                    val updatedAt: Date?,
                    val type:Int,

@@ -1,14 +1,12 @@
-package com.huawei.references.hinotes.adapter
+package com.huawei.references.hinotes.ui.notes.adapter
 
-import android.content.ClipData
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.data.note.model.Item
+import com.huawei.references.hinotes.data.item.model.Item
 import kotlinx.android.synthetic.main.note_item_list.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 class NotesAdapter(var notesList:ArrayList<Item>) :
@@ -26,7 +24,7 @@ class NotesAdapter(var notesList:ArrayList<Item>) :
     }
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        holder.itemView.note_title.text = notesList[position].itemId
+        holder.itemView.note_title.text = notesList[position].itemId.toString()
         holder.itemView.note_description.text = notesList[position].poiDescription
         holder.itemView.note_created_date.text = notesList[position].createdAt.toString()
     }

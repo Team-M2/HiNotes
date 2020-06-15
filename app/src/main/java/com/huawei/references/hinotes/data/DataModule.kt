@@ -4,11 +4,7 @@ import android.content.Context
 import com.huawei.agconnect.cloud.database.AGConnectCloudDB
 import com.huawei.agconnect.cloud.database.CloudDBZone
 import com.huawei.agconnect.cloud.database.CloudDBZoneConfig
-import com.huawei.references.hinotes.data.note.ItemDataSource
-import com.huawei.references.hinotes.data.note.NoteRepository
-import com.huawei.references.hinotes.data.note.noteDataModule
-import com.huawei.references.hinotes.ui.todolist.todoListUIModule
-import org.koin.core.qualifier.named
+import com.huawei.references.hinotes.data.item.itemDataModule
 import org.koin.dsl.module
 
 val dataCoreModule = module {
@@ -19,7 +15,7 @@ val dataCoreModule = module {
         AGConnectCloudDB.getInstance()
     }
 
-    factory {
+    single {
         val agConnectCloudDBInstance : AGConnectCloudDB = get()
         openDbZone(agConnectCloudDBInstance)
     }
@@ -27,7 +23,7 @@ val dataCoreModule = module {
 }
 
 fun openDbZone(agConnectCloudDBInstance : AGConnectCloudDB) : CloudDBZone? =
-    try {
+    try{
         agConnectCloudDBInstance.openCloudDBZone(
             CloudDBZoneConfig(
                 DataConstants.DB_ZONE_NAME,
@@ -37,10 +33,10 @@ fun openDbZone(agConnectCloudDBInstance : AGConnectCloudDB) : CloudDBZone? =
             },
             true)
     }
-    catch (e:Exception){
+    catch (e: Exception){
         e.printStackTrace()
         null
     }
 
 
-val dataModule = dataCoreModule + noteDataModule
+val dataModule = dataCoreModule + itemDataModule

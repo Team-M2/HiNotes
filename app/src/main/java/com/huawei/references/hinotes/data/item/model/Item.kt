@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.data.note.model
+package com.huawei.references.hinotes.data.item.model
 
 import java.util.*
 

@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.data.note.model
+package com.huawei.references.hinotes.data.item.model
 
 enum class ItemType(val type:Int) {
     Note(0),

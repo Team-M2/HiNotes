@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.huawei.references.hinotes.data.base.DataHolder
-import com.huawei.references.hinotes.data.note.NoteRepository
-import com.huawei.references.hinotes.data.note.model.Item
+import com.huawei.references.hinotes.data.item.ItemRepository
+import com.huawei.references.hinotes.data.item.model.Item
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NotesViewModel(private val noteRepository: NoteRepository) : ViewModel() {
+class NotesViewModel(private val itemRepository: ItemRepository) : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is notes fragment"
@@ -24,7 +24,7 @@ class NotesViewModel(private val noteRepository: NoteRepository) : ViewModel() {
     fun getNotes(userId: String){
         _itemsLiveData.value=DataHolder.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _itemsLiveData.postValue(noteRepository.getItems(userId))
+            _itemsLiveData.postValue(itemRepository.getItems(userId))
         }
     }
 }

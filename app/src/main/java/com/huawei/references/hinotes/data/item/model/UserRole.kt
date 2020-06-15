@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.data.note.model
+package com.huawei.references.hinotes.data.item.model
 
 enum class UserRole(val role:Int) {
     Owner(0),

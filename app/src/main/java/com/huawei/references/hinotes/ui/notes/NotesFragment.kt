@@ -1,25 +1,18 @@
 package com.huawei.references.hinotes.ui.notes
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.adapter.NotesAdapter
-import com.huawei.references.hinotes.base.BaseFragment
 import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.ui.base.BaseFragment
+import com.huawei.references.hinotes.ui.notes.adapter.NotesAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
-import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 class NotesFragment : BaseFragment() {
 
@@ -28,7 +21,7 @@ class NotesFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        notesViewModel.getNotes(1)
+        notesViewModel.getNotes("")
         notes_recycler_view.layoutManager=LinearLayoutManager(context)
         notes_recycler_view.adapter=notesAdapter
 
@@ -45,7 +38,7 @@ class NotesFragment : BaseFragment() {
                             it.toString(),
                             Toast.LENGTH_SHORT).show()
                      */
-                }
+                    }
                     notesAdapter.updateNotesList(it.data)
 
                     /*
@@ -67,10 +60,10 @@ class NotesFragment : BaseFragment() {
         })
 
         getNotesButton.setOnClickListener {
-            val action = NotesFragmentDirections.actionNavigationNotesToAddNoteFragment()
-            Navigation.findNavController(it).navigate(action)
+            //val action = NotesFragmentDirections.actionNavigationNotesToAddNoteFragment()
+            //Navigation.findNavController(it).navigate(action)
 
-            //   notesViewModel.getNotes(1)
+            notesViewModel.getNotes("")
          //   notes_recycler_view.layoutManager=LinearLayoutManager(context)
          //   notes_recycler_view.adapter=notesAdapter
 

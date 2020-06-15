@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.data.note.model
+package com.huawei.references.hinotes.data.item.model
 
 fun PermissionDTO.mapToPermission() : Permission{
     return Permission(this.itemId,this.userId,UserRole.valueOf(this.role)!!)
