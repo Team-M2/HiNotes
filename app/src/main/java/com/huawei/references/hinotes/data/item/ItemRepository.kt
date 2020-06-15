@@ -54,7 +54,7 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                     ,false
                 ),
                 Item(
-                    5,
+                    4,
                     Date(),
                     Date(),
                     ItemType.Note,
@@ -66,7 +66,7 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                     false
                 ),
                 Item(
-                    "itemID5",
+                    5,
                     Date(),
                     Date(),
                     ItemType.Note,

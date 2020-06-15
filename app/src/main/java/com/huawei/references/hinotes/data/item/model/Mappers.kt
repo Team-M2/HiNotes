@@ -17,7 +17,8 @@ fun ItemDTO.mapToItem() : Item{
         lat,
         lng,
         poiDescription,
-        UserRole.valueOf(role)!!
+        UserRole.valueOf(role)!!,
+        isPinned
     )
 }
 
@@ -30,6 +31,7 @@ fun Item.mapToItemDTO() : ItemDTO{
         lat,
         lng,
         poiDescription,
-        role.role
+        role.role,
+        isPinned
     )
 }

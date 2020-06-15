@@ -12,6 +12,6 @@ data class Item (
     val lng:Double?,
     val poiDescription:String?,
     val role:UserRole,
-    val isPin:Boolean
+    val isPinned:Boolean
 )
 

@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.adapter.ContactsSection
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.ui.base.BaseFragment
 import com.huawei.references.hinotes.ui.notes.adapter.NotesAdapter
@@ -23,7 +24,7 @@ class NotesFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        notesViewModel.getNotes("1")
+
         sectionedAdapter = SectionedRecyclerViewAdapter()
         notes_recycler_view.layoutManager=LinearLayoutManager(context)
         notes_recycler_view.adapter=sectionedAdapter
@@ -36,16 +37,10 @@ class NotesFragment : BaseFragment() {
             when(it){
                 is DataHolder.Success ->{
                     // populate list with data, hide loading indicator
-                    it.data.forEach {
-                    /*    Toast.makeText(requireContext(),
-                            it.toString(),
-                            Toast.LENGTH_SHORT).show()
-                     */
-                }
                     sectionedAdapter!!.addSection(ContactsSection("13 July 2020", it.data))
                     sectionedAdapter!!.addSection(ContactsSection("2 July 2020", it.data))
 
-                    //notesAdapter.updateNotesList(it.data)
+                    notesAdapter.updateNotesList(it.data)
                 }
 
                 is DataHolder.Fail ->{
@@ -58,23 +53,12 @@ class NotesFragment : BaseFragment() {
             }
         })
 
-        getNotesButton.setOnClickListener {
-            //val action = NotesFragmentDirections.actionNavigationNotesToAddNoteFragment()
-            //Navigation.findNavController(it).navigate(action)
-
-            notesViewModel.getNotes("")
-         //   notes_recycler_view.layoutManager=LinearLayoutManager(context)
-         //   notes_recycler_view.adapter=notesAdapter
-
-            // first swap the item using  Collections.swap() method
-
-        }
+        notesViewModel.getNotes("1")
 
         floatingActionButton.setOnClickListener {
             val action = NotesFragmentDirections.actionNavigationNotesToAddNoteFragment()
             Navigation.findNavController(it).navigate(action)
         }
-
     }
 
     override fun onCreateView(

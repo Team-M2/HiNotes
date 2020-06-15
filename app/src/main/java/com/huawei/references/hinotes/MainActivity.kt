@@ -2,13 +2,13 @@ package com.huawei.references.hinotes
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.huawei.agconnect.auth.AGConnectAuth
-import com.huawei.references.hinotes.base.BaseActivity
+import com.huawei.references.hinotes.ui.base.BaseActivity
 import com.huawei.references.hinotes.ui.login.LoginActivity
 
 class MainActivity : BaseActivity() {

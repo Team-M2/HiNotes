@@ -5,12 +5,14 @@ import com.huawei.references.hinotes.data.DataConstants
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.mapToItemDTO
 
 class DeleteItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
-                                  private val permissionsDataSourceCDBImpl: PermissionsDataSourceCDBImpl,
-                                  private val getItemDataSourceCDBImpl: GetItemDataSourceCDBImpl
+                                  private val permissionsDataSource: PermissionsDataSource,
+                                  private val getItemDataSource: GetItemDataSource
                      ) :
     DeleteItemDataSource {
 
@@ -18,7 +20,7 @@ class DeleteItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
         try {
             var itemSize=0
             // getting lastItemId and itemSize
-            when(val res=getItemDataSourceCDBImpl.getItemsByUserId(userId)){
+            when(val res=getItemDataSource.getItemsByUserId(userId)){
                 is DataHolder.Success -> {
                     if(res.data.isNotEmpty()){
                         itemSize=res.data.size

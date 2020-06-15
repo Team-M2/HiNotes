@@ -9,7 +9,6 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.notes.NotesFragmentDirections
 import kotlinx.android.synthetic.main.note_item_list.view.*
-import kotlin.collections.ArrayList
 
 class NotesAdapter(var notesList:ArrayList<Item>) :
     RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
@@ -25,7 +24,7 @@ class NotesAdapter(var notesList:ArrayList<Item>) :
         return notesList.size
     }
 
-    override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         holder.itemView.note_title.text = notesList[position].itemId.toString()
         holder.itemView.note_description.text = notesList[position].poiDescription
         holder.itemView.note_created_date.text = notesList[position].createdAt.toString()
@@ -34,7 +33,7 @@ class NotesAdapter(var notesList:ArrayList<Item>) :
             Navigation.findNavController(it).navigate(action)
         }
 
-        if(notesList[position].isPin){
+        if(notesList[position].isPinned){
             holder.itemView.pin_icon.alpha=1f
         }
 
@@ -52,4 +51,5 @@ class NotesAdapter(var notesList:ArrayList<Item>) :
     fun updateNotesIndex(){
         notifyItemMoved(2, 0);
     }
+
 }

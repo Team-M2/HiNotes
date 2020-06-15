@@ -24,7 +24,8 @@ class NotesViewModel(private val itemRepository: ItemRepository) : ViewModel() {
     fun getNotes(userId: String){
         _itemsLiveData.value=DataHolder.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _itemsLiveData.postValue(itemRepository.getItems(userId))
+            //_itemsLiveData.postValue(itemRepository.getItems(userId))
+            _itemsLiveData.postValue(itemRepository.getNotesDummy())
         }
     }
 }

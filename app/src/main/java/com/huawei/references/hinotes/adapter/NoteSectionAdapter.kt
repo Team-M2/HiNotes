@@ -3,7 +3,7 @@ package com.huawei.references.hinotes.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.data.note.model.Item
+import com.huawei.references.hinotes.data.item.model.Item
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 
@@ -32,7 +32,7 @@ class ContactsSection(
     ) {
         val itemHolder: ItemViewHolder = holder as ItemViewHolder
         val noteItem: Item = list[position]
-        itemHolder.noteTitle.text = noteItem.itemId
+        itemHolder.noteTitle.text = noteItem.itemId.toString()
         itemHolder.noteDescription.text = noteItem.poiDescription
         itemHolder.noteCreatedDate.text = "08:24 PM"
 

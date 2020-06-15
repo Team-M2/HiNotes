@@ -6,6 +6,7 @@ import com.huawei.references.hinotes.data.DataConstants
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemDTO
 import com.huawei.references.hinotes.data.item.model.mapToItem
@@ -13,7 +14,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class GetItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
-                               private val permissionsDataSourceCDBImpl: PermissionsDataSourceCDBImpl
+                               private val permissionsDataSource: PermissionsDataSource
                      ) :
     GetItemDataSource {
 
@@ -81,7 +82,7 @@ class GetItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
 
     override suspend fun getItemsByUserId(userId: String) : DataHolder<List<Item>> =
         try {
-            when (val permissionsResult = permissionsDataSourceCDBImpl.getPermissions(userId)) {
+            when (val permissionsResult = permissionsDataSource.getPermissions(userId)) {
                 is DataHolder.Success -> {
                     when (val itemsResult =
                         getItemByIds(permissionsResult.data.map {

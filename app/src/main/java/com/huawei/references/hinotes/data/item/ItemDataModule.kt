@@ -3,9 +3,11 @@ package com.huawei.references.hinotes.data.item
 import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.abstractions.UpsertItemDataSource
 import com.huawei.references.hinotes.data.item.clouddbdatasource.DeleteItemDataSourceCDBImpl
 import com.huawei.references.hinotes.data.item.clouddbdatasource.GetItemDataSourceCDBImpl
 import com.huawei.references.hinotes.data.item.clouddbdatasource.PermissionsDataSourceCDBImpl
+import com.huawei.references.hinotes.data.item.clouddbdatasource.UpsertItemDataSourceCDBImpl
 import org.koin.dsl.module
 
 val itemDataModule = module{
@@ -19,6 +21,14 @@ val itemDataModule = module{
             get(),
             get()
         ) as GetItemDataSource
+    }
+
+    factory {
+        UpsertItemDataSourceCDBImpl(
+            get(),
+            get(),
+            get()
+        ) as UpsertItemDataSource
     }
 
     factory {
