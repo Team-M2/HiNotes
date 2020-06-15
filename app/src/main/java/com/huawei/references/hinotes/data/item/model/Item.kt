@@ -11,6 +11,7 @@ data class Item (
     val lat:Double?,
     val lng:Double?,
     val poiDescription:String?,
-    val role:UserRole
+    val role:UserRole,
+    val isPin:Boolean
 )
 

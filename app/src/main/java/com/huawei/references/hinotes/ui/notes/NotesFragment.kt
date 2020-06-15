@@ -11,6 +11,7 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.ui.base.BaseFragment
 import com.huawei.references.hinotes.ui.notes.adapter.NotesAdapter
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -18,12 +19,14 @@ class NotesFragment : BaseFragment() {
 
     private val notesViewModel: NotesViewModel by viewModel()
     private val notesAdapter = NotesAdapter(arrayListOf())
+    private var sectionedAdapter: SectionedRecyclerViewAdapter? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        notesViewModel.getNotes("")
+        notesViewModel.getNotes("1")
+        sectionedAdapter = SectionedRecyclerViewAdapter()
         notes_recycler_view.layoutManager=LinearLayoutManager(context)
-        notes_recycler_view.adapter=notesAdapter
+        notes_recycler_view.adapter=sectionedAdapter
 
         notesViewModel.text.observe(viewLifecycleOwner, Observer {
             textNotes.text = it
@@ -38,15 +41,11 @@ class NotesFragment : BaseFragment() {
                             it.toString(),
                             Toast.LENGTH_SHORT).show()
                      */
-                    }
-                    notesAdapter.updateNotesList(it.data)
+                }
+                    sectionedAdapter!!.addSection(ContactsSection("13 July 2020", it.data))
+                    sectionedAdapter!!.addSection(ContactsSection("2 July 2020", it.data))
 
-                    /*
-                    CoroutineScope(Dispatchers.Main).launch {
-                        delay(3000)
-                        notesAdapter.updateNotesIndex()
-                    }
-                     */
+                    //notesAdapter.updateNotesList(it.data)
                 }
 
                 is DataHolder.Fail ->{
