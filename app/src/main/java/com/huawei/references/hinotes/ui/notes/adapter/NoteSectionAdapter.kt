@@ -3,8 +3,8 @@ package com.huawei.references.hinotes.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.adapter.notes.NoteItemViewHolder
-import com.huawei.references.hinotes.adapter.notes.NoteSectionHeaderViewHolder
+import com.huawei.references.hinotes.ui.notes.adapter.NoteItemViewHolder
+import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionHeaderViewHolder
 import com.huawei.references.hinotes.data.item.model.Item
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
@@ -25,7 +25,9 @@ class NoteSectionAdapter(
     }
 
     override fun getItemViewHolder(view: View): RecyclerView.ViewHolder {
-        return NoteItemViewHolder(view)
+        return NoteItemViewHolder(
+            view
+        )
     }
 
     override fun onBindItemViewHolder(
@@ -44,7 +46,9 @@ class NoteSectionAdapter(
     }
 
     override fun getHeaderViewHolder(view: View): RecyclerView.ViewHolder {
-        return NoteSectionHeaderViewHolder(view)
+        return NoteSectionHeaderViewHolder(
+            view
+        )
     }
 
     override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder) {

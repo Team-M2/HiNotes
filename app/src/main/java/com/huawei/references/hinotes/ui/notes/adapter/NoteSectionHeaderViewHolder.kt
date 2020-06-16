@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.adapter.notes
+package com.huawei.references.hinotes.ui.notes.adapter
 
 import android.view.View
 import android.widget.TextView

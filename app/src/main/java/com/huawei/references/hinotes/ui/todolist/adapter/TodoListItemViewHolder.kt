@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.adapter.todolist
+package com.huawei.references.hinotes.ui.todolist.adapter
 
 import android.view.View
 import android.widget.TextView

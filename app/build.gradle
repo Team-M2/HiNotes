@@ -8,7 +8,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.huawei.references.hinotes"
+        applicationId ""
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -58,8 +58,8 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:2.1.0"
     // Koin AndroidX Experimental features
     implementation "org.koin:koin-androidx-ext:2.1.0"
-    // Third party section recyclerview features
 
+    // Third party section recyclerview features
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
 
 }
