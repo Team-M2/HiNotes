@@ -1,29 +1,81 @@
 package com.huawei.references.hinotes.ui.todolist
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.ui.todolist.adapter.TodoListSectionAdapter
+import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.ui.base.BaseFragment
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
+import kotlinx.android.synthetic.main.fragment_todo_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ToDoListsFragment : BaseFragment() {
 
     private val toDoListsViewModel: ToDoListsViewModel by viewModel()
+    private var todoListSectionedAdapter: SectionedRecyclerViewAdapter? = null
+
+    @SuppressLint("NewApi")
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val toolbarTextView = activity!!.findViewById<View>(R.id.toolbar_title) as TextView
+        toolbarTextView.text = "My To-do List"
+        toDoListsViewModel.getNotes(1)
+
+        todoListSectionedAdapter = SectionedRecyclerViewAdapter()
+        todo_list_recycler_view.layoutManager= LinearLayoutManager(context)
+        todo_list_recycler_view.adapter=todoListSectionedAdapter
+
+        toDoListsViewModel.todoListItemsLiveData.observe(viewLifecycleOwner, Observer {
+            when(it){
+                is DataHolder.Success ->{
+                    // populate list with data, hide loading indicator
+                    it.data.forEach {
+                        /*    Toast.makeText(requireContext(),
+                                it.toString(),
+                                Toast.LENGTH_SHORT).show()
+                         */
+                    }
+                    todoListSectionedAdapter!!.addSection(
+                        TodoListSectionAdapter(
+                            "My Todo Lists",
+                            it.data
+                        )
+                    )
+                    todoListSectionedAdapter!!.addSection(
+                        TodoListSectionAdapter(
+                            "Shared Todo Lists",
+                            it.data
+                        )
+                    )
+                    //notesAdapter.updateNotesList(it.data)
+                    todoListSectionedAdapter?.notifyDataSetChanged()
+                }
+
+                is DataHolder.Fail ->{
+                    // show error indicator
+                }
+
+                is DataHolder.Loading ->{
+                    // show loading indicator
+                }
+            }
+        })
+
+
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_todo_list, container, false)
-        val templateTextView: TextView = root.findViewById(R.id.text_todolist) //we will delete this textView in next step.
-        toDoListsViewModel.text.observe(viewLifecycleOwner, Observer {
-            templateTextView.text = it
-        })
-        return root
+        return inflater.inflate(R.layout.fragment_todo_list, container, false)
     }
 }

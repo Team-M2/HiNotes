@@ -20,12 +20,12 @@ class MainActivity : BaseActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.custom_toolbar)
-        //  val auth = AGConnectAuth.getInstance().currentUser
+          val auth = AGConnectAuth.getInstance().currentUser
 
-     //   if(auth == null){
-     //       val intent = Intent(this, LoginActivity::class.java)
-     //       startActivity(intent)
-     //   }
+        if(auth == null){
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
