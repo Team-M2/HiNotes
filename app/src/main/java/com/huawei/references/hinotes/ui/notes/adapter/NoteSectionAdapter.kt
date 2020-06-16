@@ -3,12 +3,14 @@ package com.huawei.references.hinotes.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.adapter.notes.NoteItemViewHolder
+import com.huawei.references.hinotes.adapter.notes.NoteSectionHeaderViewHolder
 import com.huawei.references.hinotes.data.item.model.Item
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 
 
-class ContactsSection(
+class NoteSectionAdapter(
     private val noteTitleList: String, var list: List<Item>
 ) : Section(
     SectionParameters.builder()
@@ -23,14 +25,14 @@ class ContactsSection(
     }
 
     override fun getItemViewHolder(view: View): RecyclerView.ViewHolder {
-        return ItemViewHolder(view)
+        return NoteItemViewHolder(view)
     }
 
     override fun onBindItemViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int
     ) {
-        val itemHolder: ItemViewHolder = holder as ItemViewHolder
+        val itemHolder: NoteItemViewHolder = holder as NoteItemViewHolder
         val noteItem: Item = list[position]
         itemHolder.noteTitle.text = noteItem.itemId.toString()
         itemHolder.noteDescription.text = noteItem.poiDescription
@@ -42,11 +44,11 @@ class ContactsSection(
     }
 
     override fun getHeaderViewHolder(view: View): RecyclerView.ViewHolder {
-        return HeaderViewHolder(view)
+        return NoteSectionHeaderViewHolder(view)
     }
 
     override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder) {
-        val headerHolder: HeaderViewHolder = holder as HeaderViewHolder
+        val headerHolder: NoteSectionHeaderViewHolder = holder as NoteSectionHeaderViewHolder
         headerHolder.noteSectionHeader.text = noteTitleList
     }
 
