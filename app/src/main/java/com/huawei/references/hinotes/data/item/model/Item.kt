@@ -12,6 +12,9 @@ data class Item (
     val lat:Double?,
     val lng:Double?,
     val poiDescription:String?,
+    val title:String,
+    val todoListSubItems:List<TodoListSubItem>?,
+    val isChecked:Boolean?,
     val role:UserRole,
     val isPinned:Boolean
 ) :Serializable

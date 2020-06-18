@@ -11,6 +11,9 @@ data class ItemDTO(var itemId:Int,
                    val lat:Double?,
                    val lng:Double?,
                    val poiDescription:String?,
+                   val title:String,
+                   val todoListSubItems:List<TodoListSubItem>?,
+                   val isChecked:Boolean?,
                    val role:Int,
                    val isPinned:Boolean
 ) : CloudDBZoneObject()

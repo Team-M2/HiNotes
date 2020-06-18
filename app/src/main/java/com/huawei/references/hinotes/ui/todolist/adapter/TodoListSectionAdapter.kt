@@ -1,9 +1,13 @@
 package com.huawei.references.hinotes.ui.todolist.adapter
 
+import android.content.Intent
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
+import com.huawei.references.hinotes.ui.todolistdetail.TodoListDetailActivity
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 
@@ -33,11 +37,14 @@ class TodoListSectionAdapter(
         position: Int
     ) {
         val todoListItemHolder: TodoListItemViewHolder = holder as TodoListItemViewHolder
-        val noteItem: Item = list[position]
-        todoListItemHolder.todoListSubText.text = noteItem.poiDescription.toString()
+        val todoListItem: Item = list[position]
+        todoListItemHolder.todoListSubText.text = todoListItem.title
+        todoListItemHolder.todoListSubCheckbox.isChecked = todoListItem.isChecked!!
 
         todoListItemHolder.rootView.setOnClickListener { v ->
-            println("clicked item -> ")
+            val intent = Intent(v.context, TodoListDetailActivity::class.java)
+            intent.putExtra("clickedItemData", todoListItem)
+            ContextCompat.startActivity(v.context, intent, null)
         }
     }
 

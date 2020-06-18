@@ -17,6 +17,9 @@ fun ItemDTO.mapToItem() : Item{
         lat,
         lng,
         poiDescription,
+        title,
+        todoListSubItems,
+        isChecked,
         UserRole.valueOf(role)!!,
         isPinned
     )
@@ -31,6 +34,9 @@ fun Item.mapToItemDTO() : ItemDTO{
         lat,
         lng,
         poiDescription,
+        title,
+        todoListSubItems,
+        isChecked,
         role.role,
         isPinned
     )
