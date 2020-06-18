@@ -34,7 +34,7 @@ class TodoListSectionAdapter(
     ) {
         val todoListItemHolder: TodoListItemViewHolder = holder as TodoListItemViewHolder
         val noteItem: Item = list[position]
-        todoListItemHolder.todoListTitle.text = noteItem.itemId.toString()
+        todoListItemHolder.todoListSubText.text = noteItem.poiDescription.toString()
 
         todoListItemHolder.rootView.setOnClickListener { v ->
             println("clicked item -> ")

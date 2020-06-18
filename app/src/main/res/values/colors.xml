@@ -7,6 +7,9 @@
     <color name="warning_red">#F00505</color>
     <color name="btn_blue">#456E94</color>
 
-    <color name="colorRecyclerViewLine">#535353</color>
-    <color name="colorRecyclerViewBackground">#323232</color>
+    <color name="colorRecyclerViewLine">#EDEDED</color>
+    <color name="colorRecyclerViewBackground">#FFFFFF</color>
+    <color name="colorAddItemViewsBackground">#FFFFFF</color>
+    <color name="colorRecyclerViewText">#000000</color>
+    <color name="colorRecyclerViewLightText">#202020</color>
 </resources>

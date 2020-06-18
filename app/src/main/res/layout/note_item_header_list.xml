@@ -15,7 +15,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="TextView"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorRecyclerViewText"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

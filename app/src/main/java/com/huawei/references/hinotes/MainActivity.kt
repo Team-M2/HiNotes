@@ -8,9 +8,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.references.hinotes.ui.base.BaseActivity
 import com.huawei.references.hinotes.ui.login.LoginActivity
-import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.main_toolbar.*
 
 class MainActivity : BaseActivity() {
 
@@ -19,13 +20,15 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar?.setCustomView(R.layout.custom_toolbar)
+        supportActionBar?.setCustomView(R.layout.main_toolbar)
           val auth = AGConnectAuth.getInstance().currentUser
 
         if(auth == null){
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
+
+
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
@@ -38,5 +41,10 @@ class MainActivity : BaseActivity() {
         toolbar_delete_icon.setOnClickListener {
 
         }
+
+        toolbar_sign_out_icon.setOnClickListener {
+
+        }
+
     }
 }

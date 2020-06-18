@@ -1,11 +1,14 @@
 package com.huawei.references.hinotes.adapter
 
+import android.content.Intent
 import android.view.View
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
 import com.huawei.references.hinotes.ui.notes.adapter.NoteItemViewHolder
 import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionHeaderViewHolder
-import com.huawei.references.hinotes.data.item.model.Item
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 
@@ -41,7 +44,9 @@ class NoteSectionAdapter(
         itemHolder.noteCreatedDate.text = "08:24 PM"
 
         itemHolder.rootView.setOnClickListener { v ->
-            println("clicked item -> ")
+            val intent = Intent(v.context, DetailNoteActivity::class.java)
+            intent.putExtra("clickedItemData", noteItem)
+            startActivity(v.context,intent,null)
         }
     }
 

@@ -5,18 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/todo_list_sub"
+    <CheckBox
+        android:id="@+id/todo_list_sub_checkbox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="CheckBox"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorRecyclerViewText"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,9 +21,28 @@
         android:id="@+id/view2"
         android:layout_width="wrap_content"
         android:layout_height="2dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="19dp"
         android:background="@color/colorRecyclerViewLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todo_list_sub" />
+        app:layout_constraintTop_toBottomOf="@+id/todo_list_sub_text" />
+
+    <TextView
+        android:id="@+id/todo_list_sub_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:text="TextView"
+        android:textColor="@color/colorRecyclerViewText"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/todo_list_sub_checkbox"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

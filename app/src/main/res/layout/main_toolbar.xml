@@ -12,19 +12,32 @@
         android:layout_marginStart="32dp"
         android:padding="8dp"
         android:text="TextView"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/toolbar_delete_icon"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
-        android:tint="@color/text_white"
+        android:padding="8dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/toolbar_sign_out_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/delete_icon" />
+
+    <ImageView
+        android:id="@+id/toolbar_sign_out_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar_title"
+        app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_delete_24" />
+        app:srcCompat="@drawable/log_out" />
 </androidx.constraintlayout.widget.ConstraintLayout>

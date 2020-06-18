@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes.data.item.model
 
+import java.io.Serializable
 import java.util.*
 
 data class Item (
@@ -13,5 +14,5 @@ data class Item (
     val poiDescription:String?,
     val role:UserRole,
     val isPinned:Boolean
-)
+) :Serializable
 

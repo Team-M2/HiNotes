@@ -1,18 +1,18 @@
 package com.huawei.references.hinotes.ui.notes
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.adapter.NoteSectionAdapter
 import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
 import com.huawei.references.hinotes.ui.base.BaseFragment
-import com.huawei.references.hinotes.ui.notes.adapter.NotesAdapter
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,7 +21,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class NotesFragment : BaseFragment() {
 
     private val notesViewModel: NotesViewModel by viewModel()
-    private val notesAdapter = NotesAdapter(arrayListOf())
     private var noteSectionedAdapter: SectionedRecyclerViewAdapter? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -75,12 +74,10 @@ class NotesFragment : BaseFragment() {
             }
         })
 
-
-        floatingActionButton.setOnClickListener {
-            val action = NotesFragmentDirections.actionNavigationNotesToAddNoteFragment()
-            Navigation.findNavController(it).navigate(action)
+        floatingActionNoteButton.setOnClickListener {
+            val intent = Intent(activity, DetailNoteActivity::class.java)
+            startActivity(intent)
         }
-
     }
 
     override fun onCreateView(

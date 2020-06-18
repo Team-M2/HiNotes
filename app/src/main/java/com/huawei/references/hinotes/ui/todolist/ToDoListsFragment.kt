@@ -1,6 +1,7 @@
 package com.huawei.references.hinotes.ui.todolist
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.ui.todolist.adapter.TodoListSectionAdapter
 import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.ui.todolistdetail.TodoListDetailActivity
 import com.huawei.references.hinotes.ui.base.BaseFragment
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_todo_list.*
@@ -25,7 +27,7 @@ class ToDoListsFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val toolbarTextView = activity!!.findViewById<View>(R.id.toolbar_title) as TextView
-        toolbarTextView.text = "My To-do List"
+        toolbarTextView.text = "My To-do Lists"
         toDoListsViewModel.getNotes(1)
 
         todoListSectionedAdapter = SectionedRecyclerViewAdapter()
@@ -68,7 +70,10 @@ class ToDoListsFragment : BaseFragment() {
             }
         })
 
-
+        floatingActionTodoButton.setOnClickListener {
+            val intent = Intent(activity, TodoListDetailActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onCreateView(

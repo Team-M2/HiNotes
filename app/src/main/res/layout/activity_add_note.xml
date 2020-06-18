@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.notedetail.DetailNoteActivity">
+
+    <EditText
+        android:id="@+id/note_detail_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAddItemViewsBackground"
+        android:ems="10"
+        android:hint="Title"
+        android:inputType="textMultiLine|text"
+        android:padding="8dp"
+        android:textColor="@color/colorRecyclerViewText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/note_detail_description"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorAddItemViewsBackground"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="Description"
+        android:inputType="textMultiLine|text"
+        android:padding="8dp"
+        android:singleLine="false"
+        android:textColor="@color/colorRecyclerViewText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/note_detail_title" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="@color/colorRecyclerViewLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/note_detail_title" />
+</androidx.constraintlayout.widget.ConstraintLayout>
