@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wooz.notes">
+    package="com.huawei.references.hinotes">
 
     <application
-        android:name=".HiNoteApplication"
+        android:name="com.wooz.com.huawei.references.hinotes.HiNoteApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.todolistdetail.TodoListDetailActivity"></activity>
-        <activity android:name=".ui.notedetail.DetailNoteActivity" />
-        <activity android:name=".ui.login.LoginActivity" />
+        <activity android:name="com.wooz.com.huawei.references.hinotes.ui.todolistdetail.TodoListDetailActivity"></activity>
+        <activity android:name="com.wooz.com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity" />
+        <activity android:name="com.wooz.com.huawei.references.hinotes.ui.login.LoginActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.wooz.com.huawei.references.hinotes.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
