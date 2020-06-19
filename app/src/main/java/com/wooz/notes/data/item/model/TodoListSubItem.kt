@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.data.item.model
+package com.wooz.notes.data.item.model
 
 import java.io.Serializable
 import java.util.*

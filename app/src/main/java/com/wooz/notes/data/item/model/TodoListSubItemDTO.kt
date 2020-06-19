@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.data.item.model
+package com.wooz.notes.data.item.model
 
 import com.huawei.agconnect.cloud.database.CloudDBZoneObject
 import java.util.*

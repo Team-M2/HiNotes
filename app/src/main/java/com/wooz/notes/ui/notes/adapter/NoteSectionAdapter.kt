@@ -1,20 +1,22 @@
-package com.huawei.references.hinotes.adapter
+package com.wooz.notes.adapter
 
 import android.content.Intent
+import android.graphics.Color
 import android.view.View
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
-import com.huawei.references.hinotes.ui.notes.adapter.NoteItemViewHolder
-import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionHeaderViewHolder
+import com.wooz.notes.MainActivity
+import com.wooz.notes.R
+import com.wooz.notes.data.item.model.Item
+import com.wooz.notes.ui.notedetail.DetailNoteActivity
+import com.wooz.notes.ui.notes.adapter.NoteItemViewHolder
+import com.wooz.notes.ui.notes.adapter.NoteSectionHeaderViewHolder
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 
 
 class NoteSectionAdapter(
-    private val noteTitleList: String, var list: List<Item>
+    private val noteTitleList: String, var list: List<Item>,var clickLongListener:IOnLongClickListener
 ) : Section(
     SectionParameters.builder()
         .itemResourceId(R.layout.note_item_list)
@@ -22,6 +24,9 @@ class NoteSectionAdapter(
         .build()
 ) {
 
+    companion object{
+        var longClickedItems:ArrayList<Int> = arrayListOf()
+    }
 
     override fun getContentItemsTotal(): Int {
         return list.size
@@ -48,6 +53,13 @@ class NoteSectionAdapter(
             intent.putExtra("clickedItemData", noteItem)
             startActivity(v.context,intent,null)
         }
+
+        itemHolder.noteDescription.setOnLongClickListener {
+            holder.rootView.setBackgroundResource(R.color.colorSelectedViewBackground);
+            longClickedItems?.add(position)
+            clickLongListener.setOnLongClickListener()
+            true
+        }
     }
 
     override fun getHeaderViewHolder(view: View): RecyclerView.ViewHolder {
@@ -61,4 +73,7 @@ class NoteSectionAdapter(
         headerHolder.noteSectionHeader.text = noteTitleList
     }
 
+    interface IOnLongClickListener{
+        fun setOnLongClickListener()
+    }
 }

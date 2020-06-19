@@ -1,24 +1,26 @@
-package com.huawei.references.hinotes.ui.notes
+package com.wooz.notes.ui.notes
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.adapter.NoteSectionAdapter
-import com.huawei.references.hinotes.data.base.DataHolder
-import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
-import com.huawei.references.hinotes.ui.base.BaseFragment
+import com.wooz.notes.MainActivity
+import com.wooz.notes.R
+import com.wooz.notes.adapter.NoteSectionAdapter
+import com.wooz.notes.data.base.DataHolder
+import com.wooz.notes.ui.base.BaseFragment
+import com.wooz.notes.ui.notedetail.DetailNoteActivity
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class NotesFragment : BaseFragment() {
+class NotesFragment : BaseFragment(),NoteSectionAdapter.IOnLongClickListener {
 
     private val notesViewModel: NotesViewModel by viewModel()
     private var noteSectionedAdapter: SectionedRecyclerViewAdapter? = null
@@ -51,13 +53,13 @@ class NotesFragment : BaseFragment() {
                     noteSectionedAdapter!!.addSection(
                         NoteSectionAdapter(
                             "My Notes",
-                            it.data
+                            it.data,this
                         )
                     )
                     noteSectionedAdapter!!.addSection(
                         NoteSectionAdapter(
                             "Shared Notes",
-                            it.data
+                            it.data,this
                         )
                     )
                     noteSectionedAdapter?.notifyDataSetChanged()
@@ -85,4 +87,9 @@ class NotesFragment : BaseFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_notes, container, false)
+
+    override fun setOnLongClickListener() {
+        val deleteIcon: ImageView = activity!!.findViewById(R.id.toolbar_delete_icon)
+        deleteIcon.visibility = View.VISIBLE
+    }
 }

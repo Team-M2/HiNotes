@@ -4,13 +4,13 @@
 		"url":"connect-dre.hispace.hicloud.com"
 	},
 	"client":{
-		"cp_id":"890090000023105689",
-		"product_id":"736430079244501346",
-		"client_id":"381005960048542848",
-		"client_secret":"56273B53D5C9E04933BEB7006B73D84F8E7C9033230409DA86A4A867789148A1",
-		"app_id":"102370991",
-		"package_name":"com.huawei.references.hinotes",
-		"api_key":"CV8G1i9NocSBjGArNbzkKNPQYhn9HQr7BVoIkl+HVdbDzhGcsCRKhFWJALvAFhDmMhJuos+MoOf4CI8k+yTmKoAx4RwA"
+		"cp_id":"40090000024278029",
+		"product_id":"9105385871708224063",
+		"client_id":"228182861809714368",
+		"client_secret":"0D6AEE557C68E40A4B12F48491CBA43E8BDE632B535421ACB052545B7F1A784D",
+		"app_id":"101350343",
+		"package_name":"com.wooz.notes",
+		"api_key":"CV5RFkZeblrVOOT3QOG7yYAmQ5sdBZ6CJfKXNsa/CDuO6SSeublJYLCScMXOE5Z8DmEFX1X4rr6EpUJPJE+ep+fKAQMF"
 	},
 	"service":{
 		"analytics":{
