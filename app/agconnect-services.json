@@ -5,12 +5,12 @@
 	},
 	"client":{
 		"cp_id":"890090000023105689",
-		"product_id":"736430079244501346",
-		"client_id":"381005960048542848",
-		"client_secret":"56273B53D5C9E04933BEB7006B73D84F8E7C9033230409DA86A4A867789148A1",
-		"app_id":"102370991",
+		"product_id":"736430079244514050",
+		"client_id":"385738754951742656",
+		"client_secret":"A566C45271A6B47C84FC8AEC860CF4831E907E83EF4EA756D0D90FA6BA637821",
+		"app_id":"102405477",
 		"package_name":"com.huawei.references.hinotes",
-		"api_key":"CV8G1i9NocSBjGArNbzkKNPQYhn9HQr7BVoIkl+HVdbDzhGcsCRKhFWJALvAFhDmMhJuos+MoOf4CI8k+yTmKoAx4RwA"
+		"api_key":"CV8PceXOYopn/ngZDofcwgFkmqYCo+LbAqjSx+uqBmVckaFf0bNgunMln8bncm+K6LjavJR/r/8N1PVf8ZEn1aVLNDZf"
 	},
 	"service":{
 		"analytics":{

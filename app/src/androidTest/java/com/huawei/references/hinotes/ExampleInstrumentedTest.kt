@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes
+package com.wooz.hinotes
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.huawei.references.hinotes", appContext.packageName)
+        assertEquals("com.wooz.notes", appContext.packageName)
     }
 }
