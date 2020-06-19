@@ -19,7 +19,7 @@ class PermissionsDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) :
         return suspendCoroutine<DataHolder<List<Permission>>> {continuation ->
             cloudDBZone?.let {
                 val query = CloudDBZoneQuery.where(PermissionDTO::class.java).apply {
-                    equalTo("userId", userId)
+//                    equalTo("userId", userId)
                 }
                 it.executeQuery(
                     query,

@@ -1,8 +1,10 @@
 package com.huawei.references.hinotes.data.item
 
+import androidx.lifecycle.LiveData
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
 import com.huawei.references.hinotes.data.item.abstractions.UpsertItemDataSource
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
@@ -11,7 +13,8 @@ import java.util.*
 
 class ItemRepository(private val getItemDataSource: GetItemDataSource,
                      private val upsertItemDataSource: UpsertItemDataSource,
-                     private val deleteItemDataSource: DeleteItemDataSource
+                     private val deleteItemDataSource: DeleteItemDataSource,
+                     private val itemsLiveDataSource: ItemsLiveDataSource
                      ) {
 
     suspend fun getNotesDummy(): DataHolder<List<Item>> {
@@ -83,6 +86,9 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
 
     suspend fun getItems(userId: String): DataHolder<List<Item>> =
         getItemDataSource.getItemsByUserId(userId)
+
+    suspend fun getItemsLiveData() : LiveData<DataHolder<List<Item>>> =
+        itemsLiveDataSource.getItemsLiveData()
 
 }
 

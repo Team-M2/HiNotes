@@ -39,7 +39,6 @@ class NotesFragment : BaseFragment() {
                     // populate list with data, hide loading indicator
                     sectionedAdapter!!.addSection(ContactsSection("13 July 2020", it.data))
                     sectionedAdapter!!.addSection(ContactsSection("2 July 2020", it.data))
-
                     notesAdapter.updateNotesList(it.data)
                 }
 
