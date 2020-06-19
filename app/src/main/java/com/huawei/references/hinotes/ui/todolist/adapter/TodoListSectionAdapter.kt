@@ -4,9 +4,9 @@ import android.content.Intent
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.wooz.hinotes.R
-import com.wooz.hinotes.data.item.model.Item
-import com.wooz.hinotes.ui.todolistdetail.TodoListDetailActivity
+import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.ui.todolistdetail.TodoListDetailActivity
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 

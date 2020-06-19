@@ -16,7 +16,7 @@ import com.huawei.hmf.tasks.OnFailureListener
 import com.huawei.hmf.tasks.OnSuccessListener
 import com.huawei.hmf.tasks.Task
 import com.huawei.hmf.tasks.TaskExecutors
-import com.wooz.hinotes.R
+import com.huawei.references.hinotes.R
 import java.util.*
 
 class RegisterFragment : Fragment() {

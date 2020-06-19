@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.wooz.hinotes.R
-import com.wooz.hinotes.data.item.model.Item
-import com.wooz.hinotes.ui.todolistdetail.adapter.TodoListSubItemsAdapter
+import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.ui.todolistdetail.adapter.TodoListSubItemsAdapter
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 

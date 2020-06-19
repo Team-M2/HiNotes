@@ -1,7 +1,7 @@
 package com.huawei.references.hinotes.data.base
 
-import com.wooz.hinotes.data.DataConstants.Companion.DEFAULT_ERROR_STR
-import com.wooz.hinotes.data.DataConstants.Companion.DEFAULT_LOADING_STR
+import com.huawei.references.hinotes.data.DataConstants.Companion.DEFAULT_ERROR_STR
+import com.huawei.references.hinotes.data.DataConstants.Companion.DEFAULT_LOADING_STR
 
 sealed class DataHolder<out T: Any> {
 

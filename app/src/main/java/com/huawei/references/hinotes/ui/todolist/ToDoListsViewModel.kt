@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wooz.hinotes.data.base.DataHolder
-import com.wooz.hinotes.data.item.ItemRepository
-import com.wooz.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.item.ItemRepository
+import com.huawei.references.hinotes.data.item.model.Item
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

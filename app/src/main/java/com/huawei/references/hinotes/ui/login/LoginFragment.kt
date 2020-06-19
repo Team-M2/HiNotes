@@ -26,8 +26,8 @@ import com.huawei.hms.support.hwid.request.HuaweiIdAuthParams
 import com.huawei.hms.support.hwid.request.HuaweiIdAuthParamsHelper
 import com.huawei.hms.support.hwid.service.HuaweiIdAuthService
 import com.huawei.hms.support.hwid.ui.HuaweiIdAuthButton
-import com.wooz.hinotes.MainActivity
-import com.wooz.hinotes.R
+import com.huawei.references.hinotes.MainActivity
+import com.huawei.references.hinotes.R
 import java.util.*
 import kotlin.collections.ArrayList
 

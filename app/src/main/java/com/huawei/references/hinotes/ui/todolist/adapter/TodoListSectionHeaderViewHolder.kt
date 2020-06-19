@@ -3,7 +3,7 @@ package com.huawei.references.hinotes.ui.todolist.adapter
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.wooz.hinotes.R
+import com.huawei.references.hinotes.R
 
 internal class TodoListSectionHeaderViewHolder(view: View) :
     RecyclerView.ViewHolder(view) {

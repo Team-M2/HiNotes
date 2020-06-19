@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.wooz.hinotes.R
+import com.huawei.references.hinotes.R
 
 internal class NoteItemViewHolder(val rootView: View) : RecyclerView.ViewHolder(rootView) {
     val noteTitle: TextView = rootView.findViewById(R.id.note_title)

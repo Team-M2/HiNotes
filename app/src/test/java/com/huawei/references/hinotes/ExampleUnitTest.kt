@@ -1,4 +1,4 @@
-package com.wooz.hinotes
+package com.huawei.references.hinotes
 
 import org.junit.Test
 

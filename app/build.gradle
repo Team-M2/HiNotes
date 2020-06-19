@@ -8,7 +8,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.wooz.notes"
+        applicationId "com.huawei.references.hinotes"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1

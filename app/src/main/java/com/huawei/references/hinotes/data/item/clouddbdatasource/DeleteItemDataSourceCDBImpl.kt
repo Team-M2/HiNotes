@@ -1,14 +1,14 @@
 package com.huawei.references.hinotes.data.item.clouddbdatasource
 
 import com.huawei.agconnect.cloud.database.CloudDBZone
-import com.wooz.hinotes.data.DataConstants
-import com.wooz.hinotes.data.base.DataHolder
-import com.wooz.hinotes.data.base.NoRecordFoundError
-import com.wooz.hinotes.data.item.abstractions.DeleteItemDataSource
-import com.wooz.hinotes.data.item.abstractions.GetItemDataSource
-import com.wooz.hinotes.data.item.abstractions.PermissionsDataSource
-import com.wooz.hinotes.data.item.model.Item
-import com.wooz.hinotes.data.item.model.mapToItemDTO
+import com.huawei.references.hinotes.data.DataConstants
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.base.NoRecordFoundError
+import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.mapToItemDTO
 
 class DeleteItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
                                   private val permissionsDataSource: PermissionsDataSource,

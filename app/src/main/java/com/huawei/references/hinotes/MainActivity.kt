@@ -9,8 +9,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.huawei.agconnect.auth.AGConnectAuth
-import com.wooz.hinotes.ui.base.BaseActivity
-import com.wooz.hinotes.ui.login.LoginActivity
+import com.huawei.references.hinotes.ui.base.BaseActivity
+import com.huawei.references.hinotes.ui.login.LoginActivity
+import com.huawei.references.hinotes.R
 import kotlinx.android.synthetic.main.main_toolbar.*
 
 class MainActivity : BaseActivity() {

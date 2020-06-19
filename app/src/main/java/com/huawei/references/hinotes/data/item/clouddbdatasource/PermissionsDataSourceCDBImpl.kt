@@ -2,13 +2,13 @@ package com.huawei.references.hinotes.data.item.clouddbdatasource
 
 import com.huawei.agconnect.cloud.database.CloudDBZone
 import com.huawei.agconnect.cloud.database.CloudDBZoneQuery
-import com.wooz.hinotes.data.DataConstants
-import com.wooz.hinotes.data.base.DataHolder
-import com.wooz.hinotes.data.base.NoRecordFoundError
-import com.wooz.hinotes.data.item.abstractions.PermissionsDataSource
-import com.wooz.hinotes.data.item.model.Permission
-import com.wooz.hinotes.data.item.model.PermissionDTO
-import com.wooz.hinotes.data.item.model.mapToPermission
+import com.huawei.references.hinotes.data.DataConstants
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.base.NoRecordFoundError
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.model.Permission
+import com.huawei.references.hinotes.data.item.model.PermissionDTO
+import com.huawei.references.hinotes.data.item.model.mapToPermission
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 

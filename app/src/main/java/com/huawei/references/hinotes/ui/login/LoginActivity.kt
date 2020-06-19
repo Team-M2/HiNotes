@@ -12,8 +12,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.huawei.agconnect.auth.*
 import com.huawei.hms.common.ApiException
 import com.huawei.hms.support.hwid.HuaweiIdAuthManager
-import com.wooz.hinotes.MainActivity
-import com.wooz.hinotes.R
+import com.huawei.references.hinotes.MainActivity
+import com.huawei.references.hinotes.R
 
 
 open class LoginActivity : AppCompatActivity(){
