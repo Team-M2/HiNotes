@@ -7,14 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
-import com.huawei.references.hinotes.ui.notes.adapter.NoteItemViewHolder
-import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionHeaderViewHolder
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
+import kotlinx.android.synthetic.main.note_item_list.view.*
 
 
 class NoteSectionAdapter(
-    private val noteTitleList: String, var list: List<Item>
+    private val noteTitleList: String, var list: List<Item>, var onLongClickListener:IOnLongClickListener
 ) : Section(
     SectionParameters.builder()
         .itemResourceId(R.layout.note_item_list)
@@ -22,6 +21,9 @@ class NoteSectionAdapter(
         .build()
 ) {
 
+    companion object{
+        var longClickedItemsList:ArrayList<Int> = arrayListOf()
+    }
 
     override fun getContentItemsTotal(): Int {
         return list.size
@@ -44,9 +46,28 @@ class NoteSectionAdapter(
         itemHolder.noteCreatedDate.text = "08:24 PM"
 
         itemHolder.rootView.setOnClickListener { v ->
-            val intent = Intent(v.context, DetailNoteActivity::class.java)
-            intent.putExtra("clickedItemData", noteItem)
-            startActivity(v.context,intent,null)
+            if(longClickedItemsList.size == 0) {
+                val intent = Intent(v.context, DetailNoteActivity::class.java)
+                intent.putExtra("clickedItemData", noteItem)
+                startActivity(v.context, intent, null)
+            }
+            else{
+                performOnLongClickItem(v,position)
+            }
+        }
+
+        itemHolder.rootView.setOnLongClickListener {
+            performOnLongClickItem(it,position)
+            onLongClickListener.setOnLongClickListener()
+            true
+        }
+
+        itemHolder.selectedItemCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            performOnLongClickItem(holder.rootView,position)
+        }
+
+        if(longClickedItemsList.size != 0){
+            itemHolder.selectedItemCheckBox.visibility=View.VISIBLE
         }
     }
 
@@ -61,4 +82,9 @@ class NoteSectionAdapter(
         headerHolder.noteSectionHeader.text = noteTitleList
     }
 
+    private fun performOnLongClickItem(view:View, position: Int){
+        longClickedItemsList.add(position)
+        view.setBackgroundResource(R.color.colorSelectedViewBackground)
+        view.select_item_checkbox.isChecked=true
+    }
 }

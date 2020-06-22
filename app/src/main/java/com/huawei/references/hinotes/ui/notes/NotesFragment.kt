@@ -1,4 +1,4 @@
-package com.wooz.notes.ui.notes
+package com.huawei.references.hinotes.ui.notes
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,20 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.wooz.notes.MainActivity
-import com.wooz.notes.R
-import com.wooz.notes.adapter.NoteSectionAdapter
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.ui.base.BaseFragment
-import com.wooz.notes.ui.notedetail.DetailNoteActivity
+import com.huawei.references.hinotes.MainActivity
+import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.ui.base.BaseFragment
+import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
+import com.huawei.references.hinotes.ui.notes.adapter.IOnLongClickListener
+import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionAdapter
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class NotesFragment : BaseFragment(),NoteSectionAdapter.IOnLongClickListener {
+class NotesFragment : BaseFragment(), IOnLongClickListener {
 
     private val notesViewModel: NotesViewModel by viewModel()
     private var noteSectionedAdapter: SectionedRecyclerViewAdapter? = null
@@ -33,8 +35,6 @@ class NotesFragment : BaseFragment(),NoteSectionAdapter.IOnLongClickListener {
         noteSectionedAdapter = SectionedRecyclerViewAdapter()
         notes_recycler_view.layoutManager=LinearLayoutManager(context)
         notes_recycler_view.adapter=noteSectionedAdapter
-
-
 
         notesViewModel.text.observe(viewLifecycleOwner, Observer {
             textNotes.text = it
@@ -89,7 +89,10 @@ class NotesFragment : BaseFragment(),NoteSectionAdapter.IOnLongClickListener {
     ): View? = inflater.inflate(R.layout.fragment_notes, container, false)
 
     override fun setOnLongClickListener() {
+        noteSectionedAdapter?.notifyDataSetChanged()
         val deleteIcon: ImageView = activity!!.findViewById(R.id.toolbar_delete_icon)
+        val cancelIcon: ImageView = activity!!.findViewById(R.id.toolbar_cancel_icon)
         deleteIcon.visibility = View.VISIBLE
+        cancelIcon.visibility = View.VISIBLE
     }
 }

@@ -1,11 +1,11 @@
-package com.wooz.notes.ui.todolistdetail.adapter
+package com.huawei.references.hinotes.ui.todolistdetail.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.wooz.notes.R
-import com.wooz.notes.data.item.model.TodoListSubItem
+import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.item.model.TodoListSubItem
 import kotlinx.android.synthetic.main.todo_list_sub_item_list.view.*
 
 class TodoListSubItemsAdapter(var todoListSubItems:List<TodoListSubItem>?) : RecyclerView.Adapter<TodoListSubItemsAdapter.FeedViewHolder>() {

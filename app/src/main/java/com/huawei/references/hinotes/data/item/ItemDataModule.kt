@@ -8,6 +8,7 @@ import com.huawei.references.hinotes.data.item.clouddbdatasource.DeleteItemDataS
 import com.huawei.references.hinotes.data.item.clouddbdatasource.GetItemDataSourceCDBImpl
 import com.huawei.references.hinotes.data.item.clouddbdatasource.PermissionsDataSourceCDBImpl
 import com.huawei.references.hinotes.data.item.clouddbdatasource.UpsertItemDataSourceCDBImpl
+import com.huawei.references.hinotes.data.item.ItemRepository
 import org.koin.dsl.module
 
 val itemDataModule = module{
