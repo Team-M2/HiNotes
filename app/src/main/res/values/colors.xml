@@ -8,8 +8,9 @@
     <color name="btn_blue">#456E94</color>
 
     <color name="colorRecyclerViewLine">#EDEDED</color>
-    <color name="colorRecyclerViewBackground">#FFFFFF</color>
+    <color name="colorViewsBackground">#FFFFFF</color>
     <color name="colorAddItemViewsBackground">#FFFFFF</color>
     <color name="colorRecyclerViewText">#000000</color>
     <color name="colorRecyclerViewLightText">#202020</color>
+    <color name="colorSelectedViewBackground">#C6C6C6</color>
 </resources>

@@ -23,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
-        android:padding="8dp"
+        android:padding="10dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1"
@@ -32,13 +32,27 @@
         app:srcCompat="@drawable/delete_icon" />
 
     <ImageView
+        android:id="@+id/toolbar_cancel_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:padding="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/toolbar_delete_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/close_icon" />
+
+    <ImageView
         android:id="@+id/toolbar_sign_out_icon"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="6dp"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar_title"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/log_out" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
