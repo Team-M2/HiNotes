@@ -36,6 +36,10 @@ class TodoListDetailActivity : AppCompatActivity() {
         back_button.setOnClickListener {
             onBackPressed()
         }
+
+        microphone_icon.setOnClickListener {
+
+        }
     }
 
     override fun onBackPressed() {
