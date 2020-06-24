@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
@@ -10,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.references.hinotes.ui.base.BaseActivity
+import com.huawei.references.hinotes.ui.login.LoginActivity
 import com.huawei.references.hinotes.ui.notes.NotesFragment
 import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionAdapter.Companion.longClickedItemsList
 import kotlinx.android.synthetic.main.main_toolbar.*
@@ -23,14 +25,12 @@ class MainActivity : BaseActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.main_toolbar)
-        val auth = AGConnectAuth.getInstance().currentUser
+        val auth = AGConnectAuth.getInstance()
 
-        /*
         if(auth == null){
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
-         */
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
@@ -52,7 +52,7 @@ class MainActivity : BaseActivity() {
         }
 
         toolbar_sign_out_icon.setOnClickListener {
-
+            auth.signOut()
         }
     }
 }
