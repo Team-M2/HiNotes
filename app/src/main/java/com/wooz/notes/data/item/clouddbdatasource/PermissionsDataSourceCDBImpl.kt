@@ -6,9 +6,9 @@ import com.wooz.notes.data.DataConstants
 import com.wooz.notes.data.base.DataHolder
 import com.wooz.notes.data.base.NoRecordFoundError
 import com.wooz.notes.data.item.abstractions.PermissionsDataSource
+import com.wooz.notes.data.item.clouddbdatasource.model.PermissionCDBDTO
+import com.wooz.notes.data.item.clouddbdatasource.model.mapToPermission
 import com.wooz.notes.data.item.model.Permission
-import com.wooz.notes.data.item.model.PermissionDTO
-import com.wooz.notes.data.item.model.mapToPermission
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -18,7 +18,7 @@ class PermissionsDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) :
     override suspend fun getPermissions(userId: String): DataHolder<List<Permission>> {
         return suspendCoroutine<DataHolder<List<Permission>>> {continuation ->
             cloudDBZone?.let {
-                val query = CloudDBZoneQuery.where(PermissionDTO::class.java).apply {
+                val query = CloudDBZoneQuery.where(PermissionCDBDTO::class.java).apply {
 //                    equalTo("userId", userId)
                 }
                 it.executeQuery(

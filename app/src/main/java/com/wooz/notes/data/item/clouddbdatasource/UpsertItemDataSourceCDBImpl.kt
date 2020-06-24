@@ -8,7 +8,7 @@ import com.wooz.notes.data.item.abstractions.GetItemDataSource
 import com.wooz.notes.data.item.abstractions.PermissionsDataSource
 import com.wooz.notes.data.item.abstractions.UpsertItemDataSource
 import com.wooz.notes.data.item.model.Item
-import com.wooz.notes.data.item.model.mapToItemDTO
+import com.wooz.notes.data.item.clouddbdatasource.model.mapToItemDTO
 
 class UpsertItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
                                   private val permissionsDataSource: PermissionsDataSource,

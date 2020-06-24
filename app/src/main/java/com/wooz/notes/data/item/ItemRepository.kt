@@ -1,15 +1,14 @@
-package com.huawei.references.hinotes.data.item
+package com.wooz.notes.data.item
 
 import androidx.lifecycle.LiveData
-import com.huawei.references.hinotes.data.base.DataHolder
-import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
-import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
-import com.huawei.references.hinotes.data.item.abstractions.UpsertItemDataSource
-import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.TodoListSubItem
-import com.huawei.references.hinotes.data.item.model.UserRole
+import com.wooz.notes.data.base.DataHolder
+import com.wooz.notes.data.item.abstractions.DeleteItemDataSource
+import com.wooz.notes.data.item.abstractions.GetItemDataSource
+import com.wooz.notes.data.item.abstractions.UpsertItemDataSource
+import com.wooz.notes.data.item.model.Item
+import com.wooz.notes.data.item.model.ItemType
 import java.util.*
 
 class ItemRepository(private val getItemDataSource: GetItemDataSource,
@@ -35,7 +34,6 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                         TodoListSubItem(12,Date(),Date(),"Buy drink",false),
                         TodoListSubItem(12,Date(),Date(),"Buy something else",false)),
                     false,
-                    UserRole.Owner,
                     false
                 ),
                 Item(
@@ -52,7 +50,6 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                         TodoListSubItem(12,Date(),Date(),"Buy drink",false),
                         TodoListSubItem(12,Date(),Date(),"Buy something else",false)),
                     false,
-                    UserRole.Owner,
                     true
                 ),
                 Item(
@@ -68,8 +65,7 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                     listOf(TodoListSubItem(11,Date(),Date(),"Buy food",true),
                         TodoListSubItem(12,Date(),Date(),"Buy drink",true),
                         TodoListSubItem(12,Date(),Date(),"Buy something else",true)),
-                    true,
-                    UserRole.Owner
+                    true
                     ,false
                 ),
                 Item(
@@ -86,7 +82,6 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                         TodoListSubItem(12,Date(),Date(),"Buy drink",true),
                         TodoListSubItem(12,Date(),Date(),"Buy something else",true)),
                     true,
-                    UserRole.Owner,
                     false
                 ),
                 Item(
@@ -103,7 +98,6 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                         TodoListSubItem(12,Date(),Date(),"Buy drink",false),
                         TodoListSubItem(12,Date(),Date(),"Buy something else",false)),
                     false,
-                    UserRole.Owner,
                     false
                 )
             )

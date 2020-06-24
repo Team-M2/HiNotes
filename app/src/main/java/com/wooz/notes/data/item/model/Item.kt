@@ -1,5 +1,6 @@
 package com.wooz.notes.data.item.model
 
+import com.huawei.references.hinotes.data.item.model.TodoListSubItem
 import java.io.Serializable
 import java.util.*
 
@@ -15,7 +16,6 @@ data class Item (
     val title:String,
     val todoListSubItems:List<TodoListSubItem>?,
     val isChecked:Boolean?,
-    val role:UserRole,
-    val isPinned:Boolean
+    val isPinned:Boolean?
 ) :Serializable
 

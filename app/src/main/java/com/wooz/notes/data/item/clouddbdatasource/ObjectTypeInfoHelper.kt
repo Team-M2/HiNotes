@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.huawei.references.hinotes.data.item.clouddbdatasource
+package com.wooz.notes.data.item.clouddbdatasource
 
 import com.huawei.agconnect.cloud.database.CloudDBZoneObject
 import com.huawei.agconnect.cloud.database.ObjectTypeInfo
-import com.huawei.references.hinotes.data.item.model.PermissionDTO
+import com.wooz.notes.data.item.clouddbdatasource.model.PermissionCDBDTO
 
 /**
  * Definition of ObjectType Helper.
@@ -32,7 +32,7 @@ object ObjectTypeInfoHelper {
             formatVersion = FORMAT_VERSION
             objectTypeVersion = OBJECT_TYPE_VERSION.toLong()
             objectTypes= mutableListOf(
-                PermissionDTO::class.java
+                PermissionCDBDTO::class.java
                 //,ItemDTO::class.java
             ).map{
                 it as Class<out CloudDBZoneObject>

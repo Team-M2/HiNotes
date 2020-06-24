@@ -1,10 +1,10 @@
-package com.huawei.references.hinotes.ui.notedetail
+package com.wooz.notes.ui.notedetail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.ActionBar
-import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.data.item.model.Item
+import androidx.appcompat.app.AppCompatActivity
+import com.wooz.notes.R
+import com.wooz.notes.data.item.model.Item
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 

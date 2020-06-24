@@ -1,9 +1,9 @@
-package com.huawei.references.hinotes.data.item.model;
+package com.wooz.notes.data.item.clouddbdatasource.model;
 
 import com.huawei.agconnect.cloud.database.CloudDBZoneObject;
 import com.huawei.agconnect.cloud.database.annotations.PrimaryKey;
 
-public class PermissionDTO extends CloudDBZoneObject{
+public class PermissionCDBDTO extends CloudDBZoneObject{
     @PrimaryKey
     public Integer itemId;
     @PrimaryKey
@@ -11,7 +11,7 @@ public class PermissionDTO extends CloudDBZoneObject{
     @PrimaryKey
     public Integer role;
 
-    public PermissionDTO(){
+    public PermissionCDBDTO(){
         super();
     }
 
@@ -39,7 +39,7 @@ public class PermissionDTO extends CloudDBZoneObject{
         this.role = role;
     }
 
-    public PermissionDTO(int itemId, String userId, int role) {
+    public PermissionCDBDTO(int itemId, String userId, int role) {
         this.itemId = itemId;
         this.userId = userId;
         this.role = role;

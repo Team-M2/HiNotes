@@ -4,11 +4,11 @@ import android.content.Intent
 import android.view.View
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
-import com.huawei.references.hinotes.ui.notes.adapter.NoteItemViewHolder
-import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionHeaderViewHolder
+import com.wooz.notes.R
+import com.wooz.notes.data.item.model.Item
+import com.wooz.notes.ui.notedetail.DetailNoteActivity
+import com.wooz.notes.ui.notes.adapter.NoteItemViewHolder
+import com.wooz.notes.ui.notes.adapter.NoteSectionHeaderViewHolder
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 

@@ -8,7 +8,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId ""
+        applicationId "com.wooz.notes"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -61,5 +61,17 @@ dependencies {
     // Third party section recyclerview features
 
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
+
+    implementation "com.squareup.retrofit2:retrofit:2.7.0"
+
+    implementation "com.squareup.retrofit2:converter-gson:2.7.0"
+
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.2"
+
+    implementation "com.squareup.retrofit2:converter-scalars:2.1.0"
+
+    implementation "com.squareup.moshi:moshi-kotlin:1.9.3"
+
+    implementation "com.squareup.moshi:moshi-adapters:1.5.0"
 
 }

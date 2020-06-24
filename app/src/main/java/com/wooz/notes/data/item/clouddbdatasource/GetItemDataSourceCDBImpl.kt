@@ -7,9 +7,9 @@ import com.wooz.notes.data.base.DataHolder
 import com.wooz.notes.data.base.NoRecordFoundError
 import com.wooz.notes.data.item.abstractions.GetItemDataSource
 import com.wooz.notes.data.item.abstractions.PermissionsDataSource
+import com.wooz.notes.data.item.clouddbdatasource.model.ItemCDBDTO
+import com.wooz.notes.data.item.clouddbdatasource.model.mapToItem
 import com.wooz.notes.data.item.model.Item
-import com.wooz.notes.data.item.model.ItemDTO
-import com.wooz.notes.data.item.model.mapToItem
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -18,10 +18,10 @@ class GetItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
                      ) :
     GetItemDataSource {
 
-    override suspend fun getItemById(itemId: Int): DataHolder<ItemDTO> {
-        return suspendCoroutine<DataHolder<ItemDTO>> {continuation ->
+    override suspend fun getItemById(itemId: Int): DataHolder<Item> {
+        return suspendCoroutine<DataHolder<Item>> { continuation ->
             cloudDBZone?.let {
-                val query = CloudDBZoneQuery.where(ItemDTO::class.java).apply {
+                val query = CloudDBZoneQuery.where(ItemCDBDTO::class.java).apply {
                     equalTo("itemId", itemId)
                 }
                 val queryTask = it.executeQuery(
@@ -33,7 +33,7 @@ class GetItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
                             continuation.resume(DataHolder.Fail(baseError = NoRecordFoundError()))
                         }
                         else{
-                            continuation.resume(DataHolder.Success(snapShot.snapshotObjects[0]))
+                            continuation.resume(DataHolder.Success(snapShot.snapshotObjects[0].mapToItem()))
                         }
                     }
                     addOnFailureListener{
@@ -45,10 +45,10 @@ class GetItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
         }
     }
 
-    override suspend fun getItemByIds(itemIds: List<Int>): DataHolder<List<ItemDTO>> {
-       return suspendCoroutine<DataHolder<List<ItemDTO>>> {continuation->
+    override suspend fun getItemByIds(itemIds: List<Int>): DataHolder<List<Item>> {
+       return suspendCoroutine<DataHolder<List<Item>>> { continuation->
            cloudDBZone?.let {
-               val query = CloudDBZoneQuery.where(ItemDTO::class.java).apply {
+               val query = CloudDBZoneQuery.where(ItemCDBDTO::class.java).apply {
                    val array : Array<out Int> = itemIds.toTypedArray()
                    `in`("itemId", array)
                }
@@ -62,9 +62,9 @@ class GetItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
                            continuation.resume(DataHolder.Fail(baseError = NoRecordFoundError()))
                        }
                        else{
-                           val itemList= mutableListOf<ItemDTO>()
+                           val itemList= mutableListOf<Item>()
                            while (snapShot.snapshotObjects.hasNext()){
-                               itemList.add(snapShot.snapshotObjects.next())
+                               itemList.add(snapShot.snapshotObjects.next().mapToItem())
                            }
                            snapShot.release()
                            continuation.resume(DataHolder.Success(itemList))
@@ -90,7 +90,7 @@ class GetItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
                         })) {
                         is DataHolder.Success -> {
                             DataHolder.Success(itemsResult.data.map {
-                                it.mapToItem()
+                                it
                             })
                         }
                         is DataHolder.Fail -> {

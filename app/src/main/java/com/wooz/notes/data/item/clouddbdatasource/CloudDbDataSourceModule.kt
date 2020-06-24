@@ -1,19 +1,12 @@
-package com.huawei.references.hinotes.data.item
+package com.wooz.notes.data.item.clouddbdatasource
 
-import com.huawei.references.hinotes.data.item.abstractions.*
-import com.huawei.references.hinotes.data.item.clouddbdatasource.*
+import com.wooz.notes.data.item.abstractions.DeleteItemDataSource
+import com.wooz.notes.data.item.abstractions.GetItemDataSource
+import com.wooz.notes.data.item.abstractions.PermissionsDataSource
+import com.wooz.notes.data.item.abstractions.UpsertItemDataSource
 import org.koin.dsl.module
 
-val itemDataModule = module{
-
-    factory {
-        ItemRepository(get(),get(),get(),get())
-    }
-
-    single {
-        ItemsLiveDataSourceCDBImpl(get()) as ItemsLiveDataSource
-    }
-
+val cloudDbDataSourceModule = module {
     factory {
         GetItemDataSourceCDBImpl(
             get(),
@@ -40,5 +33,4 @@ val itemDataModule = module{
             get(),get(),get()
         ) as DeleteItemDataSource
     }
-
 }
