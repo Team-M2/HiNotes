@@ -59,6 +59,8 @@ class LoginFragment : Fragment() {
             val authParams = huaweiIdAuthParamsHelper.setAccessToken().createParams()
             service = HuaweiIdAuthManager.getService(activity, authParams)
             startActivityForResult(service!!.signInIntent, SIGN_CODE)
+            startActivity(Intent(activity, MainActivity::class.java))
+            activity!!.finish()
         }
 
         loginBtn.setOnClickListener {

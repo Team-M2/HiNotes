@@ -53,6 +53,9 @@ class MainActivity : BaseActivity() {
 
         toolbar_sign_out_icon.setOnClickListener {
             auth.signOut()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }
