@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import com.huawei.hmf.tasks.OnFailureListener
 import com.huawei.hmf.tasks.OnSuccessListener
 import com.huawei.hmf.tasks.Task
 import com.huawei.hmf.tasks.TaskExecutors
+import com.huawei.references.hinotes.MainActivity
 import com.huawei.references.hinotes.R
 import java.util.*
 
@@ -42,8 +44,10 @@ class RegisterFragment : Fragment() {
             AGConnectAuth.getInstance().createUser(emailUser)
                 .addOnSuccessListener {
                     Toast.makeText(context, "Account created successfully", Toast.LENGTH_LONG).show()
+                    startActivity(Intent(activity, MainActivity::class.java))
+                    activity!!.finish()
                 }
-                .addOnFailureListener {e -> Log.e("register",e.toString())}
+                .addOnFailureListener {e -> Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()}
         }
 
         codeBtn.setOnClickListener {
