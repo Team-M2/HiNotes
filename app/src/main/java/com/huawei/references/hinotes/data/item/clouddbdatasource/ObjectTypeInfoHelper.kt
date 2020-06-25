@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wooz.notes.data.item.clouddbdatasource
+package com.huawei.references.hinotes.data.item.clouddbdatasource
 
 import com.huawei.agconnect.cloud.database.CloudDBZoneObject
 import com.huawei.agconnect.cloud.database.ObjectTypeInfo
-import com.wooz.notes.data.item.clouddbdatasource.model.PermissionCDBDTO
+import com.huawei.references.hinotes.data.item.clouddbdatasource.model.PermissionCDBDTO
 
 /**
  * Definition of ObjectType Helper.

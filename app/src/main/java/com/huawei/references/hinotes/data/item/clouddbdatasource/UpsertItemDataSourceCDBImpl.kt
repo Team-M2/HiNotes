@@ -1,14 +1,14 @@
-package com.wooz.notes.data.item.clouddbdatasource
+package com.huawei.references.hinotes.data.item.clouddbdatasource
 
 import com.huawei.agconnect.cloud.database.CloudDBZone
-import com.wooz.notes.data.DataConstants
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.data.base.NoRecordFoundError
-import com.wooz.notes.data.item.abstractions.GetItemDataSource
-import com.wooz.notes.data.item.abstractions.PermissionsDataSource
-import com.wooz.notes.data.item.abstractions.UpsertItemDataSource
-import com.wooz.notes.data.item.model.Item
-import com.wooz.notes.data.item.clouddbdatasource.model.mapToItemDTO
+import com.huawei.references.hinotes.data.DataConstants
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.base.NoRecordFoundError
+import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.abstractions.UpsertItemDataSource
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.clouddbdatasource.model.mapToItemDTO
 
 class UpsertItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
                                   private val permissionsDataSource: PermissionsDataSource,

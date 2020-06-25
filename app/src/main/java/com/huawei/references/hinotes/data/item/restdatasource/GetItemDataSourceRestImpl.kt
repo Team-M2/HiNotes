@@ -1,11 +1,11 @@
-package com.wooz.notes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource
 
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.data.base.NoRecordFoundError
-import com.wooz.notes.data.item.abstractions.GetItemDataSource
-import com.wooz.notes.data.item.model.Item
-import com.wooz.notes.data.item.restdatasource.model.ItemRestDTO
-import com.wooz.notes.data.item.restdatasource.model.mapToItem
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.base.NoRecordFoundError
+import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.restdatasource.model.ItemRestDTO
+import com.huawei.references.hinotes.data.item.restdatasource.model.mapToItem
 
 class GetItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
                                 private val itemRestService: ItemRestService

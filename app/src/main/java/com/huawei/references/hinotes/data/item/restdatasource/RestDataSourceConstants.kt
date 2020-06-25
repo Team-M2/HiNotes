@@ -1,4 +1,4 @@
-package com.wooz.notes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource
 
 class RestDataSourceConstants {
     companion object{

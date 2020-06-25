@@ -1,12 +1,12 @@
-package com.wooz.notes.ui.todolist.adapter
+package com.huawei.references.hinotes.ui.todolist.adapter
 
 import android.content.Intent
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.wooz.notes.R
-import com.wooz.notes.data.item.model.Item
-import com.wooz.notes.ui.todolistdetail.TodoListDetailActivity
+import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.ui.todolistdetail.TodoListDetailActivity
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 

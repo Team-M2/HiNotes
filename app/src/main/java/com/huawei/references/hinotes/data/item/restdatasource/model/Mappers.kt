@@ -1,10 +1,10 @@
-package com.wooz.notes.data.item.restdatasource.model
+package com.huawei.references.hinotes.data.item.restdatasource.model
 
 import com.huawei.references.hinotes.data.item.model.TodoListSubItem
-import com.wooz.notes.data.item.model.Item
-import com.wooz.notes.data.item.model.ItemType
-import com.wooz.notes.data.item.model.Permission
-import com.wooz.notes.data.item.model.UserRole
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.ItemType
+import com.huawei.references.hinotes.data.item.model.Permission
+import com.huawei.references.hinotes.data.item.model.UserRole
 
 fun PermissionRestDTO.mapToPermission() : Permission {
     return Permission(this.itemId,this.userId,UserRole.valueOf(this.role)!!)

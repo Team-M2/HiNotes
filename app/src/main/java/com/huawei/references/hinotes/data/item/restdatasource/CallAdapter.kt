@@ -1,15 +1,14 @@
-package com.wooz.notes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource
 
+import com.huawei.references.hinotes.data.DataConstants.Companion.DEFAULT_SERVER_ERROR_STR
+import com.huawei.references.hinotes.data.base.DataHolder
 import com.squareup.moshi.*
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.wooz.notes.data.DataConstants.Companion.DEFAULT_SERVER_ERROR_STR
-import com.wooz.notes.data.base.DataHolder
 import retrofit2.Response
 import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class ApiCallAdapter {
     inline fun <reified T : Any> adapt(serviceBody: () -> Response<String>): DataHolder<List<T>> {

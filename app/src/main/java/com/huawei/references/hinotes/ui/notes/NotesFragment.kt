@@ -1,4 +1,4 @@
-package com.wooz.notes.ui.notes
+package com.huawei.references.hinotes.ui.notes
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.adapter.NoteSectionAdapter
-import com.wooz.notes.R
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.ui.base.BaseFragment
-import com.wooz.notes.ui.notedetail.DetailNoteActivity
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.ui.base.BaseFragment
+import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel

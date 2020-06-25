@@ -1,15 +1,15 @@
-package com.wooz.notes.data.item.clouddbdatasource
+package com.huawei.references.hinotes.data.item.clouddbdatasource
 
 import com.huawei.agconnect.cloud.database.CloudDBZone
 import com.huawei.agconnect.cloud.database.CloudDBZoneQuery
-import com.wooz.notes.data.DataConstants
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.data.base.NoRecordFoundError
-import com.wooz.notes.data.item.abstractions.GetItemDataSource
-import com.wooz.notes.data.item.abstractions.PermissionsDataSource
-import com.wooz.notes.data.item.clouddbdatasource.model.ItemCDBDTO
-import com.wooz.notes.data.item.clouddbdatasource.model.mapToItem
-import com.wooz.notes.data.item.model.Item
+import com.huawei.references.hinotes.data.DataConstants
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.base.NoRecordFoundError
+import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.clouddbdatasource.model.ItemCDBDTO
+import com.huawei.references.hinotes.data.item.clouddbdatasource.model.mapToItem
+import com.huawei.references.hinotes.data.item.model.Item
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 

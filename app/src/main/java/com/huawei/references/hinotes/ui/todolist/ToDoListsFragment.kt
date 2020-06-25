@@ -9,12 +9,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.wooz.notes.ui.todolist.adapter.TodoListSectionAdapter
-import com.wooz.notes.R
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.ui.base.BaseFragment
-import com.wooz.notes.ui.todolist.ToDoListsViewModel
-import com.wooz.notes.ui.todolistdetail.TodoListDetailActivity
+import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.ui.base.BaseFragment
+import com.huawei.references.hinotes.ui.todolist.adapter.TodoListSectionAdapter
+import com.huawei.references.hinotes.ui.todolistdetail.TodoListDetailActivity
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_todo_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel

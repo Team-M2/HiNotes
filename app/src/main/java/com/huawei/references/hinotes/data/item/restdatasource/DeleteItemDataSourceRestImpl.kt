@@ -1,9 +1,9 @@
-package com.wooz.notes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource
 
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.data.item.abstractions.DeleteItemDataSource
-import com.wooz.notes.data.item.abstractions.GetItemDataSource
-import com.wooz.notes.data.item.model.Item
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.model.Item
 
 class DeleteItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
                                    private val itemRestService: ItemRestService,

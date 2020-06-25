@@ -1,4 +1,4 @@
-package com.wooz.notes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource
 
 import retrofit2.Response
 import retrofit2.http.Body

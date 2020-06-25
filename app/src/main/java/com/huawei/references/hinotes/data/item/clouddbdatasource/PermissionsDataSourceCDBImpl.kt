@@ -1,14 +1,15 @@
-package com.wooz.notes.data.item.clouddbdatasource
+package com.huawei.references.hinotes.data.item.clouddbdatasource
 
 import com.huawei.agconnect.cloud.database.CloudDBZone
 import com.huawei.agconnect.cloud.database.CloudDBZoneQuery
-import com.wooz.notes.data.DataConstants
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.data.base.NoRecordFoundError
-import com.wooz.notes.data.item.abstractions.PermissionsDataSource
-import com.wooz.notes.data.item.clouddbdatasource.model.PermissionCDBDTO
-import com.wooz.notes.data.item.clouddbdatasource.model.mapToPermission
-import com.wooz.notes.data.item.model.Permission
+import com.huawei.references.hinotes.data.DataConstants
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.base.NoRecordFoundError
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.clouddbdatasource.model.PermissionCDBDTO
+import com.huawei.references.hinotes.data.item.clouddbdatasource.model.mapToPermission
+import com.huawei.references.hinotes.data.item.model.Permission
+import com.huawei.references.hinotes.data.item.model.UserRole
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -46,5 +47,13 @@ class PermissionsDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) :
                 }
             }
         }
+    }
+
+    override suspend fun addPermission(
+        userId: String,
+        itemId: Int,
+        role: UserRole
+    ): DataHolder<Any> {
+        return DataHolder.Success(Any())
     }
 }

@@ -1,11 +1,11 @@
-package com.wooz.notes.data
+package com.huawei.references.hinotes.data
 
 import android.content.Context
 import com.huawei.agconnect.cloud.database.AGConnectCloudDB
 import com.huawei.agconnect.cloud.database.CloudDBZone
 import com.huawei.agconnect.cloud.database.CloudDBZoneConfig
-import com.wooz.notes.data.item.itemDataModule
-import com.wooz.notes.data.item.restdatasource.restDataModule
+import com.huawei.references.hinotes.data.item.itemDataModule
+import com.huawei.references.hinotes.data.item.restdatasource.restDataModule
 import org.koin.dsl.module
 
 val dataCoreModule = module {

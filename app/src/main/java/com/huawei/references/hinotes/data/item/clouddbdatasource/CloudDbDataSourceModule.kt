@@ -1,9 +1,9 @@
-package com.wooz.notes.data.item.clouddbdatasource
+package com.huawei.references.hinotes.data.item.clouddbdatasource
 
-import com.wooz.notes.data.item.abstractions.DeleteItemDataSource
-import com.wooz.notes.data.item.abstractions.GetItemDataSource
-import com.wooz.notes.data.item.abstractions.PermissionsDataSource
-import com.wooz.notes.data.item.abstractions.UpsertItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.abstractions.UpsertItemDataSource
 import org.koin.dsl.module
 
 val cloudDbDataSourceModule = module {

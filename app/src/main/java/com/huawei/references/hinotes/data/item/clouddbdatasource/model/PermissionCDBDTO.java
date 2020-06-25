@@ -1,4 +1,4 @@
-package com.wooz.notes.data.item.clouddbdatasource.model;
+package com.huawei.references.hinotes.data.item.clouddbdatasource.model;
 
 import com.huawei.agconnect.cloud.database.CloudDBZoneObject;
 import com.huawei.agconnect.cloud.database.annotations.PrimaryKey;

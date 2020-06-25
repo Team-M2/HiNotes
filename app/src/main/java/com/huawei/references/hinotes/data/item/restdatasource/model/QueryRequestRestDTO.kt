@@ -1,4 +1,4 @@
-package com.wooz.notes.data.item.restdatasource.model
+package com.huawei.references.hinotes.data.item.restdatasource.model
 
 import com.google.gson.annotations.SerializedName
 

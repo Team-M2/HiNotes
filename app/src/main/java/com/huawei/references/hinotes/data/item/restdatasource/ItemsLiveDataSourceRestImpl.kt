@@ -1,10 +1,10 @@
-package com.wooz.notes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.data.item.model.Item
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.item.model.Item
 
 
 class ItemsLiveDataSourceRestImpl() : ItemsLiveDataSource {

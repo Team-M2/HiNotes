@@ -1,29 +1,41 @@
-package com.wooz.notes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource
 
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.data.base.NoRecordFoundError
-import com.wooz.notes.data.item.abstractions.PermissionsDataSource
-import com.wooz.notes.data.item.model.Permission
-import com.wooz.notes.data.item.restdatasource.model.PermissionRestDTO
-import com.wooz.notes.data.item.restdatasource.model.mapToPermission
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.base.NoRecordFoundError
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.model.Permission
+import com.huawei.references.hinotes.data.item.model.UserRole
+import com.huawei.references.hinotes.data.item.restdatasource.model.PermissionRestDTO
+import com.huawei.references.hinotes.data.item.restdatasource.model.mapToPermission
 
-class PermissionsDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
-                                    private val itemRestService: ItemRestService) :
+class PermissionsDataSourceRestImpl(
+    private val apiCallAdapter: ApiCallAdapter,
+    private val itemRestService: ItemRestService
+) :
     PermissionsDataSource {
 
     override suspend fun getPermissions(userId: String): DataHolder<List<Permission>> =
         apiCallAdapter.adapt<PermissionRestDTO> {
-            val query=""
+            val query = ""
             itemRestService.executeQuery(query)
         }.let {
-            when(it){
-                is DataHolder.Success ->{
-                    if(it.data.isEmpty()) DataHolder.Fail(baseError = NoRecordFoundError())
+            when (it) {
+                is DataHolder.Success -> {
+                    if (it.data.isEmpty()) DataHolder.Fail(baseError = NoRecordFoundError())
                     else DataHolder.Success(it.data.map { it.mapToPermission() })
                 }
                 is DataHolder.Fail -> it
                 is DataHolder.Loading -> it
             }
         }
+
+    override suspend fun addPermission(
+        userId: String,
+        itemId: Int,
+        role: UserRole
+    ): DataHolder<Any> {
+        TODO("Not yet implemented")
+    }
+
 
 }

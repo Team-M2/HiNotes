@@ -1,14 +1,14 @@
-package com.wooz.notes.data.item
+package com.huawei.references.hinotes.data.item
 
 import androidx.lifecycle.LiveData
+import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
+import com.huawei.references.hinotes.data.item.abstractions.UpsertItemDataSource
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.TodoListSubItem
-import com.wooz.notes.data.base.DataHolder
-import com.wooz.notes.data.item.abstractions.DeleteItemDataSource
-import com.wooz.notes.data.item.abstractions.GetItemDataSource
-import com.wooz.notes.data.item.abstractions.UpsertItemDataSource
-import com.wooz.notes.data.item.model.Item
-import com.wooz.notes.data.item.model.ItemType
 import java.util.*
 
 class ItemRepository(private val getItemDataSource: GetItemDataSource,
@@ -109,6 +109,14 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
 
     suspend fun getItemsLiveData() : LiveData<DataHolder<List<Item>>> =
         itemsLiveDataSource.getItemsLiveData()
+
+    suspend fun addItemToDb(item: Item,userId: String){
+        upsertItemDataSource.upsertItem(item,userId,true)
+    }
+
+    suspend fun updateItem(item: Item,userId: String){
+        upsertItemDataSource.upsertItem(item,userId,false)
+    }
 
 }
 

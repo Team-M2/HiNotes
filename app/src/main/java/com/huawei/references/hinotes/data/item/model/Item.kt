@@ -1,21 +1,20 @@
 package com.huawei.references.hinotes.data.item.model
 
-import com.huawei.references.hinotes.data.item.model.TodoListSubItem
 import java.io.Serializable
 import java.util.*
 
 data class Item (
-    val itemId:Int,
-    val createdAt:Date?,
-    val updatedAt: Date?,
+    val itemId:Int=-1,
+    val createdAt:Date?=Date(),
+    val updatedAt: Date?=Date(),
     val type:ItemType,
-    val isOpen:Boolean,
-    val lat:Double?,
-    val lng:Double?,
-    val poiDescription:String?,
-    val title:String,
-    val todoListSubItems:List<TodoListSubItem>?,
-    val isChecked:Boolean?,
-    val isPinned:Boolean?
+    val isOpen:Boolean=false,
+    val lat:Double?=null,
+    val lng:Double?=null,
+    var poiDescription:String?=null,
+    var title:String,
+    val todoListSubItems:List<TodoListSubItem>?=null,
+    val isChecked:Boolean?=false,
+    val isPinned:Boolean?=false
 ) :Serializable
 

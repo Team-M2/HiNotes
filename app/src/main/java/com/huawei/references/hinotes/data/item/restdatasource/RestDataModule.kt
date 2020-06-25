@@ -1,11 +1,7 @@
-package com.wooz.notes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource
 
-import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
-import com.wooz.notes.data.item.abstractions.DeleteItemDataSource
-import com.wooz.notes.data.item.abstractions.GetItemDataSource
-import com.wooz.notes.data.item.abstractions.PermissionsDataSource
-import com.wooz.notes.data.item.abstractions.UpsertItemDataSource
-import com.wooz.notes.data.item.restdatasource.RestDataSourceConstants.Companion.BASE_URL
+import com.huawei.references.hinotes.data.item.abstractions.*
+import com.huawei.references.hinotes.data.item.restdatasource.RestDataSourceConstants.Companion.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -48,7 +44,7 @@ val restDataModule = module {
     }
 
     factory {
-        UpsertItemDataSourceRestImpl(get(),get(),get()) as UpsertItemDataSource
+        UpsertItemDataSourceRestImpl(get(),get(),get(),get()) as UpsertItemDataSource
     }
 
     factory {
