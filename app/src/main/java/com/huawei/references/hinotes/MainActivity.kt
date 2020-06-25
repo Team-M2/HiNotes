@@ -18,28 +18,19 @@ import kotlinx.android.synthetic.main.main_toolbar.*
 import kotlinx.android.synthetic.main.note_item_list.*
 
 class MainActivity : BaseActivity() {
-
+    var auth:AGConnectAuth = AGConnectAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.main_toolbar)
-        val auth = AGConnectAuth.getInstance()
-
-        if(auth == null){
+        val user = auth.currentUser
+        if(user == null){
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
-
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
-        val navController = findNavController(R.id.nav_host_fragment)
-
-        val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_notes, R.id.navigation_todo_list))
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
 
         toolbar_delete_icon.setOnClickListener {
             longClickedItemsList.forEach {
