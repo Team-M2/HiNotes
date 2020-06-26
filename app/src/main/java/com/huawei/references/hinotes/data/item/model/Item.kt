@@ -5,8 +5,8 @@ import java.util.*
 
 data class Item (
     val itemId:Int=-1,
-    val createdAt:Date?=Date(),
-    val updatedAt: Date?=Date(),
+    val createdAt:Date?=null,
+    val updatedAt: Date?=null,
     val type:ItemType,
     val isOpen:Boolean=false,
     val lat:Double?=null,

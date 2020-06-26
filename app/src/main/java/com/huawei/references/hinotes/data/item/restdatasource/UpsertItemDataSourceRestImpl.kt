@@ -2,14 +2,12 @@ package com.huawei.references.hinotes.data.item.restdatasource
 
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoPermissionError
-import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
 import com.huawei.references.hinotes.data.item.abstractions.UpsertItemDataSource
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.UserRole
 import com.huawei.references.hinotes.data.item.restdatasource.model.ItemRestDTO
-import com.huawei.references.hinotes.data.item.restdatasource.model.mapToItem
 
 class UpsertItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
                                    private val itemRestService: ItemRestService,
@@ -45,15 +43,6 @@ class UpsertItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
         return apiCallAdapter.adapt<ItemRestDTO> {
             val query="insert into hinotesschema.item(\"createdAt\",\"updatedAt\",\"type\",\"isOpen\",lat,lng,\"poiDescription\",\"title\",\"isChecked\",\"isPinned\") values (${if(isNew) "NOW()," else ""}NOW(),${item.type.type},${item.isOpen},${item.lat?:"NULL"},${item.lng?:"NULL"},${item.poiDescription?.let{ "'$it'" }?:"NULL"},'${item.title}',${item.isChecked},${item.isPinned}) returning \"itemId\""
             itemRestService.executeQuery(query)
-        }.let {
-            when(it){
-                is DataHolder.Success ->{
-                    if(it.data.isEmpty()) DataHolder.Fail(baseError = NoRecordFoundError())
-                    else DataHolder.Success(it.data.first().mapToItem())
-                }
-                is DataHolder.Fail -> it
-                is DataHolder.Loading -> it
-            }
         }
     }
 

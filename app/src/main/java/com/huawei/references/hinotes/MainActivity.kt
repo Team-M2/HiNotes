@@ -24,7 +24,7 @@ class MainActivity : BaseActivity() {
         supportActionBar?.setCustomView(R.layout.main_toolbar)
         val auth = AGConnectAuth.getInstance()
 
-        if(auth == null){
+        if(auth.currentUser == null){
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }

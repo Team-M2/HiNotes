@@ -44,7 +44,7 @@ class GetItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
     }
     override suspend fun getItemsByUserId(userId: String) : DataHolder<List<Item>> =
         apiCallAdapter.adapt<ItemRestDTO> {
-            val query= "select json_agg(json_build_object('itemId',\"itemId\",'createdAt',created_at,'updatedAt',\"updatedAt\",'type',\"type\",'isOpen',\"isOpen\",'lat',\"lat\",'lng',\"lng\",'poiDescription',\"poiDescription\",'title',\"title\",'isChecked',\"isChecked\",'isPinned',\"isPinned\")) from hinotesschema.item"
+            val query= "select json_agg(json_build_object('itemId',\"itemId\",'createdAt',\"createdAt\",'updatedAt',\"updatedAt\",'type',\"type\",'isOpen',\"isOpen\",'lat',\"lat\",'lng',\"lng\",'poiDescription',\"poiDescription\",'title',\"title\",'isChecked',\"isChecked\",'isPinned',\"isPinned\")) from hinotesschema.item"
             itemRestService.executeQuery(query)
         }.let {
             when(it){

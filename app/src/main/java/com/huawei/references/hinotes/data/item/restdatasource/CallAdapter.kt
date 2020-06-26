@@ -26,6 +26,10 @@ class ApiCallAdapter {
                             it.startsWith(RestDataSourceConstants.DB_NO_RESULTS_START_STR) -> {
                                 DataHolder.Success(listOf<T>())
                             }
+                            it.toIntOrNull() !=null ->{
+                                // a row inserted
+                                DataHolder.Success(listOf<T>())
+                            }
                             else -> {
                                 val type: Type = Types.newParameterizedType(
                                     MutableList::class.java,

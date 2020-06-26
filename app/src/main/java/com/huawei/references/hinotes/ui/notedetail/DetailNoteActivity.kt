@@ -44,7 +44,7 @@ class DetailNoteActivity : BaseActivity() {
                 title=note_detail_title.text.toString()
                 poiDescription=note_detail_description.text.toString()
             } ?: Item(type = ItemType.Note,title = note_detail_title.text.toString())
-            viewModel.saveItem(itemToSave,auth.currentUser.uid)
+            viewModel.saveItem(itemToSave,"user1")
         }
     }
 

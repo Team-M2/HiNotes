@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.huawei.agconnect.auth.*
 import com.huawei.agconnect.auth.VerifyCodeSettings.ACTION_REGISTER_LOGIN
 import com.huawei.agconnect.auth.VerifyCodeSettings.ACTION_RESET_PASSWORD
@@ -58,9 +58,9 @@ class LoginFragment : Fragment() {
             huaweiIdAuthParamsHelper.setScopeList(scopeList)
             val authParams = huaweiIdAuthParamsHelper.setAccessToken().createParams()
             service = HuaweiIdAuthManager.getService(activity, authParams)
-            startActivityForResult(service!!.signInIntent, SIGN_CODE)
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity!!.finish()
+            requireActivity().startActivityForResult(service!!.signInIntent, SIGN_CODE)
+            //startActivity(Intent(activity, MainActivity::class.java))
+            //activity!!.finish()
         }
 
         loginBtn.setOnClickListener {
