@@ -18,7 +18,7 @@ fun ItemDTO.mapToItem() : Item{
         lng,
         poiDescription,
         title,
-        todoListSubItems,
+        todoListSubItems!!,
         isChecked,
         UserRole.valueOf(role)!!,
         isPinned

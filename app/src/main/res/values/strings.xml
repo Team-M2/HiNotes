@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">HiNotes</string>
     <string name="title_notes">Notes</string>
+    <string name="title_todo_list">To-Do List</string>
+    <string name="title_toolbar_notes">My Notes</string>
+    <string name="title_toolbar_todo_list">My To-Do List</string>
     <string name="title_login">Login</string>
     <string name="title_register">Register</string>
-    <string name="title_todo_list">To-Do List</string>
+
     <string name="hw_id">HuaweiId</string>
     <string name="hw_pay">HuaweiPay</string>
     <string name="hw_push">HuaweiPUSH</string>

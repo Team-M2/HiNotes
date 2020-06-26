@@ -12,11 +12,6 @@ import kotlinx.coroutines.launch
 
 class ToDoListsViewModel(private val itemRepository: ItemRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is to-do list fragment"
-    }
-    val text: LiveData<String> = _text
-
     private val _todoListItemsLiveData = MutableLiveData<DataHolder<List<Item>>>()
     val todoListItemsLiveData : LiveData<DataHolder<List<Item>>>
         get() = _todoListItemsLiveData

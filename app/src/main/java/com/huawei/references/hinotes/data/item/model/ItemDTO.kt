@@ -2,6 +2,7 @@ package com.huawei.references.hinotes.data.item.model
 
 import com.huawei.agconnect.cloud.database.CloudDBZoneObject
 import java.util.*
+import kotlin.collections.ArrayList
 
 data class ItemDTO(var itemId:Int,
                    val createdAt: Date?,
@@ -12,7 +13,7 @@ data class ItemDTO(var itemId:Int,
                    val lng:Double?,
                    val poiDescription:String?,
                    val title:String,
-                   val todoListSubItems:List<TodoListSubItem>?,
+                   val todoListSubItems:ArrayList<TodoListSubItem>?,
                    val isChecked:Boolean?,
                    val role:Int,
                    val isPinned:Boolean

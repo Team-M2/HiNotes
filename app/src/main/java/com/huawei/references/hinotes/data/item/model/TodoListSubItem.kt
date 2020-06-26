@@ -7,7 +7,7 @@ data class TodoListSubItem (
     val itemId:Int,
     val createdAt:Date?,
     val updatedAt: Date?,
-    val title:String,
+    var title:String,
     var isChecked:Boolean
 ) :Serializable
 
