@@ -5,6 +5,16 @@ apply plugin: 'com.huawei.agconnect'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
+    signingConfigs{
+        release{
+            storeFile file('hinotesJKS.jks')
+            storePassword 'android123'
+            keyAlias 'hinotesKey'
+            keyPassword 'android123'
+        }
+    }
+
+
     compileSdkVersion 29
 
     defaultConfig {
@@ -20,6 +30,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -61,6 +74,9 @@ dependencies {
     // Third party section recyclerview features
 
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
+
+    //Swipe refresh layout
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     implementation "com.squareup.retrofit2:retrofit:2.7.0"
 

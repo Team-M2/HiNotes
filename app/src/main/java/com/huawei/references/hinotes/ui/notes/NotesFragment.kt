@@ -8,20 +8,31 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.adapter.NoteSectionAdapter
 import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseFragment
 import com.huawei.references.hinotes.ui.notedetail.DetailNoteActivity
+import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionAdapter
+import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionAdapter.Companion.selectedMyNoteItemsList
+import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionAdapter.Companion.selectedSharedNoteItemsList
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.collections.ArrayList
 
 
-class NotesFragment : BaseFragment() {
+class NotesFragment : BaseFragment(),SwipeRefreshLayout.OnRefreshListener {
 
     private val notesViewModel: NotesViewModel by viewModel()
     private var noteSectionedAdapter: SectionedRecyclerViewAdapter? = null
+
+    companion object{
+        var userMyNotesList:ArrayList<Item> = arrayListOf()
+        var userSharedList:ArrayList<Item> = arrayListOf()
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -29,31 +40,31 @@ class NotesFragment : BaseFragment() {
         noteSectionedAdapter = SectionedRecyclerViewAdapter()
         notes_recycler_view.layoutManager=LinearLayoutManager(context)
         notes_recycler_view.adapter=noteSectionedAdapter
-
-        notesViewModel.text.observe(viewLifecycleOwner, Observer {
-            textNotes.text = it
-        })
+        notes_swipe_refresh_layout.setOnRefreshListener(this)
 
         notesViewModel.itemsLiveData.observe(viewLifecycleOwner, Observer {
             when(it){
                 is DataHolder.Success ->{
-                    // populate list with data, hide loading indicator
-                    it.data.forEach {
-                    /*    Toast.makeText(requireContext(),
-                            it.toString(),
-                            Toast.LENGTH_SHORT).show()
-                     */
-                }
+                    if(userMyNotesList.size == 0 && userSharedList.size == 0) {
+                        userMyNotesList.clear()
+                        userSharedList.clear()
+                        it.data.forEach {
+                            userMyNotesList.add(it)
+                            userSharedList.add(it)
+                        }
+                    }
+                    notes_swipe_refresh_layout.isRefreshing=false
+                    notes_progressbar.visibility=View.GONE
                     noteSectionedAdapter!!.addSection(
                         NoteSectionAdapter(
                             "My Notes",
-                            it.data
+                            userMyNotesList,this,0
                         )
                     )
                     noteSectionedAdapter!!.addSection(
                         NoteSectionAdapter(
                             "Shared Notes",
-                            it.data
+                            userSharedList,this,1
                         )
                     )
                     noteSectionedAdapter?.notifyDataSetChanged()
@@ -61,11 +72,12 @@ class NotesFragment : BaseFragment() {
                 }
 
                 is DataHolder.Fail ->{
-                    // show error indicator
+                    notes_swipe_refresh_layout.isRefreshing=false
+                    notes_progressbar.visibility=View.GONE
                 }
 
                 is DataHolder.Loading ->{
-                    // show loading indicator
+                    notes_progressbar.visibility=View.VISIBLE
                 }
             }
         })
@@ -73,6 +85,24 @@ class NotesFragment : BaseFragment() {
         floatingActionNoteButton.setOnClickListener {
             val intent = Intent(activity, DetailNoteActivity::class.java)
             startActivity(intent)
+        }
+
+        toolbarCancelIcon.setOnClickListener {
+            setDefaultToolbar()
+            noteSectionedAdapter?.notifyDataSetChanged()
+        }
+
+        toolbarDeleteIcon.setOnClickListener {
+            selectedMyNoteItemsList.sortDescending()
+            selectedSharedNoteItemsList.sortDescending()
+            selectedMyNoteItemsList.forEach{
+                userMyNotesList.removeAt(it)
+            }
+            selectedSharedNoteItemsList.forEach{
+                userSharedList.removeAt(it)
+            }
+            setDefaultToolbar()
+            noteSectionedAdapter?.notifyDataSetChanged()
         }
     }
 
@@ -82,6 +112,20 @@ class NotesFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_notes, container, false)
 
+    override fun setOnLongClickListener() {
+        noteSectionedAdapter?.notifyDataSetChanged()
+        super.setOnLongClickListener()
+    }
+
+    override fun onRefresh() {
+        notesViewModel.getNotes("1")
+        noteSectionedAdapter = SectionedRecyclerViewAdapter()
+    }
+
+    override fun onResume() {
+        noteSectionedAdapter?.notifyDataSetChanged()
+        super.onResume()
+    }
 
     override fun onStart() {
         super.onStart()

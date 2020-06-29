@@ -12,11 +12,6 @@ import kotlinx.coroutines.launch
 
 class NotesViewModel(private val itemRepository: ItemRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notes fragment"
-    }
-    val text: LiveData<String> = _text
-
     private val _itemsLiveData = MutableLiveData<DataHolder<List<Item>>>()
     val itemsLiveData : LiveData<DataHolder<List<Item>>>
         get() = _itemsLiveData

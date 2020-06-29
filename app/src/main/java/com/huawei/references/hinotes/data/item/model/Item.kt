@@ -13,7 +13,7 @@ data class Item (
     val lng:Double?=null,
     var poiDescription:String?=null,
     var title:String,
-    val todoListSubItems:List<TodoListSubItem>?=null,
+    val todoListSubItems:List<TodoListSubItem>?=listOf(),
     val isChecked:Boolean?=false,
     val isPinned:Boolean?=false
 ) :Serializable

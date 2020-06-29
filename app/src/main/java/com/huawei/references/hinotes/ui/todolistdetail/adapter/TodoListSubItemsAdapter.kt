@@ -1,5 +1,7 @@
 package com.huawei.references.hinotes.ui.todolistdetail.adapter
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +24,24 @@ class TodoListSubItemsAdapter(var todoListSubItems:List<TodoListSubItem>?) : Rec
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
         holder.itemView.sub_item_title.setText(todoListSubItems?.get(position)?.title)
         holder.itemView.sub_item_checkbox.isChecked = todoListSubItems?.get(position)?.isChecked!!
+
+        holder.itemView.sub_item_title.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                todoListSubItems!![position].title = s.toString()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+
+        holder.itemView.sub_item_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            todoListSubItems!![position].isChecked=isChecked
+        }
     }
 
     fun updateCheckBox(isCheckedAll:Boolean){
@@ -30,6 +50,7 @@ class TodoListSubItemsAdapter(var todoListSubItems:List<TodoListSubItem>?) : Rec
         }
         notifyDataSetChanged()
     }
+
 
     class FeedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 }

@@ -56,7 +56,9 @@ class MainActivity : BaseActivity() {
 
 
         toolbar_delete_icon.setOnClickListener {
-
+            longClickedItemsList.forEach {
+                Toast.makeText(this,"delete item index is -> $it",Toast.LENGTH_SHORT).show()
+            }
         }
 
         toolbar_cancel_icon.setOnClickListener {
