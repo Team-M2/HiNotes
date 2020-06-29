@@ -1,11 +1,12 @@
-package com.huawei.references.hinotes.data.item.model
+package com.huawei.references.hinotes.data.item.restdatasource.model
 
-import com.huawei.agconnect.cloud.database.CloudDBZoneObject
 import java.util.*
 
-data class TodoListSubItemRestDTO(val itemId:Int,
+data class TodoListSubItemRestDTO(val id:Int?,
+                                  val itemId:Int,
                                   val createdAt:Date?,
                                   val updatedAt: Date?,
                                   val title:String,
                                   val isChecked:Boolean
-) : CloudDBZoneObject()
+)
+

@@ -1,25 +1,15 @@
 package com.huawei.references.hinotes.data.item.clouddbdatasource
 
-import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
-import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.ItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
-import com.huawei.references.hinotes.data.item.abstractions.UpsertItemDataSource
 import org.koin.dsl.module
 
 val cloudDbDataSourceModule = module {
     factory {
-        GetItemDataSourceCDBImpl(
+        ItemDataSourceCDBImpl(
             get(),
             get()
-        ) as GetItemDataSource
-    }
-
-    factory {
-        UpsertItemDataSourceCDBImpl(
-            get(),
-            get(),
-            get()
-        ) as UpsertItemDataSource
+        ) as ItemDataSource
     }
 
     factory {
@@ -28,9 +18,4 @@ val cloudDbDataSourceModule = module {
         ) as PermissionsDataSource
     }
 
-    factory {
-        DeleteItemDataSourceCDBImpl(
-            get(),get(),get()
-        ) as DeleteItemDataSource
-    }
 }

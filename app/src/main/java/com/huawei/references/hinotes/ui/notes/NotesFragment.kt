@@ -25,8 +25,6 @@ class NotesFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val toolbarTextView = activity!!.findViewById<View>(R.id.toolbar_title) as TextView
-        toolbarTextView.text = "My Notes"
         notesViewModel.getNotes("1")
         noteSectionedAdapter = SectionedRecyclerViewAdapter()
         notes_recycler_view.layoutManager=LinearLayoutManager(context)
@@ -83,4 +81,10 @@ class NotesFragment : BaseFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_notes, container, false)
+
+
+    override fun onStart() {
+        super.onStart()
+        activity?.findViewById<TextView>(R.id.toolbar_title)?.text="My Notes"
+    }
 }

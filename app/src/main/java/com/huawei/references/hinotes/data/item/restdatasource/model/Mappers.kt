@@ -1,17 +1,13 @@
 package com.huawei.references.hinotes.data.item.restdatasource.model
 
-import com.huawei.references.hinotes.data.item.model.TodoListSubItem
-import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.data.item.model.ItemType
-import com.huawei.references.hinotes.data.item.model.Permission
-import com.huawei.references.hinotes.data.item.model.UserRole
+import com.huawei.references.hinotes.data.item.model.*
 
 fun PermissionRestDTO.mapToPermission() : Permission {
-    return Permission(this.itemId,this.userId,UserRole.valueOf(this.role)!!)
+    return Permission(itemId!!,userId!!,UserRole.valueOf(role!!)!!)
 }
 
 fun Permission.mapToPermissionDTO() : PermissionRestDTO {
-    return PermissionRestDTO(this.itemId,this.userId,this.userRole.role)
+    return PermissionRestDTO(itemId,userId,userRole.role)
 }
 
 fun ItemRestDTO.mapToItem(todoListSubItems: List<TodoListSubItem>?=null) : Item {
@@ -45,4 +41,8 @@ fun Item.mapToItemDTO() : ItemRestDTO {
         isChecked,
         isPinned
     )
+}
+
+fun TodoListSubItemRestDTO.mapToTodoListSubItem() : TodoListSubItem{
+    return TodoListSubItem(id!!,itemId,createdAt,updatedAt,title,isChecked)
 }

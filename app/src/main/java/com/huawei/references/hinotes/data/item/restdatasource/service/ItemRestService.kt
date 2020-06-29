@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource.service
 
 import retrofit2.Response
 import retrofit2.http.Body

@@ -2,18 +2,14 @@ package com.huawei.references.hinotes.data.item
 
 import androidx.lifecycle.LiveData
 import com.huawei.references.hinotes.data.base.DataHolder
-import com.huawei.references.hinotes.data.item.abstractions.DeleteItemDataSource
-import com.huawei.references.hinotes.data.item.abstractions.GetItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.ItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
-import com.huawei.references.hinotes.data.item.abstractions.UpsertItemDataSource
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.TodoListSubItem
 import java.util.*
 
-class ItemRepository(private val getItemDataSource: GetItemDataSource,
-                     private val upsertItemDataSource: UpsertItemDataSource,
-                     private val deleteItemDataSource: DeleteItemDataSource,
+class ItemRepository(private val itemDataSource: ItemDataSource,
                      private val itemsLiveDataSource: ItemsLiveDataSource
                      ) {
 
@@ -30,9 +26,9 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                     27.3,
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                     "Lessons",
-                    listOf(TodoListSubItem(11,Date(),Date(),"Buy food",true),
-                        TodoListSubItem(12,Date(),Date(),"Buy drink",false),
-                        TodoListSubItem(12,Date(),Date(),"Buy something else",false)),
+                    listOf(TodoListSubItem(1,11,Date(),Date(),"Buy food",true),
+                        TodoListSubItem(2,12,Date(),Date(),"Buy drink",false),
+                        TodoListSubItem(3,12,Date(),Date(),"Buy something else",false)),
                     false,
                     false
                 ),
@@ -46,9 +42,9 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                     27.3,
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                     "Meetings",
-                    listOf(TodoListSubItem(11,Date(),Date(),"Buy food",true),
-                        TodoListSubItem(12,Date(),Date(),"Buy drink",false),
-                        TodoListSubItem(12,Date(),Date(),"Buy something else",false)),
+                    listOf(TodoListSubItem(4,11,Date(),Date(),"Buy food",true),
+                        TodoListSubItem(5,12,Date(),Date(),"Buy drink",false),
+                        TodoListSubItem(6,12,Date(),Date(),"Buy something else",false)),
                     false,
                     true
                 ),
@@ -62,9 +58,9 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                     27.3,
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                     "About medicines",
-                    listOf(TodoListSubItem(11,Date(),Date(),"Buy food",true),
-                        TodoListSubItem(12,Date(),Date(),"Buy drink",true),
-                        TodoListSubItem(12,Date(),Date(),"Buy something else",true)),
+                    listOf(TodoListSubItem(7,11,Date(),Date(),"Buy food",true),
+                        TodoListSubItem(8,12,Date(),Date(),"Buy drink",true),
+                        TodoListSubItem(9,12,Date(),Date(),"Buy something else",true)),
                     true
                     ,false
                 ),
@@ -78,9 +74,9 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                     27.3,
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                     "I will buy from the market.",
-                    listOf(TodoListSubItem(11,Date(),Date(),"Buy food",true),
-                        TodoListSubItem(12,Date(),Date(),"Buy drink",true),
-                        TodoListSubItem(12,Date(),Date(),"Buy something else",true)),
+                    listOf(TodoListSubItem(11,11,Date(),Date(),"Buy food",true),
+                        TodoListSubItem(12,12,Date(),Date(),"Buy drink",true),
+                        TodoListSubItem(13,12,Date(),Date(),"Buy something else",true)),
                     true,
                     false
                 ),
@@ -94,9 +90,9 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
                     27.3,
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                     "what I have to do this month.",
-                    listOf(TodoListSubItem(11,Date(),Date(),"Buy food",true),
-                        TodoListSubItem(12,Date(),Date(),"Buy drink",false),
-                        TodoListSubItem(12,Date(),Date(),"Buy something else",false)),
+                    listOf(TodoListSubItem(14,11,Date(),Date(),"Buy food",true),
+                        TodoListSubItem(15,12,Date(),Date(),"Buy drink",false),
+                        TodoListSubItem(16,12,Date(),Date(),"Buy something else",false)),
                     false,
                     false
                 )
@@ -105,17 +101,17 @@ class ItemRepository(private val getItemDataSource: GetItemDataSource,
     }
 
     suspend fun getItems(userId: String): DataHolder<List<Item>> =
-        getItemDataSource.getItemsByUserId(userId)
+        itemDataSource.getItemsByUserId(userId)
 
     suspend fun getItemsLiveData() : LiveData<DataHolder<List<Item>>> =
         itemsLiveDataSource.getItemsLiveData()
 
     suspend fun addItemToDb(item: Item,userId: String){
-        upsertItemDataSource.upsertItem(item,userId,true)
+        itemDataSource.upsertItem(item,userId,true)
     }
 
     suspend fun updateItem(item: Item,userId: String){
-        upsertItemDataSource.upsertItem(item,userId,false)
+        itemDataSource.upsertItem(item,userId,false)
     }
 
 }

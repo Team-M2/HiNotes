@@ -14,7 +14,5 @@ class HiNoteApplication : Application(),KoinComponent {
             androidContext(this@HiNoteApplication)
             modules(dataModule + uiModule)
         }
-
     }
-
 }

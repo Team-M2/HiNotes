@@ -26,8 +26,6 @@ class ToDoListsFragment : BaseFragment() {
     @SuppressLint("NewApi")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val toolbarTextView = activity!!.findViewById<View>(R.id.toolbar_title) as TextView
-        toolbarTextView.text = "My To-do Lists"
         toDoListsViewModel.getNotes(1)
 
         todoListSectionedAdapter = SectionedRecyclerViewAdapter()
@@ -82,5 +80,10 @@ class ToDoListsFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_todo_list, container, false)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        activity?.findViewById<TextView>(R.id.toolbar_title)?.text="My To-do Lists"
     }
 }

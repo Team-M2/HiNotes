@@ -1,9 +1,9 @@
-package com.huawei.references.hinotes.data.item.restdatasource
+package com.huawei.references.hinotes.data.item.restdatasource.impl
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
 import com.huawei.references.hinotes.data.base.DataHolder
+import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
 import com.huawei.references.hinotes.data.item.model.Item
 
 
