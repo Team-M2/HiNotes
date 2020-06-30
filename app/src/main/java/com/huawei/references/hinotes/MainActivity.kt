@@ -40,10 +40,6 @@ class MainActivity : BaseActivity() {
                 AGConnectAuth.getInstance().signOut()
                 openLoginActivity()
             }
-//            toolbar_sign_out_icon.setOnClickListener {
-//                AGConnectAuth.getInstance().signOut()
-//                openLoginActivity()
-//            }
         }
 
         val navController = findNavController(R.id.nav_host_fragment)
