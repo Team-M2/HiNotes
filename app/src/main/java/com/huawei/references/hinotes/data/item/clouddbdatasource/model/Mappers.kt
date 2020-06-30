@@ -1,10 +1,6 @@
 package com.huawei.references.hinotes.data.item.clouddbdatasource.model
 
-import com.huawei.references.hinotes.data.item.model.TodoListSubItem
-import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.data.item.model.ItemType
-import com.huawei.references.hinotes.data.item.model.Permission
-import com.huawei.references.hinotes.data.item.model.UserRole
+import com.huawei.references.hinotes.data.item.model.*
 
 fun PermissionCDBDTO.mapToPermission() : Permission {
     return Permission(this.itemId,this.userId,UserRole.valueOf(this.role)!!)
@@ -18,7 +14,7 @@ fun Permission.mapToPermissionDTO() : PermissionCDBDTO {
     )
 }
 
-fun ItemCDBDTO.mapToItem(todoListSubItems:List<TodoListSubItem>?=null) : Item {
+fun ItemCDBDTO.mapToItem(todoListSubItems:List<TodoListSubItem> = mutableListOf(), userRole: UserRole=UserRole.Owner) : Item {
     return Item(
         itemId,
         createdAt,
@@ -29,8 +25,9 @@ fun ItemCDBDTO.mapToItem(todoListSubItems:List<TodoListSubItem>?=null) : Item {
         lng,
         poiDescription,
         title,
-        todoListSubItems,
+        todoListSubItems.toMutableList(),
         isChecked,
+        userRole,
         isPinned
     )
 }

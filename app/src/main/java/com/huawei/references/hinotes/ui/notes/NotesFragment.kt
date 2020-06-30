@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.adapter.NoteSectionAdapter
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseFragment
@@ -21,7 +20,6 @@ import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionAdapter.Compani
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.collections.ArrayList
 
 
 class NotesFragment : BaseFragment(),SwipeRefreshLayout.OnRefreshListener {

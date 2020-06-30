@@ -13,8 +13,9 @@ data class Item (
     val lng:Double?=null,
     var poiDescription:String?=null,
     var title:String,
-    val todoListSubItems:List<TodoListSubItem>?=listOf(),
-    val isChecked:Boolean?=false,
-    val isPinned:Boolean?=false
+    val todoListSubItems:MutableList<TodoListSubItem>?= mutableListOf(),
+    var isChecked:Boolean?=false,
+    val role: UserRole?=null,
+    var isPinned:Boolean?=false
 ) :Serializable
 

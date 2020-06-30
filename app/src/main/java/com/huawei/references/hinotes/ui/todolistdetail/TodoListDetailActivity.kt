@@ -4,20 +4,16 @@ import android.os.Bundle
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.huawei.references.hinotes.ui.todolistdetail.adapter.TodoListSubItemsAdapter
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.TodoListSubItem
 import com.huawei.references.hinotes.data.item.model.UserRole
-import com.huawei.references.hinotes.ui.notes.NotesFragment
 import com.huawei.references.hinotes.ui.todolist.ToDoListsFragment
 import com.huawei.references.hinotes.ui.todolistdetail.adapter.TodoListSubItemsAdapter
-import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 class TodoListDetailActivity : AppCompatActivity() {
     private var isNewNote=true
@@ -70,13 +66,13 @@ class TodoListDetailActivity : AppCompatActivity() {
         add_todo_item.setOnClickListener {
             if(isNewNote){
                 todoItemIndex=0
-                createSubItem(ToDoListsFragment.userMyTodoList)
+                createSubItem(ToDoListsFragment.userMyTodoList,todoItemData!!.itemId)
             }
             else if(todoItemSectionIndex == 0) {
-                createSubItem(ToDoListsFragment.userMyTodoList)
+                createSubItem(ToDoListsFragment.userMyTodoList,todoItemData!!.itemId)
             }
             else{
-                createSubItem(ToDoListsFragment.userSharedTodoList)
+                createSubItem(ToDoListsFragment.userSharedTodoList,todoItemData!!.itemId)
             }
         }
 
@@ -121,9 +117,10 @@ class TodoListDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun createSubItem(todoItemList:ArrayList<Item>){
-        todoItemList[todoItemIndex!!].todoListSubItems.add(
+    private fun createSubItem(todoItemList:ArrayList<Item>,itemId:Int){
+        todoItemList[todoItemIndex!!].todoListSubItems!!.add(
             TodoListSubItem(
+                itemId,
                 11,
                 Date(),
                 Date(),

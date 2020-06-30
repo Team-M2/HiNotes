@@ -4,27 +4,28 @@ import android.os.Bundle
 import androidx.appcompat.app.ActionBar
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.data.item.ItemRepository
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.UserRole
-import com.huawei.references.hinotes.ui.notes.NotesFragment
 import com.huawei.references.hinotes.ui.base.BaseActivity
+import com.huawei.references.hinotes.ui.notes.NotesFragment
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 import java.util.*
+
+
+
+
 
 class DetailNoteActivity : BaseActivity() {
 
     private val viewModel: DetailNoteViewModel by viewModel()
-
-class DetailNoteActivity : AppCompatActivity() {
     private var isNewNote=true
     private var noteItemData :Item ?= null
     private var noteItemIndex :Int ?= null
     private var noteItemSectionIndex :Int ?= null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_note)

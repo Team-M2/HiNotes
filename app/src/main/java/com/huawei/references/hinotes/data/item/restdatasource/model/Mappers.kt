@@ -10,7 +10,7 @@ fun Permission.mapToPermissionDTO() : PermissionRestDTO {
     return PermissionRestDTO(itemId,userId,userRole.role)
 }
 
-fun ItemRestDTO.mapToItem(todoListSubItems: List<TodoListSubItem>?=null) : Item {
+fun ItemRestDTO.mapToItem(todoListSubItems: List<TodoListSubItem> = mutableListOf(),userRole: UserRole=UserRole.Owner) : Item {
     return Item(
         itemId,
         createdAt,
@@ -21,8 +21,9 @@ fun ItemRestDTO.mapToItem(todoListSubItems: List<TodoListSubItem>?=null) : Item 
         lng,
         poiDescription,
         title,
-        todoListSubItems,
+        todoListSubItems.toMutableList(),
         isChecked,
+        userRole,
         isPinned
     )
 }
