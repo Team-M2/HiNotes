@@ -55,6 +55,18 @@
         app:srcCompat="@drawable/microphone_icon" />
 
     <ImageView
+        android:id="@+id/image_icon"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/microphone_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/camera_icon" />
+
+    <ImageView
         android:id="@+id/back_button"
         android:layout_width="0dp"
         android:layout_height="40dp"
