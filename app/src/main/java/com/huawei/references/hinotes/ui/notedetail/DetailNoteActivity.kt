@@ -106,7 +106,7 @@ class DetailNoteActivity : AppCompatActivity() {
             include_choose_image.visibility= View.GONE
         }
 
-      /*  saveFab.setOnClickListener {
+        saveFab.setOnClickListener {
             //TODO: empty note title and description check
             //TODO: if current user is null navigate to login activity
             val itemToSave=noteItemData?.apply {
@@ -115,8 +115,6 @@ class DetailNoteActivity : AppCompatActivity() {
             } ?: Item(type = ItemType.Note,title = note_detail_title.text.toString())
             viewModel.saveItem(itemToSave,"user1")
         }
-
-       */
     }
 
     override fun onBackPressed() {
