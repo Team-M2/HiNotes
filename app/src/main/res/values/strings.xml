@@ -6,6 +6,10 @@
     <string name="title_toolbar_todo_list">My To-Do List</string>
     <string name="title_login">Login</string>
     <string name="title_register">Register</string>
+    <string name="text_recognition_failed">Text recognition operation failed. Please try again.</string>
+    <string name="speech_to_text_failed">Speech to text operation failed. Please try again.</string>
+    <string name="text_recognition_could_not_read">Text Recognition operation could not read text from the image. Please try again.</string>
+
 
     <string name="hw_id">HuaweiId</string>
     <string name="hw_pay">HuaweiPay</string>

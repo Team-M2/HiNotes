@@ -53,9 +53,13 @@ class NotesFragment : BaseFragment(),SwipeRefreshLayout.OnRefreshListener {
                     if(userMyNotesList.size == 0 && userSharedList.size == 0) {
                         userMyNotesList.clear()
                         userSharedList.clear()
+                        var index=0
                         it.data.forEach {
+                            if(index<3)
                             userMyNotesList.add(it)
+                            else
                             userSharedList.add(it)
+                            index++
                         }
                     }
                     notes_swipe_refresh_layout.isRefreshing=false
