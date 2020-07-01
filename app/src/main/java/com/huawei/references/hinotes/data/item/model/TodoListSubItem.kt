@@ -4,10 +4,11 @@ import java.io.Serializable
 import java.util.*
 
 data class TodoListSubItem (
-    val itemId:Int,
-    val createdAt:Date?,
-    val updatedAt: Date?,
+    val id:Int=-1,
+    val itemId:Int=-1,
+    val createdAt:Date?=null,
+    var updatedAt: Date?=null,
     var title:String,
-    var isChecked:Boolean
+    var isChecked:Boolean=false
 ) :Serializable
 

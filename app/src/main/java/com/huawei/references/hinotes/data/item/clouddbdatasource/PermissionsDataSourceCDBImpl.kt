@@ -6,9 +6,10 @@ import com.huawei.references.hinotes.data.DataConstants
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.clouddbdatasource.model.PermissionCDBDTO
+import com.huawei.references.hinotes.data.item.clouddbdatasource.model.mapToPermission
 import com.huawei.references.hinotes.data.item.model.Permission
-import com.huawei.references.hinotes.data.item.model.PermissionDTO
-import com.huawei.references.hinotes.data.item.model.mapToPermission
+import com.huawei.references.hinotes.data.item.model.UserRole
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -18,8 +19,8 @@ class PermissionsDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) :
     override suspend fun getPermissions(userId: String): DataHolder<List<Permission>> {
         return suspendCoroutine<DataHolder<List<Permission>>> {continuation ->
             cloudDBZone?.let {
-                val query = CloudDBZoneQuery.where(PermissionDTO::class.java).apply {
-                    equalTo("userId", userId)
+                val query = CloudDBZoneQuery.where(PermissionCDBDTO::class.java).apply {
+//                    equalTo("userId", userId)
                 }
                 it.executeQuery(
                     query,
@@ -46,5 +47,13 @@ class PermissionsDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) :
                 }
             }
         }
+    }
+
+    override suspend fun addPermission(
+        userId: String,
+        itemId: Int,
+        role: UserRole
+    ): DataHolder<Any> {
+        return DataHolder.Success(Any())
     }
 }

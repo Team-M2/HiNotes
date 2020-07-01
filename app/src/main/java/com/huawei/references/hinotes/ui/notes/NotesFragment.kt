@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +20,6 @@ import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionAdapter.Compani
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.collections.ArrayList
 
 
 class NotesFragment : BaseFragment(),SwipeRefreshLayout.OnRefreshListener {
@@ -36,11 +34,6 @@ class NotesFragment : BaseFragment(),SwipeRefreshLayout.OnRefreshListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val toolbarTextView = activity!!.findViewById<View>(R.id.toolbar_title) as TextView
-        val toolbarCancelIcon = activity!!.findViewById(R.id.toolbar_cancel_icon) as ImageView
-        val toolbarDeleteIcon = activity!!.findViewById(R.id.toolbar_delete_icon) as ImageView
-        setDefaultToolbar()
-        toolbarTextView.text = resources.getText(R.string.title_toolbar_notes)
         notesViewModel.getNotes("1")
         noteSectionedAdapter = SectionedRecyclerViewAdapter()
         notes_recycler_view.layoutManager=LinearLayoutManager(context)
@@ -134,5 +127,10 @@ class NotesFragment : BaseFragment(),SwipeRefreshLayout.OnRefreshListener {
     override fun onResume() {
         noteSectionedAdapter?.notifyDataSetChanged()
         super.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        activity?.findViewById<TextView>(R.id.toolbar_title)?.text="My Notes"
     }
 }

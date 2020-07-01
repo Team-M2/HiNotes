@@ -80,4 +80,16 @@ dependencies {
     // Import speech to text SDK.
     implementation "com.huawei.hms:ml-computer-voice-asr-plugin:2.0.0.300"
 
+    implementation "com.squareup.retrofit2:retrofit:2.7.0"
+
+    implementation "com.squareup.retrofit2:converter-gson:2.7.0"
+
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.2"
+
+    implementation "com.squareup.retrofit2:converter-scalars:2.1.0"
+
+    implementation "com.squareup.moshi:moshi-kotlin:1.9.3"
+
+    implementation "com.squareup.moshi:moshi-adapters:1.5.0"
+
 }

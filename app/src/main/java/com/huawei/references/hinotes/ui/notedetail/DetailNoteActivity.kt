@@ -7,23 +7,18 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.hmf.tasks.Task
-import com.huawei.hms.mlplugin.asr.MLAsrCaptureActivity
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureConstants
 import com.huawei.hms.mlsdk.MLAnalyzerFactory
-import com.huawei.hms.mlsdk.asr.MLAsrConstants
-import com.huawei.hms.mlsdk.asr.MLAsrRecognizer
 import com.huawei.hms.mlsdk.common.MLFrame
 import com.huawei.hms.mlsdk.text.MLLocalTextSetting
 import com.huawei.hms.mlsdk.text.MLText
@@ -46,7 +41,6 @@ class DetailNoteActivity : AppCompatActivity() {
     private var noteItemSectionIndex :Int ?= null
     private val cameraRequestCode = 101
     private val takePictureResultCode = 201
-
     private val storageRequestCode = 102
     private val pickImageResultCode = 202
 
@@ -56,6 +50,9 @@ class DetailNoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_note)
+
+        val auth = AGConnectAuth.getInstance()
+
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.item_detail_toolbar)
@@ -106,6 +103,16 @@ class DetailNoteActivity : AppCompatActivity() {
 
         choose_event_background.setOnClickListener {
             include_choose_image.visibility= View.GONE
+        }
+
+        saveFab.setOnClickListener {
+            //TODO: empty note title and description check
+            //TODO: if current user is null navigate to login activity
+            val itemToSave=noteItemData?.apply {
+                title=note_detail_title.text.toString()
+                poiDescription=note_detail_description.text.toString()
+            } ?: Item(type = ItemType.Note,title = note_detail_title.text.toString())
+            viewModel.saveItem(itemToSave,"user1")
         }
     }
 

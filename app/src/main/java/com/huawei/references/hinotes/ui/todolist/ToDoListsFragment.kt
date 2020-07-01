@@ -3,23 +3,19 @@ package com.huawei.references.hinotes.ui.todolist
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.ui.todolist.adapter.TodoListSectionAdapter
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.ui.todolistdetail.TodoListDetailActivity
 import com.huawei.references.hinotes.ui.base.BaseFragment
-import com.huawei.references.hinotes.ui.notes.NotesFragment
-import com.huawei.references.hinotes.ui.notes.adapter.NoteSectionAdapter
+import com.huawei.references.hinotes.ui.todolist.adapter.TodoListSectionAdapter
+import com.huawei.references.hinotes.ui.todolistdetail.TodoListDetailActivity
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_todo_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,9 +33,6 @@ class ToDoListsFragment : BaseFragment(),SwipeRefreshLayout.OnRefreshListener {
     @SuppressLint("NewApi")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val toolbarTextView = activity!!.findViewById<View>(R.id.toolbar_title) as TextView
-        val toolbarCancelIcon = activity!!.findViewById(R.id.toolbar_cancel_icon) as ImageView
-        val toolbarDeleteIcon = activity!!.findViewById(R.id.toolbar_delete_icon) as ImageView
         setDefaultToolbar()
         toolbarTextView.text = resources.getString(R.string.title_toolbar_todo_list)
         toDoListsViewModel.getNotes(1)
@@ -120,6 +113,11 @@ class ToDoListsFragment : BaseFragment(),SwipeRefreshLayout.OnRefreshListener {
             savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_todo_list, container, false)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        activity?.findViewById<TextView>(R.id.toolbar_title)?.text="My To-do Lists"
     }
 
     override fun setOnLongClickListener() {
