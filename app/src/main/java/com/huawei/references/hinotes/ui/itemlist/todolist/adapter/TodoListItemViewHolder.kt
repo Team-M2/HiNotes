@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.ui.todolist.adapter
+package com.huawei.references.hinotes.ui.itemlist.todolist.adapter
 
 import android.view.View
 import android.widget.CheckBox

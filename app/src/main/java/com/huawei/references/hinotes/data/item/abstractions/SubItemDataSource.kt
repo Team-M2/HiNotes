@@ -5,9 +5,13 @@ import com.huawei.references.hinotes.data.item.model.TodoListSubItem
 
 interface SubItemDataSource {
 
+    suspend fun getSubItemsByItemId(itemId:Int) : DataHolder<List<TodoListSubItem>>
+
     suspend fun upsert(subItem: TodoListSubItem,itemId:Int,isNew: Boolean) : DataHolder<Int>
 
     suspend fun deleteSubItem(subItemId: Int) : DataHolder<Any>
+
+    suspend fun deleteSubItems(subItemIds: List<Int>) : DataHolder<Any>
 
     suspend fun checkUncheckSubItem(subItemId: Int, check: Boolean) : DataHolder<Any>
 

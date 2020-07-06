@@ -1,6 +1,6 @@
 package com.huawei.references.hinotes.data.item.restdatasource.impl
 
-import com.huawei.references.hinotes.data.base.DBInsertError
+import com.huawei.references.hinotes.data.base.DBError
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.data.item.abstractions.ItemDataSource
@@ -37,7 +37,7 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
         }
 
 
-    override suspend fun getItemByIds(itemIds: List<Int>): DataHolder<List<Item>> =
+    override suspend fun getItemByIds(itemIds: List<Int>,itemType: ItemType): DataHolder<List<Item>> =
         apiCallAdapter.adapt<ItemRestDTO> {
             val query=""
             itemRestService.executeQuery(query)
@@ -53,9 +53,9 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
             }
         }
 
-    override suspend fun getItemsByUserId(userId: String) : DataHolder<List<Item>> =
+    override suspend fun getItemsByUserId(userId: String,itemType: ItemType) : DataHolder<List<Item>> =
         apiCallAdapter.adapt<ItemRestDTO> {
-            val query= "select json_agg(json_build_object('itemId',\"itemId\",'createdAt',\"createdAt\",'updatedAt',\"updatedAt\",'type',\"type\",'isOpen',\"isOpen\",'lat',\"lat\",'lng',\"lng\",'poiDescription',\"poiDescription\",'title',\"title\",'isChecked',\"isChecked\",'isPinned',\"isPinned\")) from hinotesschema.item"
+            val query= "select json_agg(json_build_object('itemId',\"itemId\",'createdAt',\"createdAt\",'updatedAt',\"updatedAt\",'type',\"type\",'isOpen',\"isOpen\",'lat',\"lat\",'lng',\"lng\",'poiDescription',\"poiDescription\",'title',\"title\",'isChecked',\"isChecked\",'isPinned',\"isPinned\")) from hinotesschema.item WHERE \"type\"=${itemType.type} "
             itemRestService.executeQuery(query)
         }.let {
             when(it){
@@ -69,8 +69,57 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
             }
         }
 
-    override suspend fun deleteItem(item:Item,userId: String) : DataHolder<Any>{
-        return DataHolder.Success(Any())
+    override suspend fun deleteItem(item:Item,userId: String) : DataHolder<Any> =
+        when(item.type){
+            ItemType.TodoList->{
+                when(val res=subItemDataSource.deleteSubItems(item.todoListSubItems?.map { it.id } ?: listOf())){
+                    is DataHolder.Success ->{
+                        deleteItemCore(item, userId)
+                    }
+                    is DataHolder.Fail -> res
+                    is DataHolder.Loading -> res
+                }
+            }
+            ItemType.Note->{
+                deleteItemCore(item,userId)
+            }
+        }
+
+
+    private suspend fun deleteItemCore(item: Item,userId:String) : DataHolder<Any> =
+        apiCallAdapter.adapt<ItemRestDTO> {
+            val query= "DELETE FROM hinotesschema.item WHERE \"itemId\"=${item.itemId}"
+            itemRestService.executeQuery(query)
+        }.let {
+            when(it){
+                is DBResult.EmptyQueryResult ->DataHolder.Success(Any())
+                else -> DataHolder.Fail(baseError = DBError("delete error"))
+            }
+        }
+
+
+    override suspend fun deleteItems(items: List<Item>, userId: String): DataHolder<Any> {
+        val resultList= mutableListOf<DataHolder<Any>>()
+        items.forEach {item->
+            when(item.type){
+                ItemType.TodoList->{
+                    when(val res=subItemDataSource.deleteSubItems(item.todoListSubItems?.map { it.id } ?: listOf())){
+                        is DataHolder.Success ->{
+                            deleteItemCore(item,userId)
+                        }
+                        is DataHolder.Fail -> res
+                        is DataHolder.Loading -> res
+                    }
+                }
+                ItemType.Note->{
+                    deleteItemCore(item,userId)
+                }
+            }.let {
+               resultList.add(it)
+            }
+        }
+       return if(resultList.count { it is DataHolder.Fail } >0 ) DataHolder.Fail(baseError = DBError("delete error"))
+        else DataHolder.Success(Any())
     }
 
     override suspend fun upsertItem(item:Item,userId: String,isNew:Boolean) : DataHolder<Any>{
@@ -102,17 +151,17 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
             apiCallAdapter.adapt<Any> {
                 val query="insert into hinotesschema.item(\"createdAt\",\"updatedAt\",\"type\",\"isOpen\",lat,lng,\"poiDescription\",\"title\",\"isChecked\",\"isPinned\") values (${if(isNew) "NOW()," else ""}NOW(),${item.type.type},${item.isOpen},${item.lat?:"NULL"},${item.lng?:"NULL"},${item.poiDescription?.let{ "'$it'" }?:"NULL"},'${item.title}',${item.isChecked},${item.isPinned}) returning \"itemId\""
                 itemRestService.executeQuery(query)
-            }.let {
-                when(it){
+            }.let {itemDbResult->
+                when(itemDbResult){
                     is DBResult.InsertResultId ->{
                         when(item.type){
                             ItemType.Note->{
-                                DataHolder.Success(it.id)
+                                DataHolder.Success(itemDbResult.id)
                             }
                             ItemType.TodoList->{
-                                subItemDataSource.insertMultiple(item.todoListSubItems ?: listOf(),it.id).let {
+                                subItemDataSource.insertMultiple(item.todoListSubItems ?: listOf(),itemDbResult.id).let {
                                     when(it){
-                                        is DataHolder.Success -> DataHolder.Success(item.itemId)
+                                        is DataHolder.Success -> DataHolder.Success(itemDbResult.id)
                                         is DataHolder.Fail -> it
                                         is DataHolder.Loading -> it
                                     }
@@ -120,7 +169,7 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
                             }
                         }
                     }
-                    else -> DataHolder.Fail(baseError = DBInsertError("Insert error"))
+                    else -> DataHolder.Fail(baseError = DBError("Insert error"))
                 }
             }
         }
@@ -130,28 +179,33 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
                     updateItemCore(item)
                 }
                 ItemType.TodoList->{
-                    subItemDataSource.updateMultiple(item.todoListSubItems?:listOf(),item.itemId).let {
-                        when(it){
-                            is DataHolder.Success ->{
-                                updateItemCore(item)
-                            }
-                            is DataHolder.Loading ->it
-                            is DataHolder.Fail -> it
+                    // inserts sub items with id -1 , updates others
+                    item.todoListSubItems?.takeIf{ it.isNotEmpty() }?.partition { it.id==-1 }?.let {
+                        val insertResult= if(it.first.isEmpty()){
+                            DataHolder.Success(Any())
+                        } else subItemDataSource.insertMultiple(it.first,item.itemId)
+
+                        val updateResult= if(it.second.isEmpty()){
+                            DataHolder.Success(Any())
+                        } else subItemDataSource.updateMultiple(it.second,item.itemId)
+
+                        if(updateResult is DataHolder.Success && insertResult is DataHolder.Success){
+                            updateItemCore(item)
                         }
-                    }
+                        else  DataHolder.Fail()
+                    } ?: updateItemCore(item)
                 }
             }
         }
 
-
     private suspend fun updateItemCore(item: Item) : DataHolder<Int> =
         apiCallAdapter.adapt<Any> {
-            val query="UPDATE hinotesschema.item SET \"updatedAt\" = NOW(),\"type\"=${item.type.type},\"isOpen\"=${item.isOpen},lat=${item.lat},lng=${item.lng},\"poiDescription\"=${item.poiDescription},\"title\"=${item.title},\"isChecked\"=${item.isChecked},\"isPinned\"=${item.isPinned} where \"itemId\"=${item.itemId}"
+            val query="UPDATE hinotesschema.item SET \"updatedAt\" = NOW(),\"type\"=${item.type.type},\"isOpen\"=${item.isOpen},lat=${item.lat},lng=${item.lng},\"poiDescription\"=${item.poiDescription.takeIf { (it?:"").isNotBlank() }?:"null"},\"title\"=${item.title},\"isChecked\"=${item.isChecked},\"isPinned\"=${item.isPinned} where \"itemId\"=${item.itemId}"
             itemRestService.executeQuery(query)
         }.let {
             when(it){
-                is DBResult.SuccessfulOperation -> DataHolder.Success(item.itemId)
-                else -> DataHolder.Fail(baseError = DBInsertError("Insert error"))
+                is DBResult.EmptyQueryResult -> DataHolder.Success(item.itemId)
+                else -> DataHolder.Fail(baseError = DBError("Insert error"))
             }
         }
 

@@ -15,8 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.todolistdetail.TodoListDetailActivity" />
-        <activity android:name=".ui.notedetail.DetailNoteActivity" />
+        <activity android:name="com.huawei.references.hinotes.ui.itemdetail.todolistdetail.TodoListDetailActivity" />
+        <activity android:name="com.huawei.references.hinotes.ui.itemdetail.notedetail.DetailNoteActivity" />
         <activity android:name=".ui.login.LoginActivity" />
         <activity
             android:name=".MainActivity"

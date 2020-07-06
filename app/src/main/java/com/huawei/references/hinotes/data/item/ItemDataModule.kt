@@ -8,4 +8,8 @@ val itemDataModule = module{
         ItemRepository(get(),get())
     }
 
+    factory {
+        SubItemRepository(get())
+    }
+
 }

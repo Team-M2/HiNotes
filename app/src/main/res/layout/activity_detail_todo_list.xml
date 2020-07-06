@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorViewsBackground"
-    tools:context=".ui.todolistdetail.TodoListDetailActivity">
+    tools:context=".ui.itemdetail.todolistdetail.TodoListDetailActivity">
 
     <CheckBox
         android:id="@+id/todo_list_item_checkbox"
@@ -47,7 +47,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/todo_list_sub_recycler_view"
         app:layout_constraintTop_toBottomOf="@+id/todo_list_sub_recycler_view"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        android:src="@drawable/ic_baseline_add_circle_24"
+         />
 
     <TextView
         android:id="@+id/textView"
@@ -58,4 +59,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/add_todo_item"
         app:layout_constraintStart_toEndOf="@+id/add_todo_item"
         app:layout_constraintTop_toTopOf="@+id/add_todo_item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@android:drawable/ic_menu_save"
+        android:layout_margin="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

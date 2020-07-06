@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.ui.notedetail
+package com.huawei.references.hinotes.ui.itemdetail.notedetail
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,7 +13,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
-import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.hmf.tasks.Task
 import com.huawei.hms.mlsdk.MLAnalyzerFactory
 import com.huawei.hms.mlsdk.common.MLFrame
@@ -23,8 +22,8 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.UserRole
-import com.huawei.references.hinotes.ui.base.BaseActivity
-import com.huawei.references.hinotes.ui.notes.NotesFragment
+import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
+import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.choose_image_direction.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
@@ -32,54 +31,54 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.IOException
 import java.util.*
 
-
-
-
-
-class DetailNoteActivity : BaseActivity() {
+class DetailNoteActivity : ItemDetailBaseActivity() {
 
     private val viewModel: DetailNoteViewModel by viewModel()
     private var isNewNote=true
-    private var noteItemData :Item ?= null
-    private var noteItemIndex :Int ?= null
-    private var noteItemSectionIndex :Int ?= null
+    private lateinit var noteItemData :Item
     private val cameraRequestCode = 101
     private val takePictureResultCode = 201
     private val storageRequestCode = 102
     private val pickImageResultCode = 202
 
+    override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        noteItemData=intent?.extras?.let{
+            if(it.containsKey(ITEM_KEY)){
+                (intent.extras?.getSerializable(ITEM_KEY) as Item).apply {
+                    isNewNote=false
+                }
+            }
+            else{
+                createNote()
+            }
+        }?: createNote()
         super.onCreate(savedInstanceState)
+    }
+
+    override fun setupUI() {
+        supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+            setCustomView(R.layout.item_detail_toolbar)
+        }
+
         setContentView(R.layout.activity_detail_note)
 
-        val auth = AGConnectAuth.getInstance()
-
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar?.setCustomView(R.layout.item_detail_toolbar)
-        noteItemData = intent.extras?.getSerializable("clickedItemData") as Item?
-        noteItemSectionIndex = intent.extras?.getSerializable("clickedItemSection") as Int?
-        noteItemIndex = intent.extras?.getSerializable("clickedIndex") as Int?
-
-        if(noteItemData!=null) {
-            isNewNote=false
-            note_detail_title.setText(noteItemData?.title)
-            note_detail_description.setText(noteItemData?.poiDescription.toString())
-        }
+        note_detail_title.setText(noteItemData.title)
+        note_detail_description.setText(noteItemData.poiDescription.toString())
 
         back_button.setOnClickListener {
             onBackPressed()
         }
 
         delete_icon.setOnClickListener {
-            if(noteItemSectionIndex == 0) {
-                noteItemIndex?.let { it1 -> NotesFragment.userMyNotesList.removeAt(it1) }
+            if(!isNewNote){
+                runWithAGConnectUserOrOpenLogin {
+                    viewModel.deleteItem(noteItemData,it.uid)
+                }
             }
-            else{
-                noteItemIndex?.let { it1 -> NotesFragment.userSharedList.removeAt(it1) }
-            }
-            finish()
         }
 
         microphone_icon.setOnClickListener {
@@ -109,40 +108,23 @@ class DetailNoteActivity : BaseActivity() {
 
         saveFab.setOnClickListener {
             //TODO: empty note title and description check
-            //TODO: if current user is null navigate to login activity
-            val itemToSave=noteItemData?.apply {
-                title=note_detail_title.text.toString()
-                poiDescription=note_detail_description.text.toString()
-            } ?: Item(type = ItemType.Note,title = note_detail_title.text.toString())
-            viewModel.saveItem(itemToSave,"user1")
+            runWithAGConnectUserOrOpenLogin {
+                val itemToSave=noteItemData.apply {
+                    title=note_detail_title.text.toString()
+                    poiDescription=note_detail_description.text.toString()
+                }
+                viewModel.saveItem(itemToSave,it.uid,isNewNote)
+            }
         }
     }
 
     override fun onBackPressed() {
-        if(isNewNote){
-            createNote()
-        }
-        else{
-            saveNoteChanges()
-        }
+        //TODO: show usnsaved data will be lost popup,then finish
         super.onBackPressed()
     }
 
-    private fun saveNoteChanges(){
-        if(noteItemSectionIndex==0) {
-                NotesFragment.userMyNotesList[noteItemIndex!!].title = note_detail_title.text.toString()
-                NotesFragment.userMyNotesList[noteItemIndex!!].poiDescription = note_detail_description.text.toString()
-            }
-            else{
-                NotesFragment.userSharedList[noteItemIndex!!].title = note_detail_title.text.toString()
-                NotesFragment.userSharedList[noteItemIndex!!].poiDescription = note_detail_description.text.toString()
-        }
-    }
-
-    private fun createNote(){
-        NotesFragment.userMyNotesList.add(0,Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,note_detail_description.text.toString(),note_detail_title.text.toString(),
-            arrayListOf(),false,UserRole.Owner,false))
-    }
+    private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","",
+        arrayListOf(),false,UserRole.Owner,false)
 
     @SuppressLint("NewApi")
     private fun performTakePicture(){
@@ -236,5 +218,9 @@ class DetailNoteActivity : BaseActivity() {
             view = View(this)
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    companion object{
+        const val ITEM_KEY="ITEM_KEY"
     }
 }

@@ -101,19 +101,23 @@ class ItemRepository(private val itemDataSource: ItemDataSource,
         )
     }
 
-    suspend fun getItems(userId: String): DataHolder<List<Item>> =
-        itemDataSource.getItemsByUserId(userId)
+    suspend fun getItems(userId: String,itemType: ItemType): DataHolder<List<Item>> =
+        itemDataSource.getItemsByUserId(userId,itemType)
 
     suspend fun getItemsLiveData() : LiveData<DataHolder<List<Item>>> =
         itemsLiveDataSource.getItemsLiveData()
 
-    suspend fun addItemToDb(item: Item,userId: String){
-        itemDataSource.upsertItem(item,userId,true)
-    }
+    suspend fun upsertItem(item: Item,userId: String,isNew:Boolean) : DataHolder<Any> =
+        itemDataSource.upsertItem(item,userId,isNew)
 
-    suspend fun updateItem(item: Item,userId: String){
-        itemDataSource.upsertItem(item,userId,false)
-    }
+
+    suspend fun deleteItem(item:Item,userId:String) : DataHolder<Any> =
+        itemDataSource.deleteItem(item,userId)
+
+
+    suspend fun deleteItems(items:List<Item>,userId:String) : DataHolder<Any> =
+        itemDataSource.deleteItems(items,userId)
+
 
 }
 

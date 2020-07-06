@@ -1,7 +1,6 @@
 package com.huawei.references.hinotes.data.item.restdatasource.service
 
 import com.huawei.references.hinotes.data.DataConstants.Companion.DEFAULT_SERVER_ERROR_STR
-import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.item.restdatasource.RestDataSourceConstants
 import com.squareup.moshi.*
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -18,9 +17,8 @@ class ApiCallAdapter {
                 if(response.isSuccessful){
                     response.body()?.let {
                         when {
-                            it.startsWith(RestDataSourceConstants.DB_ERROR_STR) -> {
-                                DataHolder.Fail(errStr = it)
-                                DBResult.DBError(it)
+                            it.toLowerCase().startsWith(RestDataSourceConstants.DB_ERROR_STR) -> {
+                                DBResult.EmptyQueryResult()
                             }
                             it == RestDataSourceConstants.DB_EMPTY_LIST_STR -> {
                                 DBResult.EmptyQueryResult()
@@ -31,6 +29,9 @@ class ApiCallAdapter {
                             it.startsWith(RestDataSourceConstants.DB_DELETE_STR) -> {
                                 DBResult.SuccessfulOperation()
                             }
+//                            it.startsWith(RestDataSourceConstants.DB_NO_RESULTS_RETURNING_STR) -> {
+//                                DBResult.SuccessfulOperation()
+//                            }
                             it.startsWith(RestDataSourceConstants.DB_UPDATE_STR) -> {
                                 DBResult.SuccessfulOperation()
                             }

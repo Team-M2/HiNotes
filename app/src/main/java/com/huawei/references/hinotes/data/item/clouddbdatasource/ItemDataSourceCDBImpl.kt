@@ -11,6 +11,7 @@ import com.huawei.references.hinotes.data.item.clouddbdatasource.model.ItemCDBDT
 import com.huawei.references.hinotes.data.item.clouddbdatasource.model.mapToItem
 import com.huawei.references.hinotes.data.item.clouddbdatasource.model.mapToItemDTO
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.ItemType
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -44,7 +45,7 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
             }
         }
 
-    override suspend fun getItemByIds(itemIds: List<Int>): DataHolder<List<Item>> =
+    override suspend fun getItemByIds(itemIds: List<Int>,itemType: ItemType): DataHolder<List<Item>> =
         suspendCoroutine{ continuation->
             cloudDBZone?.let {
                 val query = CloudDBZoneQuery.where(ItemCDBDTO::class.java).apply {
@@ -77,14 +78,14 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
             }
         }
 
-    override suspend fun getItemsByUserId(userId: String): DataHolder<List<Item>> =
+    override suspend fun getItemsByUserId(userId: String,itemType: ItemType): DataHolder<List<Item>> =
         try {
             when (val permissionsResult = permissionsDataSource.getPermissions(userId)) {
                 is DataHolder.Success -> {
                     when (val itemsResult =
                         getItemByIds(permissionsResult.data.map {
                             it.itemId
-                        })) {
+                        },itemType)) {
                         is DataHolder.Success -> {
                             DataHolder.Success(itemsResult.data.map {
                                 it
@@ -122,7 +123,7 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
             var itemSize=0
             var lastItemId=0
             // getting lastItemId and itemSize
-            when(val res=getItemsByUserId(userId)){
+            when(val res=getItemsByUserId(userId,item.type)){
                 is DataHolder.Success -> {
                     if(res.data.isNotEmpty()){
                         itemSize=res.data.size
@@ -173,7 +174,7 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
         try {
             var itemSize=0
             // getting lastItemId and itemSize
-            when(val res=getItemsByUserId(userId)){
+            when(val res=getItemsByUserId(userId,item.type)){
                 is DataHolder.Success -> {
                     if(res.data.isNotEmpty()){
                         itemSize=res.data.size
@@ -208,4 +209,9 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
         catch (e:Exception){
             DataHolder.Fail(errStr = e.message ?: DataConstants.DEFAULT_ERROR_STR)
         }
+
+    override suspend fun deleteItems(items: List<Item>, userId: String): DataHolder<Any> {
+        TODO("Not yet implemented")
+    }
+
 }

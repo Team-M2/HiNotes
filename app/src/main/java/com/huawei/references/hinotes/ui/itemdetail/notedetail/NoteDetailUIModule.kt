@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.ui.notedetail
+package com.huawei.references.hinotes.ui.itemdetail.notedetail
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

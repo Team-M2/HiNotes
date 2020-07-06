@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.ui.notes.adapter
+package com.huawei.references.hinotes.ui.itemlist.notes.adapter
 
 import android.view.View
 import android.widget.CheckBox
