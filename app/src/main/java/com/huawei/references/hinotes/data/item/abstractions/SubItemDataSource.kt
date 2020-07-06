@@ -15,6 +15,8 @@ interface SubItemDataSource {
 
     suspend fun checkUncheckSubItem(subItemId: Int, check: Boolean) : DataHolder<Any>
 
+    suspend fun checkUncheckSubItemByItemId(itemId: Int, check: Boolean) : DataHolder<Any>
+
     suspend fun insertMultiple(subItemList:List<TodoListSubItem>,itemId:Int) : DataHolder<Any>
 
     suspend fun updateMultiple(subItemList: List<TodoListSubItem>, itemId: Int): DataHolder<Any>

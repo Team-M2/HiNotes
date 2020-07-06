@@ -14,5 +14,6 @@ data class ItemRestDTO(@SerializedName("itemId") var itemId:Int,
                        @SerializedName("poiDescription") val poiDescription:String?,
                        @SerializedName("title") val title:String,
                        @SerializedName("isChecked") val isChecked:Boolean?,
-                       @SerializedName("isPinned") val isPinned:Boolean?
+                       @SerializedName("isPinned") val isPinned:Boolean?,
+                       @SerializedName("role") val role:Int?
 ) : CloudDBZoneObject()

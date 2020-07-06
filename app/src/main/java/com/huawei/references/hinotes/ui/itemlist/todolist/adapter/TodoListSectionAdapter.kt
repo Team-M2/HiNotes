@@ -2,6 +2,7 @@ package com.huawei.references.hinotes.ui.itemlist.todolist.adapter
 
 import android.content.Intent
 import android.view.View
+import android.widget.CompoundButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.huawei.references.hinotes.R
@@ -12,7 +13,6 @@ import com.huawei.references.hinotes.ui.itemlist.SectionAdapter
 import com.huawei.references.hinotes.ui.itemlist.notes.adapter.IOnLongClickListener
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
-import kotlinx.android.synthetic.main.todo_list_item_list.view.*
 
 
 class TodoListSectionAdapter(
@@ -27,6 +27,8 @@ class TodoListSectionAdapter(
 
     private val selectedItems:HashMap<Item,Boolean> = hashMapOf()
 
+    var checkCallback : (item:Item) -> Unit = {}
+
     val list: ArrayList<Item> = arrayListOf()
 
     override fun getContentItemsTotal(): Int {
@@ -39,6 +41,10 @@ class TodoListSectionAdapter(
         )
     }
 
+    private val checkListener= CompoundButton.OnCheckedChangeListener{_,isCheckedParam ->
+        val s=isCheckedParam
+    }
+
     override fun onBindItemViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int
@@ -46,7 +52,16 @@ class TodoListSectionAdapter(
         val todoListItemHolder: TodoListItemViewHolder = holder as TodoListItemViewHolder
         val todoListItem: Item = list[position]
         todoListItemHolder.todoListSubText.text = todoListItem.title
-        todoListItemHolder.todoListSubCheckbox.isChecked = todoListItem.isChecked!!
+        todoListItemHolder.todoListSubCheckbox.apply {
+            isChecked = todoListItem.isChecked!!
+            setOnCheckedChangeListener { _, isCheckedParam ->
+                isChecked=isCheckedParam
+                checkCallback.invoke(todoListItem.apply {
+                    isChecked=isCheckedParam
+                })
+            }
+            //setOnCheckedChangeListener(checkListener)
+        }
 
         if(selectedItems[todoListItem]!!){
             holder.rootView.setBackgroundResource(R.color.colorSelectedViewBackground)
@@ -79,9 +94,9 @@ class TodoListSectionAdapter(
         }
 
 
-        holder.itemView.todo_list_sub_checkbox.setOnCheckedChangeListener { _, isChecked ->
-            list[position].isChecked=isChecked
-        }
+//        holder.itemView.todo_list_sub_checkbox.setOnCheckedChangeListener { _, isChecked ->
+//            list[position].isChecked=isChecked
+//        }
     }
 
     override fun getHeaderViewHolder(view: View): RecyclerView.ViewHolder {

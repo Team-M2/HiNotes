@@ -24,7 +24,6 @@ import com.huawei.references.hinotes.ui.base.show
 import com.huawei.references.hinotes.ui.itemlist.notes.adapter.IOnLongClickListener
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
 
@@ -39,19 +38,19 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
 
     abstract val pageTitle:Int
 
-    protected val itemListViewModel: ItemListViewModel by viewModel()
+    protected abstract fun getItemListViewModel() : ItemListViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        observeDataHolderLiveData(itemListViewModel.itemsLiveData,{
+        observeDataHolderLiveData(getItemListViewModel().itemsLiveData,{
             //TODO: no results popup
             fillLists(listOf())
         }){
             fillLists(it)
         }
 
-        observeDataHolderLiveData(itemListViewModel.deleteILiveData){
+        observeDataHolderLiveData(getItemListViewModel().deleteILiveData){
             getData()
         }
 
@@ -74,7 +73,7 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
         }
         requireActivity().findViewById<ImageView>(R.id.toolbar_delete_icon).setOnClickListener {
             runWithAGConnectUserOrOpenLogin {
-                itemListViewModel.deleteItems(myItemsSectionAdapter.getSelectedItems() +
+                getItemListViewModel().deleteItems(myItemsSectionAdapter.getSelectedItems() +
                         sharedItemsSectionAdapter.getSelectedItems(),it.uid)
             }
         }

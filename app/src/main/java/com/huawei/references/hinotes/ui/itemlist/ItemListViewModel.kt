@@ -11,7 +11,7 @@ import com.huawei.references.hinotes.ui.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ItemListViewModel(private val itemRepository: ItemRepository) : BaseViewModel() {
+open class ItemListViewModel(private val itemRepository: ItemRepository) : BaseViewModel() {
 
     private val _itemsLiveData = MutableLiveData<DataHolder<List<Item>>>()
     val itemsLiveData : LiveData<DataHolder<List<Item>>>

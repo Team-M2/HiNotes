@@ -37,9 +37,19 @@ class PermissionsDataSourceRestImpl(
         userId: String,
         itemId: Int,
         role: UserRole
-    ): DataHolder<Any> {
-        TODO("Not yet implemented")
-    }
+    ): DataHolder<Any> =
+        apiCallAdapter.adapt<PermissionRestDTO> {
+            val query="insert into hinotesschema.permission(\"userId\",\"itemId\",\"role\") values ($userId,$itemId,${role.role})"
+            itemRestService.executeQuery(query)
+        }.let {
+            when (it) {
+                is DBResult.EmptyQueryResult ->{
+                    DataHolder.Success(Any())
+                }
+                else -> DataHolder.Fail()
+            }
+        }
+
 
 
 }

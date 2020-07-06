@@ -69,6 +69,18 @@ class SubItemDataSourceImpl(private val apiCallAdapter: ApiCallAdapter,
         }
     }
 
+    override suspend fun checkUncheckSubItemByItemId(itemId: Int, check: Boolean): DataHolder<Any> {
+        return apiCallAdapter.adapt<TodoListSubItemRestDTO> {
+            val query="UPDATE hinotesschema.todolistsubitem SET \"isChecked\" = $check,\"updatedAt\"=NOW() WHERE \"itemId\" = $itemId"
+            itemRestService.executeQuery(query)
+        }.let {
+            when(it){
+                is DBResult.EmptyQueryResult -> DataHolder.Success(Any())
+                else -> DataHolder.Fail()
+            }
+        }
+    }
+
     override suspend fun insertMultiple(subItemList: List<TodoListSubItem>, itemId: Int): DataHolder<Any> {
         return apiCallAdapter.adapt<TodoListSubItemRestDTO> {
             val query="BEGIN; ${subItemList.joinToString(";"){ "insert into hinotesschema.todolistsubitem(\"itemId\",\"createdAt\",\"updatedAt\",title,\"isChecked\") values ($itemId,NOW(),NOW(),'${it.title}',${it.isChecked}) returning todolistsubitem.id" }}; COMMIT;"

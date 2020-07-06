@@ -8,6 +8,7 @@ import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSourc
 import com.huawei.references.hinotes.data.item.abstractions.SubItemDataSource
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
+import com.huawei.references.hinotes.data.item.model.UserRole
 import com.huawei.references.hinotes.data.item.restdatasource.model.ItemRestDTO
 import com.huawei.references.hinotes.data.item.restdatasource.model.mapToItem
 import com.huawei.references.hinotes.data.item.restdatasource.service.ApiCallAdapter
@@ -55,7 +56,7 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
 
     override suspend fun getItemsByUserId(userId: String,itemType: ItemType) : DataHolder<List<Item>> =
         apiCallAdapter.adapt<ItemRestDTO> {
-            val query= "select json_agg(json_build_object('itemId',\"itemId\",'createdAt',\"createdAt\",'updatedAt',\"updatedAt\",'type',\"type\",'isOpen',\"isOpen\",'lat',\"lat\",'lng',\"lng\",'poiDescription',\"poiDescription\",'title',\"title\",'isChecked',\"isChecked\",'isPinned',\"isPinned\")) from hinotesschema.item WHERE \"type\"=${itemType.type} "
+            val query= "select json_agg(json_build_object('itemId',item.\"itemId\",'createdAt',\"createdAt\",'updatedAt',\"updatedAt\",'type',\"type\",'isOpen',\"isOpen\",'lat',\"lat\",'lng',\"lng\",'poiDescription',\"poiDescription\",'title',\"title\",'isChecked',\"isChecked\",'isPinned',\"isPinned\",'role',\"role\")) from hinotesschema.item INNER JOIN hinotesschema.permission ON permission.\"itemId\"=item.\"itemId\" WHERE \"type\"=${itemType.type} AND permission.\"userId\"='$userId'"
             itemRestService.executeQuery(query)
         }.let {
             when(it){
@@ -124,7 +125,7 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
 
     override suspend fun upsertItem(item:Item,userId: String,isNew:Boolean) : DataHolder<Any>{
         return if(isNew){
-            upsertCore(item,isNew)
+            upsertCore(userId,item,isNew)
         }
         else{
 //            when(val res=permissionsDataSource.getPermissions(userId)){
@@ -142,11 +143,11 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
 //                is DataHolder.Fail -> res
 //                is DataHolder.Loading -> res
 //            }
-            upsertCore(item,isNew)
+            upsertCore(userId,item,isNew)
         }
     }
 
-    private suspend fun upsertCore(item:Item,isNew: Boolean) : DataHolder<Int> =
+    private suspend fun upsertCore(userId:String,item:Item,isNew: Boolean) : DataHolder<Int> =
         if(isNew){
             apiCallAdapter.adapt<Any> {
                 val query="insert into hinotesschema.item(\"createdAt\",\"updatedAt\",\"type\",\"isOpen\",lat,lng,\"poiDescription\",\"title\",\"isChecked\",\"isPinned\") values (${if(isNew) "NOW()," else ""}NOW(),${item.type.type},${item.isOpen},${item.lat?:"NULL"},${item.lng?:"NULL"},${item.poiDescription?.let{ "'$it'" }?:"NULL"},'${item.title}',${item.isChecked},${item.isPinned}) returning \"itemId\""
@@ -154,19 +155,25 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
             }.let {itemDbResult->
                 when(itemDbResult){
                     is DBResult.InsertResultId ->{
-                        when(item.type){
-                            ItemType.Note->{
-                                DataHolder.Success(itemDbResult.id)
-                            }
-                            ItemType.TodoList->{
-                                subItemDataSource.insertMultiple(item.todoListSubItems ?: listOf(),itemDbResult.id).let {
-                                    when(it){
-                                        is DataHolder.Success -> DataHolder.Success(itemDbResult.id)
-                                        is DataHolder.Fail -> it
-                                        is DataHolder.Loading -> it
+                        when(val permResult=permissionsDataSource.addPermission(userId,itemDbResult.id,UserRole.Owner)){
+                            is DataHolder.Success->{
+                                when(item.type){
+                                    ItemType.Note->{
+                                        DataHolder.Success(itemDbResult.id)
+                                    }
+                                    ItemType.TodoList->{
+                                        subItemDataSource.insertMultiple(item.todoListSubItems ?: listOf(),itemDbResult.id).let {
+                                            when(it){
+                                                is DataHolder.Success -> DataHolder.Success(itemDbResult.id)
+                                                is DataHolder.Fail -> it
+                                                is DataHolder.Loading -> it
+                                            }
+                                        }
                                     }
                                 }
                             }
+                            is DataHolder.Fail -> permResult
+                            is DataHolder.Loading -> permResult
                         }
                     }
                     else -> DataHolder.Fail(baseError = DBError("Insert error"))
@@ -200,7 +207,7 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
 
     private suspend fun updateItemCore(item: Item) : DataHolder<Int> =
         apiCallAdapter.adapt<Any> {
-            val query="UPDATE hinotesschema.item SET \"updatedAt\" = NOW(),\"type\"=${item.type.type},\"isOpen\"=${item.isOpen},lat=${item.lat},lng=${item.lng},\"poiDescription\"=${item.poiDescription.takeIf { (it?:"").isNotBlank() }?:"null"},\"title\"=${item.title},\"isChecked\"=${item.isChecked},\"isPinned\"=${item.isPinned} where \"itemId\"=${item.itemId}"
+            val query="UPDATE hinotesschema.item SET \"updatedAt\" = NOW(),\"type\"=${item.type.type},\"isOpen\"=${item.isOpen},lat=${item.lat},lng=${item.lng},\"poiDescription\"=${item.poiDescription.takeIf { (it?:"").isNotBlank() }?:"null"},\"title\"='${item.title}',\"isChecked\"=${item.isChecked},\"isPinned\"=${item.isPinned} where \"itemId\"=${item.itemId}"
             itemRestService.executeQuery(query)
         }.let {
             when(it){
@@ -208,5 +215,15 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
                 else -> DataHolder.Fail(baseError = DBError("Insert error"))
             }
         }
+
+    override suspend fun checkUncheckTodoItem(userId:String, item:Item, isChecked:Boolean) : DataHolder<Any> =
+        when(val updateSubRes=subItemDataSource.checkUncheckSubItemByItemId(item.itemId,isChecked)){
+            is DataHolder.Success ->{
+                updateItemCore(item.apply { this.isChecked=isChecked })
+            }
+            is DataHolder.Fail -> updateSubRes
+            is DataHolder.Loading -> updateSubRes
+        }
+
 
 }

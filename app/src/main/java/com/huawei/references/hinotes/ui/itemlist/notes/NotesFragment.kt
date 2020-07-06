@@ -10,9 +10,11 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.ui.itemdetail.notedetail.DetailNoteActivity
 import com.huawei.references.hinotes.ui.itemlist.ItemListBaseFragment
+import com.huawei.references.hinotes.ui.itemlist.ItemListViewModel
 import com.huawei.references.hinotes.ui.itemlist.SectionAdapter
 import com.huawei.references.hinotes.ui.itemlist.notes.adapter.NoteSectionAdapter
 import kotlinx.android.synthetic.main.fragment_notes.*
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
 class NotesFragment : ItemListBaseFragment() {
@@ -28,6 +30,8 @@ class NotesFragment : ItemListBaseFragment() {
         this
     )
     override val pageTitle: Int = R.string.title_toolbar_notes
+
+    override fun getItemListViewModel(): ItemListViewModel = getViewModel()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -49,7 +53,7 @@ class NotesFragment : ItemListBaseFragment() {
 
     override fun getData() {
         runWithAGConnectUserOrOpenLogin {
-            itemListViewModel.getItems(it.uid,ItemType.Note)
+            getItemListViewModel().getItems(it.uid,ItemType.Note)
         }
     }
 }

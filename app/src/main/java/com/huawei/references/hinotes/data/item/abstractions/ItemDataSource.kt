@@ -18,4 +18,6 @@ interface ItemDataSource {
 
     suspend fun deleteItems(items: List<Item>, userId: String) : DataHolder<Any>
 
+    suspend fun checkUncheckTodoItem(userId:String,item:Item,isChecked:Boolean) : DataHolder<Any>
+
 }

@@ -118,6 +118,8 @@ class ItemRepository(private val itemDataSource: ItemDataSource,
     suspend fun deleteItems(items:List<Item>,userId:String) : DataHolder<Any> =
         itemDataSource.deleteItems(items,userId)
 
+    suspend fun checkUncheckTodoItem(userId:String,item:Item,isChecked:Boolean) : DataHolder<Any> =
+        itemDataSource.checkUncheckTodoItem(userId,item,isChecked)
 
 }
 
