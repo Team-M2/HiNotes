@@ -1,10 +1,8 @@
 package com.huawei.references.hinotes.ui.itemdetail.notedetail
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -14,7 +12,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
-import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.hmf.tasks.Task
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureActivity
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureConstants
@@ -28,9 +25,11 @@ import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.UserRole
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
+import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.choose_image_direction.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.IOException
 import java.util.*
 
@@ -39,13 +38,10 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     private val viewModel: DetailNoteViewModel by viewModel()
     private var isNewNote=true
     private lateinit var noteItemData :Item
-    private val cameraRequestCode = 101
     private val takePictureResultCode = 201
-    private val storageRequestCode = 102
     private val pickImageResultCode = 202
 
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
-    private val recordAudioRequestCode = 103
     private val recordAudioResultCode = 203
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,23 +127,16 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","",
         arrayListOf(),false,UserRole.Owner,false)
 
-    private fun performTakePicture(){
-        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.CAMERA), cameraRequestCode)
-        } else {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(intent, takePictureResultCode)
+    private fun performTakePicture() =
+        runWithPermissions(Manifest.permission.CAMERA){
+            startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE), takePictureResultCode)
         }
-    }
 
-    private fun performPickImage(){
-        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), storageRequestCode)
-        } else {
+    private fun performPickImage() =
+        runWithPermissions(Manifest.permission.READ_EXTERNAL_STORAGE){
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, pickImageResultCode)
         }
-    }
 
     private fun performTextRecognition(selectedImageBitmap:Bitmap){
         val setting = MLLocalTextSetting.Factory()
@@ -171,42 +160,11 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         }
     }
 
-    private fun performSpeechToText(){
-        if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.INTERNET, Manifest.permission.RECORD_AUDIO), recordAudioRequestCode)
-        } else {
-            val intent = Intent(this, MLAsrCaptureActivity::class.java)
-                .putExtra(MLAsrCaptureConstants.LANGUAGE, "en-US")
-                .putExtra(MLAsrCaptureConstants.FEATURE, MLAsrCaptureConstants.FEATURE_WORDFLUX)
-            startActivityForResult(intent, recordAudioResultCode)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == cameraRequestCode) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                performTakePicture()
-            } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show();
-            }
-        }
-        else if(requestCode == storageRequestCode){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                performPickImage()
-            } else {
-                Toast.makeText(this, "Storage permission denied", Toast.LENGTH_LONG).show();
-            }
-        }
-        else if (requestCode == recordAudioRequestCode) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                performSpeechToText()
-            }
-            else {
-                Toast.makeText(this, "Record audio permission denied", Toast.LENGTH_SHORT).show()
-            }
-        }
+    private fun performSpeechToText() = runWithPermissions(Manifest.permission.RECORD_AUDIO){
+        val intent = Intent(this, MLAsrCaptureActivity::class.java)
+            .putExtra(MLAsrCaptureConstants.LANGUAGE, "en-US")
+            .putExtra(MLAsrCaptureConstants.FEATURE, MLAsrCaptureConstants.FEATURE_WORDFLUX)
+        startActivityForResult(intent, recordAudioResultCode)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
