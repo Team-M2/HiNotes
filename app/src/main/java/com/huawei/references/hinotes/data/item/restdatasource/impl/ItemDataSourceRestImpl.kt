@@ -207,12 +207,12 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
 
     private suspend fun updateItemCore(item: Item) : DataHolder<Int> =
         apiCallAdapter.adapt<Any> {
-            val query="UPDATE hinotesschema.item SET \"updatedAt\" = NOW(),\"type\"=${item.type.type},\"isOpen\"=${item.isOpen},lat=${item.lat},lng=${item.lng},\"poiDescription\"=${item.poiDescription.takeIf { (it?:"").isNotBlank() }?:"null"},\"title\"='${item.title}',\"isChecked\"=${item.isChecked},\"isPinned\"=${item.isPinned} where \"itemId\"=${item.itemId}"
+            val query="UPDATE hinotesschema.item SET \"updatedAt\" = NOW(),\"type\"=${item.type.type},\"isOpen\"=${item.isOpen},lat=${item.lat},lng=${item.lng},\"poiDescription\"=${item.poiDescription.takeIf { (it?:"").isNotBlank()}?.let { "'$it'" } ?: "NULL"},\"title\"='${item.title}',\"isChecked\"=${item.isChecked},\"isPinned\"=${item.isPinned} where \"itemId\"=${item.itemId}"
             itemRestService.executeQuery(query)
         }.let {
             when(it){
                 is DBResult.EmptyQueryResult -> DataHolder.Success(item.itemId)
-                else -> DataHolder.Fail(baseError = DBError("Insert error"))
+                else -> DataHolder.Fail(baseError = DBError("Update error"))
             }
         }
 
