@@ -11,6 +11,8 @@ abstract class BaseActivity: AppCompatActivity() {
 
     protected val agConnectAuth :AGConnectAuth? = AGConnectAuth.getInstance()
 
+    protected var contentViewIsSet=false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (AGConnectAuth.getInstance().currentUser == null) {

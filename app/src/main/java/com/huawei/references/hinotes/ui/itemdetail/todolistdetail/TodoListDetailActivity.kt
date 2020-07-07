@@ -51,13 +51,16 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
     }
 
     override fun setupUI() {
-        supportActionBar?.apply {
-            setDisplayShowTitleEnabled(false)
-            displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            setCustomView(R.layout.item_detail_toolbar)
-        }
 
-        setContentView(R.layout.activity_detail_todo_list)
+        if(!contentViewIsSet){
+            contentViewIsSet=true
+            supportActionBar?.apply {
+                setDisplayShowTitleEnabled(false)
+                displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+                setCustomView(R.layout.item_detail_toolbar)
+            }
+            setContentView(R.layout.activity_detail_todo_list)
+        }
 
         todo_item_title.setText(todoItem.title)
         todo_list_item_checkbox.isChecked = todoItem.isChecked ?: false

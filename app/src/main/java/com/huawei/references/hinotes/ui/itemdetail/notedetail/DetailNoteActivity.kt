@@ -59,13 +59,16 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     }
 
     override fun setupUI() {
-        supportActionBar?.apply {
-            setDisplayShowTitleEnabled(false)
-            displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            setCustomView(R.layout.item_detail_toolbar)
-        }
 
-        setContentView(R.layout.activity_detail_note)
+        if(!contentViewIsSet){
+            contentViewIsSet=true
+            supportActionBar?.apply {
+                setDisplayShowTitleEnabled(false)
+                displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+                setCustomView(R.layout.item_detail_toolbar)
+            }
+            setContentView(R.layout.activity_detail_note)
+        }
 
         note_detail_title.setText(noteItemData.title)
         note_detail_description.setText(noteItemData.poiDescription.toString())

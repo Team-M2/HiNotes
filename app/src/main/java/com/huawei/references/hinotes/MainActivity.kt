@@ -14,17 +14,20 @@ class MainActivity : BaseActivity() {
 
     override fun setupUI(){
 
-        supportActionBar?.apply {
-            setDisplayShowTitleEnabled(false)
-            displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            setCustomView(R.layout.main_toolbar)
-            findViewById<ImageView>(R.id.toolbar_sign_out_icon).setOnClickListener {
-                AGConnectAuth.getInstance().signOut()
-                openLoginActivity()
+        if(!contentViewIsSet){
+            contentViewIsSet=true
+            supportActionBar?.apply {
+                setDisplayShowTitleEnabled(false)
+                displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+                setCustomView(R.layout.main_toolbar)
+                findViewById<ImageView>(R.id.toolbar_sign_out_icon).setOnClickListener {
+                    AGConnectAuth.getInstance().signOut()
+                    openLoginActivity()
+                }
             }
-        }
 
-        setContentView(R.layout.activity_main)
+            setContentView(R.layout.activity_main)
+        }
 
         val navController = findNavController(R.id.nav_host_fragment)
 
