@@ -7,6 +7,8 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -23,6 +25,8 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.UserRole
+import com.huawei.references.hinotes.ui.base.customPopup
+import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
@@ -36,10 +40,11 @@ import java.util.*
 class DetailNoteActivity : ItemDetailBaseActivity() {
 
     private val viewModel: DetailNoteViewModel by viewModel()
-    private var isNewNote=true
+    private var isNewNote = true
     private lateinit var noteItemData :Item
     private val takePictureResultCode = 201
     private val pickImageResultCode = 202
+    private var noteDetailChanged = false
 
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
     private val recordAudioResultCode = 203
@@ -80,7 +85,11 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         delete_icon.setOnClickListener {
             if(!isNewNote){
                 runWithAGConnectUserOrOpenLogin {
-                    viewModel.deleteItem(noteItemData,it.uid)
+                    customPopup(this.getString(R.string.delete_note_popup_warning),
+                        this.getString(R.string.delete_note_popup_accept),
+                        this.getString(R.string.delete_note_popup_reject),
+                        { viewModel.deleteItem(noteItemData,it.uid) },
+                        this)
                 }
             }
         }
@@ -111,20 +120,60 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         }
 
         saveFab.setOnClickListener {
-            //TODO: empty note title and description check
-            runWithAGConnectUserOrOpenLogin {
-                val itemToSave=noteItemData.apply {
-                    title=note_detail_title.text.toString()
-                    poiDescription=note_detail_description.text.toString()
+            if(note_detail_title.text.toString() == "" || note_detail_description.text.toString() == ""){
+                customToast(this,this.getString(R.string.note_detail_check_title_description),true)
+            }
+            else {
+                runWithAGConnectUserOrOpenLogin {
+                    val itemToSave = noteItemData.apply {
+                        title = note_detail_title.text.toString()
+                        poiDescription = note_detail_description.text.toString()
+                    }
+                    noteDetailChanged = false
+                    viewModel.saveItem(itemToSave, it.uid, isNewNote)
                 }
-                viewModel.saveItem(itemToSave,it.uid,isNewNote)
             }
         }
+
+        note_detail_title.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                noteDetailChanged=true
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+
+        note_detail_description.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                noteDetailChanged=true
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
     }
 
     override fun onBackPressed() {
-        //TODO: show usnsaved data will be lost popup,then finish
-        super.onBackPressed()
+        if(noteDetailChanged) {
+            runWithAGConnectUserOrOpenLogin {
+                customPopup(this.getString(R.string.delete_item_changes_popup_warning),
+                    this.getString(R.string.delete_item_changes_popup_accept),
+                    this.getString(R.string.delete_item_changes_popup_reject),
+                    {finish()},
+                    this
+                )
+            }
+        }
+        else{
+            super.onBackPressed()
+        }
     }
 
     private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","",

@@ -4,9 +4,14 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.huawei.agconnect.auth.AGConnectUser
+import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.ui.base.BaseActivity
+import com.huawei.references.hinotes.ui.base.customToast
+import com.huawei.references.hinotes.ui.base.hide
+import com.huawei.references.hinotes.ui.base.show
+import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 
 abstract class ItemDetailBaseActivity() : BaseActivity() {
 
@@ -16,11 +21,12 @@ abstract class ItemDetailBaseActivity() : BaseActivity() {
     override fun onStart() {
         super.onStart()
         observeDataHolderLiveData(getItemDetailViewModel().saveItemLiveData){
-            //TODO: show save successful popup and finish with activity result. Refresh in returned activity
+            customToast(this,this.getString(R.string.note_successfully_saved),false)
         }
 
         observeDataHolderLiveData(getItemDetailViewModel().deleteItemLiveData){
-            //TODO: show delete successfull popup and finish with activity result. Refresh in returned activity
+            customToast(this,this.getString(R.string.note_successfully_deleted),false)
+            finish()
         }
     }
 
@@ -38,22 +44,21 @@ abstract class ItemDetailBaseActivity() : BaseActivity() {
         liveData.observe(this, Observer {
             when(it){
                 is DataHolder.Success->{
-                    //TODO: hide loading popup
+                    detail_progress_bar.hide()
                     runBlock.invoke(it.data)
                 }
                 is DataHolder.Fail->{
-                    //TODO: hide loading popup
-                    //TODO: show error popup with message
+                    detail_progress_bar.hide()
+                    customToast(this,this.getString(R.string.failed_get_data),true)
                     if(it.baseError is NoRecordFoundError){
                         noResultBlock.invoke()
                     }
                     else Toast.makeText(this,it.errStr, Toast.LENGTH_LONG).show()
                 }
                 is DataHolder.Loading->{
-                    //TODO: show loading popup
+                    detail_progress_bar.show()
                 }
             }
         })
     }
-
 }

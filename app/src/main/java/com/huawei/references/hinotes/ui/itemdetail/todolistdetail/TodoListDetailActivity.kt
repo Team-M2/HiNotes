@@ -1,12 +1,16 @@
 package com.huawei.references.hinotes.ui.itemdetail.todolistdetail
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.TodoListSubItem
+import com.huawei.references.hinotes.ui.base.customPopup
+import com.huawei.references.hinotes.ui.base.hide
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
 import com.huawei.references.hinotes.ui.itemdetail.todolistdetail.adapter.TodoListSubItemsAdapter
@@ -39,11 +43,12 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
             }
         } ?: createItem()
         super.onCreate(savedInstanceState)
-
         observeDataHolderLiveData(viewModel.todoSubItemsLiveData){
             subItems.addAll(it)
             todoListSubItemsAdapter.notifyDataSetChanged()
         }
+        if (isNewNote)
+            detail_progress_bar.hide()
     }
 
     private fun getSubItems(itemId:Int){
@@ -61,13 +66,13 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
             }
             setContentView(R.layout.activity_detail_todo_list)
         }
-
         todo_item_title.setText(todoItem.title)
         todo_list_item_checkbox.isChecked = todoItem.isChecked ?: false
         todo_list_sub_recycler_view.apply {
             layoutManager = LinearLayoutManager(this@TodoListDetailActivity)
             adapter = todoListSubItemsAdapter
         }
+
 
         todo_list_item_checkbox.setOnCheckedChangeListener { _, isChecked ->
             subItems.forEach {
@@ -90,8 +95,11 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
         delete_icon.setOnClickListener {
             if (!isNewNote) {
                 runWithAGConnectUserOrOpenLogin {
-                    //TODO: show are you sure popup, then delete
-                    viewModel.deleteItem(todoItem, it.uid)
+                    customPopup(this.getString(R.string.delete_todo_list_popup_warning),
+                        this.getString(R.string.delete_todo_list_popup_accept),
+                        this.getString(R.string.delete_todo_list_popup_reject),
+                        { viewModel.deleteItem(todoItem, it.uid) },
+                        this)
                 }
             }
         }
@@ -111,8 +119,12 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
     }
 
     override fun onBackPressed() {
-        //TODO: show usnsaved data will be lost popup,then finish
-        super.onBackPressed()
+        runWithAGConnectUserOrOpenLogin {
+            customPopup(this.getString(R.string.delete_item_changes_popup_warning),
+                this.getString(R.string.delete_item_changes_popup_accept),
+                this.getString(R.string.delete_item_changes_popup_reject),
+                { finish() }, this)
+        }
     }
 
     private fun createSubItemAndAdd(itemId: Int) {

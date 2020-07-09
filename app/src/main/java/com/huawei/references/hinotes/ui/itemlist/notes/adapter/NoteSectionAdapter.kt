@@ -48,7 +48,7 @@ class NoteSectionAdapter(
         val noteItem: Item = list[position]
         itemHolder.noteTitle.text = noteItem.title
         itemHolder.noteDescription.text = noteItem.poiDescription
-        itemHolder.noteCreatedDate.text = "08:24 PM"
+        itemHolder.noteCreatedDate.text = noteItem.updatedAt.toString().subSequence(0,20)
 
         itemHolder.rootView.setOnClickListener { v ->
             if(selectedItems.isAllFalse()) {

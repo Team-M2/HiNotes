@@ -7,5 +7,4 @@ open class BaseFragment: Fragment(){
 
     protected val agConnectAuth = AGConnectAuth.getInstance()
 
-
 }

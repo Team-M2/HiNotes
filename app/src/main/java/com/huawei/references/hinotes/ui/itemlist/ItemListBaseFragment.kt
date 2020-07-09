@@ -17,10 +17,7 @@ import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.UserRole
-import com.huawei.references.hinotes.ui.base.BaseActivity
-import com.huawei.references.hinotes.ui.base.BaseFragment
-import com.huawei.references.hinotes.ui.base.hide
-import com.huawei.references.hinotes.ui.base.show
+import com.huawei.references.hinotes.ui.base.*
 import com.huawei.references.hinotes.ui.itemlist.notes.adapter.IOnLongClickListener
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
@@ -44,7 +41,7 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
         super.onActivityCreated(savedInstanceState)
 
         observeDataHolderLiveData(getItemListViewModel().itemsLiveData,{
-            //TODO: no results popup
+            customToast(requireActivity(),this.getString(R.string.no_recorded_note),false)
             fillLists(listOf())
         }){
             fillLists(it)
@@ -153,7 +150,7 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
                 }
                 is DataHolder.Fail->{
                     view?.findViewById<ProgressBar>(R.id.item_progressbar)?.hide()
-                    //TODO: show error popup with message
+                    customToast(requireActivity(),this.getString(R.string.failed_get_data),true)
                     if(it.baseError is NoRecordFoundError){
                         noResultBlock.invoke()
                     }

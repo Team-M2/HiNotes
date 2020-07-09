@@ -9,6 +9,24 @@
     <string name="text_recognition_failed">Text recognition operation failed. Please try again.</string>
     <string name="speech_to_text_failed">Speech to text operation failed. Please try again.</string>
     <string name="text_recognition_could_not_read">Text Recognition operation could not read text from the image. Please try again.</string>
+    <string name="delete_note_popup_warning">Are you sure you want to delete this note?</string>
+    <string name="delete_note_popup_accept">Delete</string>
+    <string name="delete_note_popup_reject">Cancel</string>
+    <string name="delete_todo_list_popup_warning">Are you sure you want to delete this to-do list?</string>
+    <string name="delete_todo_list_popup_accept">Delete</string>
+    <string name="delete_todo_list_popup_reject">Cancel</string>
+    <string name="delete_item_changes_popup_warning">Do you want the changes deleted?</string>
+    <string name="delete_item_changes_popup_accept">Delete</string>
+    <string name="delete_item_changes_popup_reject">Cancel</string>
+    <string name="note_detail_check_title_description">Note detail or description cannot be empty.</string>
+    <string name="note_successfully_deleted">Changes have been successfully deleted.</string>
+    <string name="note_successfully_saved">Changes have been successfully saved.</string>
+    <string name="no_recorded_note">No recorded note was found.</string>
+    <string name="failed_get_data">Failed to get data.</string>
+    <string name="failed_to_login">Failed to log in.</string>
+
+
+
 
 
     <string name="hw_id">HuaweiId</string>

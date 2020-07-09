@@ -40,6 +40,11 @@ class NotesFragment : ItemListBaseFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        getData()
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,

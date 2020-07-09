@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.huawei.agconnect.auth.AGConnectAuth
+import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.ui.login.LoginActivity
 
 abstract class BaseActivity: AppCompatActivity() {
@@ -39,7 +40,7 @@ abstract class BaseActivity: AppCompatActivity() {
                 setupUI()
             }
             else{
-                //TODO: show login error after finish
+                customToast(this,this.getString(R.string.failed_to_login),true)
                 finish()
             }
         }
@@ -48,5 +49,4 @@ abstract class BaseActivity: AppCompatActivity() {
     companion object {
         const val LOGIN_ACT_REQUEST_CODE = 333
     }
-
 }

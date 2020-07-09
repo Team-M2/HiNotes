@@ -68,7 +68,11 @@ class ToDoListsFragment : ItemListBaseFragment() {
 
     override fun onStart() {
         super.onStart()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        getData()
     }
 
     override fun setOnLongClickListener() {

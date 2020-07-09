@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/events_frame_view"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorSelectedViewBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/events_frame_view"
+        app:layout_constraintEnd_toEndOf="@+id/events_frame_view"
+        app:layout_constraintStart_toStartOf="@+id/events_frame_view"
+        app:layout_constraintTop_toBottomOf="@+id/popup_title" />
+
+    <TextView
+        android:id="@+id/popup_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Are you sure you want to delete this note?"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/events_frame_view"
+        app:layout_constraintStart_toStartOf="@+id/events_frame_view"
+        app:layout_constraintTop_toTopOf="@+id/events_frame_view" />
+
+    <TextView
+        android:id="@+id/reject_popup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="Cancel"
+        android:textColor="@color/btn_blue"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/events_frame_view"
+        app:layout_constraintEnd_toStartOf="@+id/view5"
+        app:layout_constraintStart_toStartOf="@+id/events_frame_view"
+        app:layout_constraintTop_toBottomOf="@+id/popup_title" />
+
+    <TextView
+        android:id="@+id/accept_popup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="Delete"
+        android:textColor="@color/warning_red"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/events_frame_view"
+        app:layout_constraintEnd_toEndOf="@+id/events_frame_view"
+        app:layout_constraintStart_toEndOf="@+id/view5"
+        app:layout_constraintTop_toBottomOf="@+id/popup_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
