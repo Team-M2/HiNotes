@@ -51,7 +51,6 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
             getData()
         }
 
-        getData()
     }
 
     override fun onStart() {
@@ -150,7 +149,6 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
                 }
                 is DataHolder.Fail->{
                     view?.findViewById<ProgressBar>(R.id.item_progressbar)?.hide()
-                    customToast(requireActivity(),this.getString(R.string.failed_get_data),true)
                     if(it.baseError is NoRecordFoundError){
                         noResultBlock.invoke()
                     }
