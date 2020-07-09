@@ -155,7 +155,12 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
             }.let {itemDbResult->
                 when(itemDbResult){
                     is DBResult.InsertResultId ->{
-                        when(val permResult=permissionsDataSource.addPermission(userId,itemDbResult.id,UserRole.Owner)){
+                        when(val permResult=permissionsDataSource.upsertPermission(
+                            userId,
+                            itemDbResult.id,
+                            UserRole.Owner,
+                            true
+                        )){
                             is DataHolder.Success->{
                                 when(item.type){
                                     ItemType.Note->{

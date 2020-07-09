@@ -107,7 +107,7 @@ class SubItemDataSourceImpl(private val apiCallAdapter: ApiCallAdapter,
 
     override suspend fun updateMultiple(subItemList: List<TodoListSubItem>, itemId: Int): DataHolder<Any> {
         return apiCallAdapter.adapt<TodoListSubItemRestDTO> {
-            val query="BEGIN; ${subItemList.joinToString(";") { "UPDATE hinotesschema.todolistsubitem SET \"isChecked\" = ${it.isChecked},\"itemId\"=$itemId,\"title\"=${it.title}, \"updatedAt\"=NOW() WHERE id = ${it.id}" }}; COMMIT;"
+            val query="BEGIN; ${subItemList.joinToString(";") { "UPDATE hinotesschema.todolistsubitem SET \"isChecked\" = ${it.isChecked},\"itemId\"=$itemId,\"title\"='${it.title}', \"updatedAt\"=NOW() WHERE id = ${it.id}" }}; COMMIT;"
             itemRestService.executeQuery(query)
         }.let {
             when(it){

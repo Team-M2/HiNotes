@@ -7,5 +7,10 @@ import com.huawei.references.hinotes.data.item.model.UserRole
 interface PermissionsDataSource {
     suspend fun getPermissions(userId: String): DataHolder<List<Permission>>
 
-    suspend fun addPermission(userId: String,itemId: Int,role: UserRole): DataHolder<Any>
+    suspend fun upsertPermission(
+        userId: String,
+        itemId: Int,
+        role: UserRole,
+        isNew: Boolean
+    ): DataHolder<Any>
 }

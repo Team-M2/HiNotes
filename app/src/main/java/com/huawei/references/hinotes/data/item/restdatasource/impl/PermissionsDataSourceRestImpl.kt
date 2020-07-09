@@ -33,13 +33,17 @@ class PermissionsDataSourceRestImpl(
             }
         }
 
-    override suspend fun addPermission(
+    override suspend fun upsertPermission(
         userId: String,
         itemId: Int,
-        role: UserRole
+        role: UserRole,
+        isNew: Boolean
     ): DataHolder<Any> =
+
         apiCallAdapter.adapt<PermissionRestDTO> {
-            val query="insert into hinotesschema.permission(\"userId\",\"itemId\",\"role\") values ($userId,$itemId,${role.role})"
+            val query=
+                if (isNew) "insert into hinotesschema.permission(\"userId\",\"itemId\",\"role\") values ($userId,$itemId,${role.role})"
+                else "update hinotesschema.permission SET \"userId\"=$userId,\"itemId\"=$itemId,\"role\"=${role.role} WHERE \"userId\"=$userId AND \"itemId\"=$itemId"
             itemRestService.executeQuery(query)
         }.let {
             when (it) {

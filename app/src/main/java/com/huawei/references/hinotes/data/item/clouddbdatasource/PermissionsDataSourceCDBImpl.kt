@@ -49,10 +49,11 @@ class PermissionsDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) :
         }
     }
 
-    override suspend fun addPermission(
+    override suspend fun upsertPermission(
         userId: String,
         itemId: Int,
-        role: UserRole
+        role: UserRole,
+        isNew: Boolean
     ): DataHolder<Any> {
         return DataHolder.Success(Any())
     }
