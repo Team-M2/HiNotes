@@ -3,9 +3,13 @@ package com.huawei.references.hinotes.ui.itemdetail.notedetail
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.IntentSender.SendIntentException
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +18,12 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.huawei.hmf.tasks.Task
+import com.huawei.hms.common.ApiException
+import com.huawei.hms.location.*
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureActivity
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureConstants
 import com.huawei.hms.mlsdk.MLAnalyzerFactory
@@ -33,6 +42,7 @@ import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.choose_image_direction.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
+import kotlinx.android.synthetic.main.note_detail_location_bottom_sheet.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.IOException
 import java.util.*
@@ -45,11 +55,20 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     private val takePictureResultCode = 201
     private val pickImageResultCode = 202
     private var noteDetailChanged = false
+    private var mLocationRequest: LocationRequest? = null
+    private var settingsClient: SettingsClient? = null
+    private var mLocationCallback: LocationCallback? = null
+    private var lLat: Double? = null
+    private var lLon: Double? = null
+    private var bottomSheetBehavior:BottomSheetBehavior<View>? = null
+    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
 
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
     private val recordAudioResultCode = 203
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        settingsClient = LocationServices.getSettingsClient(this)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         noteItemData=intent?.extras?.let{
             if(it.containsKey(ITEM_KEY)){
                 (intent.extras?.getSerializable(ITEM_KEY) as Item).apply {
@@ -64,7 +83,6 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     }
 
     override fun setupUI() {
-
         if(!contentViewIsSet){
             contentViewIsSet=true
             supportActionBar?.apply {
@@ -74,7 +92,8 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             }
             setContentView(R.layout.activity_detail_note)
         }
-
+        bottomSheetBehavior = BottomSheetBehavior.from(note_detail_location_bottom_sheet_layout)
+        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
         note_detail_title.setText(noteItemData.title)
         note_detail_description.setText(noteItemData.poiDescription.toString())
 
@@ -92,6 +111,10 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
                         this)
                 }
             }
+        }
+
+        location_icon.setOnClickListener {
+            checkLocationPermission()
         }
 
         microphone_icon.setOnClickListener {
@@ -159,6 +182,79 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             }
         })
     }
+
+    private fun checkLocationPermission() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                val strings = arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+                ActivityCompat.requestPermissions(this, strings, 1)
+            } else
+                getLocation()
+        } else {
+            if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, "android.permission.ACCESS_BACKGROUND_LOCATION") != PackageManager.PERMISSION_GRANTED) {
+                val strings = arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                ActivityCompat.requestPermissions(this, strings, 2)
+            } else
+                getLocation()
+        }
+    }
+
+    private fun getLocation() {
+        val builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
+        mLocationRequest = LocationRequest()
+        builder.addLocationRequest(mLocationRequest)
+        val locationSettingsRequest: LocationSettingsRequest = builder.build()
+        mLocationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                if (locationResult != null) {
+                    lLat = locationResult.lastLocation.latitude
+                    lLon = locationResult.lastLocation.longitude
+                    if (bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN) {
+                        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+                        val bottomSheetFragment = LocationBottomSheetFragment(lLat!!, lLon!!)
+                        bottomSheetFragment.show(this@DetailNoteActivity.supportFragmentManager, bottomSheetFragment.tag)
+                    } else {
+                        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
+                    }
+                }
+            }
+        }
+
+        settingsClient!!.checkLocationSettings(locationSettingsRequest)
+            .addOnSuccessListener {
+                fusedLocationProviderClient!!.requestLocationUpdates(
+                        mLocationRequest,
+                        mLocationCallback,
+                        Looper.getMainLooper()
+                    )
+                    .addOnSuccessListener { }
+            }
+            .addOnFailureListener { e ->
+                val statusCode = (e as ApiException).statusCode
+                if (statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+                    try {
+                        Log.i("bla", e.toString())
+                    } catch (sie: SendIntentException) {
+                        Log.i("bla", sie.toString())
+                    }
+                }
+            }
+    }
+
+
 
     override fun onBackPressed() {
         if(noteDetailChanged) {

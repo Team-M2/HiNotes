@@ -8,6 +8,7 @@
     app:behavior_hideable="true"
     app:behavior_peekHeight="56dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
     <EditText
         android:hint="Email"
         android:layout_margin="8dp"

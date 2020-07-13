@@ -1,5 +1,7 @@
 package com.huawei.references.hinotes.ui.itemdetail
 
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -29,6 +31,7 @@ abstract class ItemDetailBaseActivity() : BaseActivity() {
             finish()
         }
     }
+
 
     protected fun runWithAGConnectUserOrOpenLogin(runBlock: (agConnectUser: AGConnectUser) -> Unit){
         agConnectAuth?.currentUser?.let {

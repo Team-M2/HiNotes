@@ -16,7 +16,7 @@ import com.huawei.hms.support.hwid.request.HuaweiIdAuthParams
 import com.huawei.hms.support.hwid.request.HuaweiIdAuthParamsHelper
 import com.huawei.references.hinotes.R
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.login_bottom_sheet.*
 
 
 open class LoginActivity : AppCompatActivity() {

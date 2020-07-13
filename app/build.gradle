@@ -66,6 +66,12 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.20.0'
     implementation 'com.huawei.hms:hwid:4.0.1.300'
 
+    //Locaiton Service
+    implementation 'com.huawei.hms:maps:4.0.1.301'
+    implementation 'com.huawei.hms:location:4.0.3.301'
+    implementation 'com.huawei.hms:site:4.0.2.300'
+
+
     implementation 'com.huawei.agconnect:agconnect-database:1.2.1.301'
     // Koin AndroidX ViewModel features
     implementation "org.koin:koin-androidx-viewmodel:2.1.0"
