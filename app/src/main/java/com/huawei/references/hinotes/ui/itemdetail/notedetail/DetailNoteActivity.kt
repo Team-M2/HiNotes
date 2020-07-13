@@ -18,7 +18,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.huawei.hmf.tasks.Task
@@ -38,6 +37,7 @@ import com.huawei.references.hinotes.ui.base.customPopup
 import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
+import com.huawei.references.hinotes.ui.itemdetail.reminder.ReminderFragment
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.choose_image_direction.*
@@ -140,6 +140,10 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
 
         choose_event_background.setOnClickListener {
             include_choose_image.visibility= View.GONE
+        }
+
+        add_reminder.setOnClickListener {
+            performAddReminder()
         }
 
         saveFab.setOnClickListener {
@@ -314,6 +318,21 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             .putExtra(MLAsrCaptureConstants.FEATURE, MLAsrCaptureConstants.FEATURE_WORDFLUX)
         startActivityForResult(intent, recordAudioResultCode)
     }
+
+    private fun performAddReminder() =
+        runWithPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.INTERNET){
+            if (bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN) {
+                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+                val bottomSheetFragment = ReminderFragment()
+                bottomSheetFragment.show(this@DetailNoteActivity.supportFragmentManager, bottomSheetFragment.tag)
+            } else {
+                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

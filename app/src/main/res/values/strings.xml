@@ -26,9 +26,6 @@
     <string name="failed_to_login">Failed to log in.</string>
 
 
-
-
-
     <string name="hw_id">HuaweiId</string>
     <string name="hw_pay">HuaweiPay</string>
     <string name="hw_push">HuaweiPUSH</string>

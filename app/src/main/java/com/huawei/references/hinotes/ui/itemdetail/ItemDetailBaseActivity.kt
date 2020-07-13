@@ -16,8 +16,6 @@ import com.huawei.references.hinotes.ui.base.show
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 
 abstract class ItemDetailBaseActivity() : BaseActivity() {
-
-
     abstract fun getItemDetailViewModel() : ItemDetailViewModel
 
     override fun onStart() {

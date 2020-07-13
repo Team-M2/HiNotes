@@ -27,7 +27,7 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
 
     private val viewModel: TodoListDetailViewModel by viewModel()
     private val subItems = ArrayList<TodoListSubItem>()
-    private val todoListSubItemsAdapter= TodoListSubItemsAdapter(subItems)
+    private val todoListSubItemsAdapter = TodoListSubItemsAdapter(subItems)
 
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
 
