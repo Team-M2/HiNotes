@@ -2,7 +2,6 @@ package com.huawei.references.hinotes.ui.base
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -47,17 +46,17 @@ fun customToast(context:Activity, toastMessage:String, isWarningToast:Boolean){
     toast.show()
 }
 
-fun customPopup(popupText:String,positiveButtonText : String, negativeButtonText : String, clickEvent :() -> Unit = {}, context: Activity){
-    val mDialogView = LayoutInflater.from(context).inflate(R.layout.note_detail_popup, null)
+fun BaseActivity.customPopup(popupText:String,positiveButtonText : String, negativeButtonText : String, clickEvent :() -> Unit = {}){
+    val mDialogView = LayoutInflater.from(this).inflate(R.layout.note_detail_popup,
+        null).apply {
+        popup_title.text = popupText
+        accept_popup.text = positiveButtonText
+        reject_popup.text = negativeButtonText
+    }
 
-    mDialogView.popup_title.text = popupText
-    mDialogView.accept_popup.text = positiveButtonText
-    mDialogView.reject_popup.text = negativeButtonText
-
-    val mBuilder = AlertDialog
-        .Builder(context)
-        .setView(mDialogView)
-    val mAlertDialog = mBuilder.show()
+    val mAlertDialog = AlertDialog
+        .Builder(this)
+        .setView(mDialogView).show()
 
     mAlertDialog.window?.setLayout(
         ViewGroup.LayoutParams.WRAP_CONTENT,

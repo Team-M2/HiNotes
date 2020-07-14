@@ -45,17 +45,13 @@ class ToDoListsFragment : ItemListBaseFragment() {
 
     override fun getItemListViewModel(): ItemListViewModel = getViewModel<TodoListViewModel>()
 
-
-
     @SuppressLint("NewApi")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         floatingActionTodoButton.setOnClickListener {
             startActivity(Intent(activity, TodoListDetailActivity::class.java))
         }
-        observeDataHolderLiveData((getItemListViewModel() as TodoListViewModel).checkUncheckLiveData){
-            getData()
-        }
+        observeDataHolderLiveData((getItemListViewModel() as TodoListViewModel).checkUncheckLiveData)
     }
 
     override fun onCreateView(
@@ -68,7 +64,10 @@ class ToDoListsFragment : ItemListBaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        getData()
+        if(!firstDataGetCalled){
+            firstDataGetCalled=true
+            getData()
+        }
     }
 
     override fun setOnLongClickListener() {

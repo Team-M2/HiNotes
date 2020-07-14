@@ -1,8 +1,6 @@
 package com.huawei.references.hinotes.ui.itemdetail.todolistdetail
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
@@ -56,7 +54,6 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
     }
 
     override fun setupUI() {
-
         if(!contentViewIsSet){
             contentViewIsSet=true
             supportActionBar?.apply {
@@ -72,7 +69,6 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
             layoutManager = LinearLayoutManager(this@TodoListDetailActivity)
             adapter = todoListSubItemsAdapter
         }
-
 
         todo_list_item_checkbox.setOnCheckedChangeListener { _, isChecked ->
             subItems.forEach {
@@ -97,9 +93,8 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
                 runWithAGConnectUserOrOpenLogin {
                     customPopup(this.getString(R.string.delete_todo_list_popup_warning),
                         this.getString(R.string.delete_todo_list_popup_accept),
-                        this.getString(R.string.delete_todo_list_popup_reject),
-                        { viewModel.deleteItem(todoItem, it.uid) },
-                        this)
+                        this.getString(R.string.delete_todo_list_popup_reject)
+                    ) { viewModel.deleteItem(todoItem, it.uid) }
                 }
             }
         }
@@ -115,15 +110,6 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
                     isChecked = todo_list_item_checkbox.isChecked
                 }, it.uid, isNewNote)
             }
-        }
-    }
-
-    override fun onBackPressed() {
-        runWithAGConnectUserOrOpenLogin {
-            customPopup(this.getString(R.string.delete_item_changes_popup_warning),
-                this.getString(R.string.delete_item_changes_popup_accept),
-                this.getString(R.string.delete_item_changes_popup_reject),
-                { finish() }, this)
         }
     }
 

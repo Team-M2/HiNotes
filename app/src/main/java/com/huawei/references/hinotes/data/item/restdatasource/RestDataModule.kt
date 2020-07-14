@@ -1,14 +1,12 @@
 package com.huawei.references.hinotes.data.item.restdatasource
 
 import com.huawei.references.hinotes.data.item.abstractions.ItemDataSource
-import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
+import com.huawei.references.hinotes.data.item.abstractions.LiveDataSource
 import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
 import com.huawei.references.hinotes.data.item.abstractions.SubItemDataSource
+import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.restdatasource.RestDataSourceConstants.Companion.BASE_URL
-import com.huawei.references.hinotes.data.item.restdatasource.impl.ItemDataSourceRestImpl
-import com.huawei.references.hinotes.data.item.restdatasource.impl.ItemsLiveDataSourceRestImpl
-import com.huawei.references.hinotes.data.item.restdatasource.impl.PermissionsDataSourceRestImpl
-import com.huawei.references.hinotes.data.item.restdatasource.impl.SubItemDataSourceImpl
+import com.huawei.references.hinotes.data.item.restdatasource.impl.*
 import com.huawei.references.hinotes.data.item.restdatasource.service.ApiCallAdapter
 import com.huawei.references.hinotes.data.item.restdatasource.service.ItemRestService
 import okhttp3.OkHttpClient
@@ -56,11 +54,15 @@ val restDataModule = module {
     }
 
     factory {
-        ItemsLiveDataSourceRestImpl() as ItemsLiveDataSource
+        SubItemDataSourceImpl(get(),get()) as SubItemDataSource
+    }
+
+    single {
+        LiveDataSourceRestImpl() as LiveDataSource<Item>
     }
 
     factory {
-        SubItemDataSourceImpl(get(),get()) as SubItemDataSource
+        SubItemLiveDataSourceRestImpl()
     }
 
 

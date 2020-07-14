@@ -44,7 +44,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     private lateinit var noteItemData :Item
     private val takePictureResultCode = 201
     private val pickImageResultCode = 202
-    private var noteDetailChanged = false
+
 
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
     private val recordAudioResultCode = 203
@@ -64,7 +64,6 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     }
 
     override fun setupUI() {
-
         if(!contentViewIsSet){
             contentViewIsSet=true
             supportActionBar?.apply {
@@ -87,9 +86,8 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
                 runWithAGConnectUserOrOpenLogin {
                     customPopup(this.getString(R.string.delete_note_popup_warning),
                         this.getString(R.string.delete_note_popup_accept),
-                        this.getString(R.string.delete_note_popup_reject),
-                        { viewModel.deleteItem(noteItemData,it.uid) },
-                        this)
+                        this.getString(R.string.delete_note_popup_reject)
+                    ) { viewModel.deleteItem(noteItemData,it.uid) }
                 }
             }
         }
@@ -158,22 +156,6 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         })
-    }
-
-    override fun onBackPressed() {
-        if(noteDetailChanged) {
-            runWithAGConnectUserOrOpenLogin {
-                customPopup(this.getString(R.string.delete_item_changes_popup_warning),
-                    this.getString(R.string.delete_item_changes_popup_accept),
-                    this.getString(R.string.delete_item_changes_popup_reject),
-                    {finish()},
-                    this
-                )
-            }
-        }
-        else{
-            super.onBackPressed()
-        }
     }
 
     private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","",

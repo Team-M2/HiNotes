@@ -42,7 +42,10 @@ class NotesFragment : ItemListBaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        getData()
+        if(!firstDataGetCalled){
+            firstDataGetCalled=true
+            getData()
+        }
     }
 
     override fun onCreateView(

@@ -8,15 +8,16 @@ import com.huawei.agconnect.cloud.database.OnSnapshotListener
 import com.huawei.agconnect.cloud.database.exceptions.AGConnectCloudDBException
 import com.huawei.references.hinotes.data.DataConstants
 import com.huawei.references.hinotes.data.base.DataHolder
-import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
+import com.huawei.references.hinotes.data.item.abstractions.LiveDataSource
 import com.huawei.references.hinotes.data.item.clouddbdatasource.model.ItemCDBDTO
 import com.huawei.references.hinotes.data.item.clouddbdatasource.model.mapToItem
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.SubscriptionParam
 
 
-class ItemsLiveDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) : ItemsLiveDataSource {
+class LiveDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) : LiveDataSource<Item> {
 
-    override suspend fun getItemsLiveData(): LiveData<DataHolder<List<Item>>> {
+    override fun subscribe(subscriptionParam: SubscriptionParam): LiveData<DataHolder<List<Item>>> {
         val mutableLiveData=MutableLiveData<DataHolder<List<Item>>>()
         cloudDBZone?.let {
             val mSnapshotListener: OnSnapshotListener<ItemCDBDTO> =
@@ -47,7 +48,15 @@ class ItemsLiveDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) : ItemsL
         return mutableLiveData as LiveData<DataHolder<List<Item>>>
     }
 
+    override fun unsubscribe(): Boolean {
+        TODO("Not yet implemented")
+    }
+
     companion object{
         const val TAG="liveDataListener"
+    }
+
+    override suspend fun setItems(listDataHolder: DataHolder<List<Item>>) {
+        TODO("Not yet implemented")
     }
 }

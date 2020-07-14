@@ -27,7 +27,7 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
                 }
                 val queryTask = it.executeQuery(
                     query,
-                    CloudDBZoneQuery.CloudDBZoneQueryPolicy.POLICY_QUERY_FROM_CLOUD_ONLY
+                    CloudDBZoneQuery.CloudDBZoneQueryPolicy.POLICY_QUERY_FROM_CLOUD_PRIOR
                 ).apply {
                     addOnSuccessListener{snapShot->
                         if(snapShot.snapshotObjects.size()==0){

@@ -37,6 +37,8 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
 
     protected abstract fun getItemListViewModel() : ItemListViewModel
 
+    protected var firstDataGetCalled = false
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -47,15 +49,18 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
             fillLists(it)
         }
 
-        observeDataHolderLiveData(getItemListViewModel().deleteILiveData){
-            getData()
-        }
-
+        observeDataHolderLiveData(getItemListViewModel().deleteILiveData)
     }
 
     override fun onStart() {
         super.onStart()
         activity?.findViewById<TextView>(R.id.toolbar_title)?.text=getString(pageTitle)
+        runWithAGConnectUserOrOpenLogin {
+            val s=getItemListViewModel().subscribeToLiveData(it.uid)
+            observeDataHolderLiveData(s){
+                fillLists(it)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -140,7 +145,7 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
 
     fun <T : Any>observeDataHolderLiveData(liveData:LiveData<DataHolder<T>>,
                                            noResultBlock: () -> Unit= {},
-                                           runBlock: (data:T) -> Unit){
+                                           runBlock: (data:T) -> Unit = {}){
         liveData.observe(viewLifecycleOwner, Observer {
             when(it){
                 is DataHolder.Success->{

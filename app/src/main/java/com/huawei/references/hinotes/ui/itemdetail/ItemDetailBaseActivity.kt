@@ -7,10 +7,7 @@ import com.huawei.agconnect.auth.AGConnectUser
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
-import com.huawei.references.hinotes.ui.base.BaseActivity
-import com.huawei.references.hinotes.ui.base.customToast
-import com.huawei.references.hinotes.ui.base.hide
-import com.huawei.references.hinotes.ui.base.show
+import com.huawei.references.hinotes.ui.base.*
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 
 abstract class ItemDetailBaseActivity() : BaseActivity() {
@@ -18,15 +15,32 @@ abstract class ItemDetailBaseActivity() : BaseActivity() {
 
     abstract fun getItemDetailViewModel() : ItemDetailViewModel
 
+    protected var noteDetailChanged = false
+
     override fun onStart() {
         super.onStart()
         observeDataHolderLiveData(getItemDetailViewModel().saveItemLiveData){
+            noteDetailChanged = false
             customToast(this,this.getString(R.string.note_successfully_saved),false)
         }
 
         observeDataHolderLiveData(getItemDetailViewModel().deleteItemLiveData){
             customToast(this,this.getString(R.string.note_successfully_deleted),false)
             finish()
+        }
+    }
+
+    override fun onBackPressed() {
+        if(noteDetailChanged) {
+            runWithAGConnectUserOrOpenLogin {
+                customPopup(this.getString(R.string.delete_item_changes_popup_warning),
+                    this.getString(R.string.delete_item_changes_popup_accept),
+                    this.getString(R.string.delete_item_changes_popup_reject)
+                ) {finish()}
+            }
+        }
+        else{
+            super.onBackPressed()
         }
     }
 
