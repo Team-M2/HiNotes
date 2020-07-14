@@ -9,7 +9,7 @@
     <com.huawei.hms.maps.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="350dp"
         map:cameraTargetLat="51"
         map:cameraTargetLng="10"
         map:cameraZoom="8.5"

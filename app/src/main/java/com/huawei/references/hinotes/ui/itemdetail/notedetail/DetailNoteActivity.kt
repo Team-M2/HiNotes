@@ -29,6 +29,7 @@ import com.huawei.hms.mlsdk.MLAnalyzerFactory
 import com.huawei.hms.mlsdk.common.MLFrame
 import com.huawei.hms.mlsdk.text.MLLocalTextSetting
 import com.huawei.hms.mlsdk.text.MLText
+import com.huawei.hms.site.api.model.Site
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
@@ -37,6 +38,7 @@ import com.huawei.references.hinotes.ui.base.customPopup
 import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
+import com.huawei.references.hinotes.ui.itemdetail.reminder.IPoiClickListener
 import com.huawei.references.hinotes.ui.itemdetail.reminder.ReminderFragment
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_note.*
@@ -157,7 +159,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
                         poiDescription = note_detail_description.text.toString()
                     }
                     noteDetailChanged = false
-                    viewModel.saveItem(itemToSave, it.uid, isNewNote)
+                    saveChanges(itemToSave)
                 }
             }
         }
@@ -185,6 +187,12 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         })
+    }
+
+    fun saveChanges(item:Item){
+        runWithAGConnectUserOrOpenLogin {
+            viewModel.saveItem(item, it.uid, isNewNote)
+        }
     }
 
     private fun checkLocationPermission() {
@@ -258,8 +266,6 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             }
     }
 
-
-
     override fun onBackPressed() {
         if(noteDetailChanged) {
             runWithAGConnectUserOrOpenLogin {
@@ -327,9 +333,10 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             Manifest.permission.INTERNET){
             if (bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN) {
                 bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
-                val bottomSheetFragment = ReminderFragment()
+                val bottomSheetFragment = ReminderFragment(noteItemData)
                 bottomSheetFragment.show(this@DetailNoteActivity.supportFragmentManager, bottomSheetFragment.tag)
-            } else {
+            }
+            else {
                 bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
             }
         }

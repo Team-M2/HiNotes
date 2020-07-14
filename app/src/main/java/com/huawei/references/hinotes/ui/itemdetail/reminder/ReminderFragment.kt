@@ -9,10 +9,13 @@ import androidx.annotation.RequiresPermission
 import com.huawei.hms.location.LocationServices
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapView
+import com.huawei.hms.site.api.model.Site
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
+import com.huawei.references.hinotes.ui.itemdetail.notedetail.DetailNoteActivity
 
-class ReminderFragment : BaseMapFragment() {
+class ReminderFragment(var item: Item) : BaseMapFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,5 +42,11 @@ class ReminderFragment : BaseMapFragment() {
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE])
     override fun onMapReady(huaweiMap: HuaweiMap?) {
         super.onMapReady(huaweiMap)
+    }
+
+    override fun setOnPoiClickListener(site: Site) {
+        super.setOnPoiClickListener(site)
+        item.isPinned=true
+        (activity as DetailNoteActivity?)?.saveChanges(item)
     }
 }

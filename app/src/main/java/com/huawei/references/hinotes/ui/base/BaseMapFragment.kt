@@ -1,9 +1,7 @@
 package com.huawei.references.hinotes.ui.base
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.huawei.hms.location.*
@@ -19,12 +17,13 @@ import com.huawei.hms.site.api.SearchServiceFactory
 import com.huawei.hms.site.api.model.*
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.ui.itemdetail.notedetail.LocationBottomSheetFragment
+import com.huawei.references.hinotes.ui.itemdetail.reminder.IPoiClickListener
 import com.huawei.references.hinotes.ui.itemdetail.reminder.PoiItemsAdapter
 import kotlinx.android.synthetic.main.reminder_fragment.*
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
-open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback {
+open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPoiClickListener {
     private var hMap:HuaweiMap?=null
     var mapViewBundle: Bundle? = null
     var fusedLocationProviderClient : FusedLocationProviderClient ?= null
@@ -64,7 +63,7 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback {
             override fun onLocationResult(locationResult: LocationResult?) {
                 if (locationResult != null) {
                     hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude), 15F))
-                    getFirstPlace(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
+                    getPoiList(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
                 }
             }
         }
@@ -81,7 +80,7 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback {
             ?.addOnFailureListener { e -> }
     }
 
-    fun getFirstPlace(lat:Double, lng:Double) {
+    fun getPoiList(lat:Double, lng:Double) {
         val request = NearbySearchRequest()
         val location = Coordinate(lat, lng)
         request.location = location
@@ -96,7 +95,7 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback {
                         addMarker(it.location.lat,it.location.lng,hMap!!)
                     }
                     poi_recycler_view.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    poi_recycler_view.adapter = PoiItemsAdapter(results.sites)
+                    poi_recycler_view.adapter = PoiItemsAdapter(results.sites,this@BaseMapFragment)
                 }
 
                 override fun onSearchError(status: SearchStatus) {
@@ -106,4 +105,9 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback {
     }
 
     protected open fun setupUI() = Unit
+
+    override fun setOnPoiClickListener(site: Site) {
+
+    }
+
 }
