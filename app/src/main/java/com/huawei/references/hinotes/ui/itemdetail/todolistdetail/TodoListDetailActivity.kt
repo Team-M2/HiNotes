@@ -150,6 +150,7 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
         null,
         null,
         "",
+        "",
         ""
     )
 

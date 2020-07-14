@@ -60,8 +60,9 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     private var mLocationRequest: LocationRequest? = null
     private var settingsClient: SettingsClient? = null
     private var mLocationCallback: LocationCallback? = null
-    private var lLat: Double? = null
-    private var lLon: Double? = null
+    var lLat: Double? = null
+    var lLon: Double? = null
+    var mName: String? = null
     private var bottomSheetBehavior:BottomSheetBehavior<View>? = null
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
 
@@ -282,7 +283,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         }
     }
 
-    private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","",
+    private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","","",
         arrayListOf(),false,UserRole.Owner,false)
 
     private fun performTakePicture() =

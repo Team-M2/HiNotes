@@ -28,6 +28,7 @@ import com.huawei.hms.site.api.SearchService
 import com.huawei.hms.site.api.SearchServiceFactory
 import com.huawei.hms.site.api.model.*
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.location.InfoWindowData
 import com.huawei.references.hinotes.data.location.SiteAdapter
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import kotlinx.android.synthetic.main.custom_info_window.view.*
@@ -114,7 +115,6 @@ class LocationBottomSheetFragment(lat:Double, lon:Double) : BaseMapFragment() {
 
     internal class CustomInfoWindowAdapter(mcontext: Context) :
         HuaweiMap.InfoWindowAdapter {
-        private val mmContext = mcontext
         private val mWindow: View = (mcontext as Activity).
         layoutInflater.inflate(R.layout.custom_info_window, null)
 
@@ -150,7 +150,7 @@ class LocationBottomSheetFragment(lat:Double, lon:Double) : BaseMapFragment() {
         }
         mMapView.onSaveInstanceState(mapViewBundle)
     }
-    */
+
 
     private fun setMarkersToMap(placeList : List<Site>){
         placeList.forEach {
@@ -174,7 +174,7 @@ class LocationBottomSheetFragment(lat:Double, lon:Double) : BaseMapFragment() {
             marker.tag = info
         }
     }
-
+*/
     companion object{
         private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
         const val API_KEY="CV8PceXOYopn/ngZDofcwgFkmqYCo+LbAqjSx+uqBmVckaFf0bNgunMln8bncm+K6LjavJR/r/8N1PVf8ZEn1aVLNDZf"

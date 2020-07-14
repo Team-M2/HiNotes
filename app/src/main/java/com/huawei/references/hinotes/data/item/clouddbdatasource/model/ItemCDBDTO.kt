@@ -12,6 +12,7 @@ data class ItemCDBDTO(@PrimaryKey
                       val isOpen:Boolean,
                       val lat:Double?,
                       val lng:Double?,
+                      val poiName:String?,
                       val poiDescription:String?,
                       val title:String,
                       val isChecked:Boolean?,

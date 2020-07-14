@@ -16,6 +16,7 @@ import com.huawei.hms.site.api.SearchService
 import com.huawei.hms.site.api.SearchServiceFactory
 import com.huawei.hms.site.api.model.*
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.location.InfoWindowData
 import com.huawei.references.hinotes.ui.itemdetail.notedetail.LocationBottomSheetFragment
 import com.huawei.references.hinotes.ui.itemdetail.reminder.IPoiClickListener
 import com.huawei.references.hinotes.ui.itemdetail.reminder.PoiItemsAdapter
@@ -40,6 +41,7 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPo
         searchService = SearchServiceFactory.create(context, encodedApiKey)
     }
 
+
     override fun onMapReady(huaweiMap: HuaweiMap?) {
         hMap=huaweiMap
         hMap!!.isMyLocationEnabled = true
@@ -48,12 +50,40 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPo
         getLocation(settingsClient,fusedLocationProviderClient,hMap)
     }
 
+    private fun setMarkersToMap(placeList : List<Site>){
+        placeList.forEach {
+            val latlng = LatLng(it.location.lat, it.location.lng)
+            val info = InfoWindowData(it.siteId,
+                it.name,
+                it.formatAddress,
+                it.location.lat,
+                it.location.lng
+            )
+            val options = MarkerOptions()
+            options.position(latlng)
+            options.title(it.name)
+            options.draggable(false)
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+            options.clusterable(false)
+
+            val customInfoWindow = context?.let { ctx ->
+                LocationBottomSheetFragment.CustomInfoWindowAdapter(
+                    ctx
+                )
+            }
+            hMap!!.setInfoWindowAdapter(customInfoWindow)
+            val marker = hMap!!.addMarker(options)
+            marker.tag = info
+        }
+    }
+
+    /*
     fun addMarker(lat:Double,lng:Double,hMap: HuaweiMap){
         val options = MarkerOptions().position(LatLng(lat, lng))
         options.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
         hMap.addMarker(options)
     }
-
+*/
     private fun getLocation(settingsClient: SettingsClient?, fusedLocationProviderClient: FusedLocationProviderClient?, hMap: HuaweiMap?) {
         val builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
         val mLocationRequest = LocationRequest()
@@ -91,9 +121,7 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPo
         val resultListener: SearchResultListener<NearbySearchResponse> =
             object : SearchResultListener<NearbySearchResponse> {
                 override fun onSearchResult(results: NearbySearchResponse) {
-                    results.sites.forEach {
-                        addMarker(it.location.lat,it.location.lng,hMap!!)
-                    }
+                    setMarkersToMap(results.sites)
                     poi_recycler_view.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     poi_recycler_view.adapter = PoiItemsAdapter(results.sites,this@BaseMapFragment)
                 }
