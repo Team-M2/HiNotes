@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.item.abstractions.ItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.ItemsLiveDataSource
-import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.data.item.model.ItemType
-import com.huawei.references.hinotes.data.item.model.TodoListSubItem
-import com.huawei.references.hinotes.data.item.model.UserRole
+import com.huawei.references.hinotes.data.item.model.*
 import java.util.*
 
 class ItemRepository(private val itemDataSource: ItemDataSource,
@@ -32,6 +29,7 @@ class ItemRepository(private val itemDataSource: ItemDataSource,
                         TodoListSubItem(2,12,Date(),Date(),"Buy drink",false),
                         TodoListSubItem(3,12,Date(),Date(),"Buy something else",false)),
                     false,UserRole.Owner,
+                    Reminder(),
                     true
                 ),
                 Item(
@@ -49,6 +47,7 @@ class ItemRepository(private val itemDataSource: ItemDataSource,
                         TodoListSubItem(5,12,Date(),Date(),"Buy drink",false),
                         TodoListSubItem(6,12,Date(),Date(),"Buy something else",false)),
                     false,UserRole.Owner,
+                    Reminder(),
                     true
                 ),
                 Item(
@@ -66,6 +65,7 @@ class ItemRepository(private val itemDataSource: ItemDataSource,
                         TodoListSubItem(8,12,Date(),Date(),"Buy drink",true),
                         TodoListSubItem(9,12,Date(),Date(),"Buy something else",true)),
                     false,UserRole.Owner,
+                    Reminder(),
                     true
                 ),
                 Item(
@@ -83,6 +83,7 @@ class ItemRepository(private val itemDataSource: ItemDataSource,
                         TodoListSubItem(12,12,Date(),Date(),"Buy drink",true),
                         TodoListSubItem(13,12,Date(),Date(),"Buy something else",true)),
                     false,UserRole.Owner,
+                    Reminder(),
                     true
                 ),
                 Item(
@@ -100,6 +101,7 @@ class ItemRepository(private val itemDataSource: ItemDataSource,
                         TodoListSubItem(15,12,Date(),Date(),"Buy drink",false),
                         TodoListSubItem(16,12,Date(),Date(),"Buy something else",false)),
                     false,UserRole.Owner,
+                    Reminder(),
                     true
                 )
             )

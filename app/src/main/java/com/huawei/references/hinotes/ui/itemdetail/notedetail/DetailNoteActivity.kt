@@ -29,16 +29,15 @@ import com.huawei.hms.mlsdk.MLAnalyzerFactory
 import com.huawei.hms.mlsdk.common.MLFrame
 import com.huawei.hms.mlsdk.text.MLLocalTextSetting
 import com.huawei.hms.mlsdk.text.MLText
-import com.huawei.hms.site.api.model.Site
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
+import com.huawei.references.hinotes.data.item.model.Reminder
 import com.huawei.references.hinotes.data.item.model.UserRole
 import com.huawei.references.hinotes.ui.base.customPopup
 import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
-import com.huawei.references.hinotes.ui.itemdetail.reminder.IPoiClickListener
 import com.huawei.references.hinotes.ui.itemdetail.reminder.ReminderFragment
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_note.*
@@ -284,7 +283,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     }
 
     private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","","",
-        arrayListOf(),false,UserRole.Owner,false)
+        arrayListOf(),false,UserRole.Owner, Reminder(),false)
 
     private fun performTakePicture() =
         runWithPermissions(Manifest.permission.CAMERA){

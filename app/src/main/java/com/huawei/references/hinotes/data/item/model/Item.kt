@@ -17,6 +17,7 @@ data class Item (
     val todoListSubItems:MutableList<TodoListSubItem>?= mutableListOf(),
     var isChecked:Boolean?=false,
     val role: UserRole?=null,
+    var reminder: Reminder?=null,
     var isPinned:Boolean?=false
 ) :Serializable
 

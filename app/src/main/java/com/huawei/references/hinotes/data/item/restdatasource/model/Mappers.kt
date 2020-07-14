@@ -25,6 +25,7 @@ fun ItemRestDTO.mapToItem(todoListSubItems: List<TodoListSubItem> = mutableListO
         todoListSubItems.toMutableList(),
         isChecked,
         UserRole.valueOf(this.role!!),
+        reminder,
         isPinned
     )
 }
@@ -43,6 +44,7 @@ fun Item.mapToItemDTO() : ItemRestDTO {
         title,
         isChecked,
         isPinned,
+        reminder,
         role!!.role
     )
 }

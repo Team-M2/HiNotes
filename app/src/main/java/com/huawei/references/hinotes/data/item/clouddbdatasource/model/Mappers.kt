@@ -29,6 +29,7 @@ fun ItemCDBDTO.mapToItem(todoListSubItems:List<TodoListSubItem> = mutableListOf(
         todoListSubItems.toMutableList(),
         isChecked,
         userRole,
+        reminder,
         isPinned
     )
 }
@@ -46,6 +47,7 @@ fun Item.mapToItemDTO() : ItemCDBDTO {
         poiDescription,
         title,
         isChecked,
+        reminder,
         isPinned
     )
 }

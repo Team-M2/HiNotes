@@ -18,7 +18,17 @@
         map:layout_constraintTop_toTopOf="parent"
         map:mapType="normal"
         map:uiCompass="true"
-        map:uiZoomControls="true" />
+        map:uiZoomControls="true" >
+
+    </com.huawei.hms.maps.MapView>
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        map:layout_constraintBottom_toBottomOf="@+id/map_view"
+        map:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/poi_recycler_view"
