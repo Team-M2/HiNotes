@@ -15,12 +15,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/site_list"
+        app:layout_constraintBottom_toTopOf="@id/poi_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="420dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/site_list"
+        android:id="@+id/poi_recycler_view"
         app:layout_constraintTop_toBottomOf="@+id/note_detail_location_mapView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
