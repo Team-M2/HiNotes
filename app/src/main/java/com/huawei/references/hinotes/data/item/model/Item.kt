@@ -11,6 +11,7 @@ data class Item (
     val isOpen:Boolean=false,
     val lat:Double?=null,
     val lng:Double?=null,
+    val poiName:String?=null,
     var poiDescription:String?=null,
     var title:String,
     val todoListSubItems:MutableList<TodoListSubItem>?= mutableListOf(),

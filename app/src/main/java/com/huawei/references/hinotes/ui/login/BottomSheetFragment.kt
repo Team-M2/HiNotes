@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.huawei.agconnect.auth.*
 import com.huawei.hmf.tasks.OnFailureListener
@@ -20,7 +19,7 @@ import com.huawei.hmf.tasks.Task
 import com.huawei.hmf.tasks.TaskExecutors
 import com.huawei.references.hinotes.MainActivity
 import com.huawei.references.hinotes.R
-import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.login_bottom_sheet.*
 import java.util.*
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
@@ -29,7 +28,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val loginView = inflater.inflate(R.layout.bottom_sheet, container, false)
+        val loginView = inflater.inflate(R.layout.login_bottom_sheet, container, false)
         val edtEmail = loginView.findViewById<EditText>(R.id.edt_email)
         val edtPass = loginView.findViewById<EditText>(R.id.edt_pass)
         val edtCode = loginView.findViewById<EditText>(R.id.edt_code)

@@ -1,5 +1,7 @@
 package com.huawei.references.hinotes.ui.itemdetail
 
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -11,8 +13,6 @@ import com.huawei.references.hinotes.ui.base.*
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 
 abstract class ItemDetailBaseActivity() : BaseActivity() {
-
-
     abstract fun getItemDetailViewModel() : ItemDetailViewModel
 
     protected var noteDetailChanged = false
@@ -43,6 +43,7 @@ abstract class ItemDetailBaseActivity() : BaseActivity() {
             super.onBackPressed()
         }
     }
+
 
     protected fun runWithAGConnectUserOrOpenLogin(runBlock: (agConnectUser: AGConnectUser) -> Unit){
         agConnectAuth?.currentUser?.let {
