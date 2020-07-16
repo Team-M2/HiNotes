@@ -3,6 +3,7 @@ package com.huawei.references.hinotes.ui.base
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Looper
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.huawei.hms.location.*
@@ -16,8 +17,9 @@ import com.huawei.hms.site.api.SearchService
 import com.huawei.hms.site.api.SearchServiceFactory
 import com.huawei.hms.site.api.model.*
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.location.InfoWindowData
-import com.huawei.references.hinotes.ui.itemdetail.notedetail.LocationBottomSheetFragment
+import com.huawei.references.hinotes.ui.itemdetail.notedetail.LocationFragment
 import com.huawei.references.hinotes.ui.itemdetail.reminder.adapter.IPoiClickListener
 import com.huawei.references.hinotes.ui.itemdetail.reminder.adapter.PoiItemsAdapter
 import kotlinx.android.synthetic.main.reminder_fragment.*
@@ -25,7 +27,7 @@ import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
 
-open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback,
+open class BaseMapFragment(private var item: Item): BottomSheetDialogFragment(), OnMapReadyCallback,
     IPoiClickListener {
     private var hMap:HuaweiMap?=null
     var mapViewBundle: Bundle? = null
@@ -35,16 +37,16 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback,
     private var encodedApiKey:String?=null
     private var searchService: SearchService? = null
     var markerList : ArrayList<Marker>?= arrayListOf()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         try {
-            encodedApiKey = URLEncoder.encode(LocationBottomSheetFragment.API_KEY, "utf-8")
+            encodedApiKey = URLEncoder.encode(LocationFragment.API_KEY, "utf-8")
         } catch (e: UnsupportedEncodingException) {
             e.printStackTrace()
         }
         searchService = SearchServiceFactory.create(context, encodedApiKey)
     }
-
 
     override fun onMapReady(huaweiMap: HuaweiMap?) {
         hMap=huaweiMap
@@ -70,15 +72,16 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback,
             options.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
             options.clusterable(false)
 
-            val customInfoWindow = context?.let { ctx ->
-                LocationBottomSheetFragment.CustomInfoWindowAdapter(
-                    ctx
-                )
-            }
-            hMap!!.setInfoWindowAdapter(customInfoWindow)
             val marker = hMap!!.addMarker(options)
             markerList?.add(marker)
             marker.tag = info
+
+            val customInfoWindow = context?.let { ctx ->
+                LocationFragment.CustomInfoWindowAdapter(
+                    ctx, item
+                )
+            }
+            hMap!!.setInfoWindowAdapter(customInfoWindow)
         }
     }
 
@@ -121,8 +124,8 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback,
             object : SearchResultListener<NearbySearchResponse> {
                 override fun onSearchResult(results: NearbySearchResponse) {
                     setMarkersToMap(results.sites)
-                    poi_recycler_view.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    poi_recycler_view.adapter =
+                    poi_recycler_view?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    poi_recycler_view?.adapter =
                         PoiItemsAdapter(
                             results.sites,
                             this@BaseMapFragment
@@ -150,5 +153,6 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback,
         val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraBuild)
         hMap?.animateCamera(cameraUpdate)
     }
+
 
 }

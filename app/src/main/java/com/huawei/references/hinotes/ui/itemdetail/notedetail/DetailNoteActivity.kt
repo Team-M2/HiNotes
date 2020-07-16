@@ -114,7 +114,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         }
 
         location_icon.setOnClickListener {
-            checkLocationPermission()
+            performAddLocation()
         }
 
         microphone_icon.setOnClickListener {
@@ -193,77 +193,6 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         }
     }
 
-    private fun checkLocationPermission() {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                val strings = arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-                ActivityCompat.requestPermissions(this, strings, 1)
-            } else
-                getLocation()
-        } else {
-            if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, "android.permission.ACCESS_BACKGROUND_LOCATION") != PackageManager.PERMISSION_GRANTED) {
-                val strings = arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                ActivityCompat.requestPermissions(this, strings, 2)
-            } else
-                getLocation()
-        }
-    }
-
-    private fun getLocation() {
-        val builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
-        mLocationRequest = LocationRequest()
-        builder.addLocationRequest(mLocationRequest)
-        val locationSettingsRequest: LocationSettingsRequest = builder.build()
-        mLocationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                if (locationResult != null) {
-                    lLat = locationResult.lastLocation.latitude
-                    lLon = locationResult.lastLocation.longitude
-                    if (bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN) {
-                        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
-                        val bottomSheetFragment = LocationBottomSheetFragment(lLat!!, lLon!!)
-                        bottomSheetFragment.show(this@DetailNoteActivity.supportFragmentManager, bottomSheetFragment.tag)
-                    } else {
-                        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
-                    }
-                }
-            }
-        }
-
-        settingsClient!!.checkLocationSettings(locationSettingsRequest)
-            .addOnSuccessListener {
-                fusedLocationProviderClient!!.requestLocationUpdates(
-                        mLocationRequest,
-                        mLocationCallback,
-                        Looper.getMainLooper()
-                    )
-                    .addOnSuccessListener { }
-            }
-            .addOnFailureListener { e ->
-                val statusCode = (e as ApiException).statusCode
-                if (statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
-                    try {
-                        Log.i("bla", e.toString())
-                    } catch (sie: SendIntentException) {
-                        Log.i("bla", sie.toString())
-                    }
-                }
-            }
-    }
-
     override fun onBackPressed() {
         if(noteDetailChanged) {
             runWithAGConnectUserOrOpenLogin {
@@ -320,6 +249,23 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             .putExtra(MLAsrCaptureConstants.LANGUAGE, "en-US")
             .putExtra(MLAsrCaptureConstants.FEATURE, MLAsrCaptureConstants.FEATURE_WORDFLUX)
         startActivityForResult(intent, recordAudioResultCode)
+    }
+
+    private fun performAddLocation(){
+        runWithPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.INTERNET){
+            if (bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN) {
+                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+                val bottomSheetFragment = LocationFragment(noteItemData)
+                bottomSheetFragment.show(this@DetailNoteActivity.supportFragmentManager, bottomSheetFragment.tag)
+            }
+            else {
+                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
     }
 
     private fun performAddReminder() =
