@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes.ui.base
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Looper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,9 +9,8 @@ import com.huawei.hms.location.*
 import com.huawei.hms.maps.CameraUpdateFactory
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.OnMapReadyCallback
-import com.huawei.hms.maps.model.BitmapDescriptorFactory
-import com.huawei.hms.maps.model.LatLng
-import com.huawei.hms.maps.model.MarkerOptions
+import com.huawei.hms.maps.model.*
+import com.huawei.hms.maps.model.CameraPosition
 import com.huawei.hms.site.api.SearchResultListener
 import com.huawei.hms.site.api.SearchService
 import com.huawei.hms.site.api.SearchServiceFactory
@@ -18,19 +18,23 @@ import com.huawei.hms.site.api.model.*
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.location.InfoWindowData
 import com.huawei.references.hinotes.ui.itemdetail.notedetail.LocationBottomSheetFragment
-import com.huawei.references.hinotes.ui.itemdetail.reminder.IPoiClickListener
-import com.huawei.references.hinotes.ui.itemdetail.reminder.PoiItemsAdapter
+import com.huawei.references.hinotes.ui.itemdetail.reminder.adapter.IPoiClickListener
+import com.huawei.references.hinotes.ui.itemdetail.reminder.adapter.PoiItemsAdapter
 import kotlinx.android.synthetic.main.reminder_fragment.*
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
-open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPoiClickListener {
+
+open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback,
+    IPoiClickListener {
     private var hMap:HuaweiMap?=null
     var mapViewBundle: Bundle? = null
     var fusedLocationProviderClient : FusedLocationProviderClient ?= null
     var settingsClient:SettingsClient ?= null
+    var circle:Circle?=null
     private var encodedApiKey:String?=null
     private var searchService: SearchService? = null
+    var markerList : ArrayList<Marker>?= arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -73,17 +77,11 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPo
             }
             hMap!!.setInfoWindowAdapter(customInfoWindow)
             val marker = hMap!!.addMarker(options)
+            markerList?.add(marker)
             marker.tag = info
         }
     }
 
-    /*
-    fun addMarker(lat:Double,lng:Double,hMap: HuaweiMap){
-        val options = MarkerOptions().position(LatLng(lat, lng))
-        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-        hMap.addMarker(options)
-    }
-*/
     private fun getLocation(settingsClient: SettingsClient?, fusedLocationProviderClient: FusedLocationProviderClient?, hMap: HuaweiMap?) {
         val builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
         val mLocationRequest = LocationRequest()
@@ -92,8 +90,9 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPo
         val mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 if (locationResult != null) {
-                    hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude), 15F))
+                    hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude), 17F))
                     getPoiList(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
+                    addCircle(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
                 }
             }
         }
@@ -114,7 +113,7 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPo
         val request = NearbySearchRequest()
         val location = Coordinate(lat, lng)
         request.location = location
-        request.radius = 1000
+        request.radius = 100
         request.language = "en"
         request.pageIndex = 1
         request.pageSize = 10
@@ -123,7 +122,11 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPo
                 override fun onSearchResult(results: NearbySearchResponse) {
                     setMarkersToMap(results.sites)
                     poi_recycler_view.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    poi_recycler_view.adapter = PoiItemsAdapter(results.sites,this@BaseMapFragment)
+                    poi_recycler_view.adapter =
+                        PoiItemsAdapter(
+                            results.sites,
+                            this@BaseMapFragment
+                        )
                 }
 
                 override fun onSearchError(status: SearchStatus) {
@@ -132,10 +135,20 @@ open class BaseMapFragment: BottomSheetDialogFragment(), OnMapReadyCallback, IPo
         searchService!!.nearbySearch(request, resultListener)
     }
 
-    protected open fun setupUI() = Unit
+    fun addCircle(lat:Double,lng:Double){
+        circle?.remove()
+        circle=hMap?.addCircle(
+            CircleOptions().center(LatLng(lat, lng)).radius(100.0).fillColor(Color.TRANSPARENT)
+        )
+    }
 
-    override fun setOnPoiClickListener(site: Site) {
-
+    override fun setOnPoiClickListener(site: Site, index: Int) {
+        markerList?.get(index)?.showInfoWindow()
+        val cameraBuild = CameraPosition.Builder().target(
+            LatLng(site.location.lat, site.location.lng)
+        ).zoom(18f).build()
+        val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraBuild)
+        hMap?.animateCamera(cameraUpdate)
     }
 
 }

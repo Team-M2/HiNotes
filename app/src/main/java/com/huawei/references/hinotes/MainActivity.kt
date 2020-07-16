@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
 
     override fun setupUI(){
-
         if(!contentViewIsSet){
             contentViewIsSet=true
             supportActionBar?.apply {

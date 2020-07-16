@@ -2,6 +2,7 @@ package com.huawei.references.hinotes.data.item.clouddbdatasource.model
 
 import com.huawei.agconnect.cloud.database.CloudDBZoneObject
 import com.huawei.agconnect.cloud.database.annotations.PrimaryKey
+import com.huawei.references.hinotes.data.item.model.Reminder
 import java.util.*
 
 data class ItemCDBDTO(@PrimaryKey
@@ -16,5 +17,6 @@ data class ItemCDBDTO(@PrimaryKey
                       val poiDescription:String?,
                       val title:String,
                       val isChecked:Boolean?,
+                      val reminder:Reminder?,
                       val isPinned:Boolean?
 ) : CloudDBZoneObject()

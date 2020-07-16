@@ -1,39 +1,25 @@
 package com.huawei.references.hinotes.ui.itemdetail.notedetail
 
 import android.Manifest
-import android.Manifest.permission
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.RequiresPermission
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.huawei.hms.location.LocationServices
-import com.huawei.hms.maps.CameraUpdateFactory
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapView
-import com.huawei.hms.maps.OnMapReadyCallback
-import com.huawei.hms.maps.model.BitmapDescriptorFactory
-import com.huawei.hms.maps.model.LatLng
 import com.huawei.hms.maps.model.Marker
-import com.huawei.hms.maps.model.MarkerOptions
-import com.huawei.hms.site.api.SearchResultListener
 import com.huawei.hms.site.api.SearchService
-import com.huawei.hms.site.api.SearchServiceFactory
 import com.huawei.hms.site.api.model.*
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.location.InfoWindowData
-import com.huawei.references.hinotes.data.location.SiteAdapter
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import kotlinx.android.synthetic.main.custom_info_window.view.*
-import java.io.UnsupportedEncodingException
-import java.net.URLEncoder
 
 class LocationBottomSheetFragment(lat:Double, lon:Double) : BaseMapFragment() {
     private var hMap: HuaweiMap? = null
