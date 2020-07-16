@@ -17,20 +17,12 @@ import com.huawei.hms.maps.model.Marker
 import com.huawei.hms.site.api.SearchService
 import com.huawei.hms.site.api.model.*
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.location.InfoWindowData
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import kotlinx.android.synthetic.main.custom_info_window.view.*
 
-class LocationBottomSheetFragment(lat:Double, lon:Double) : BaseMapFragment() {
-    private var hMap: HuaweiMap? = null
-    private var mMarker: Marker? = null
-    private var lLat:Double = lat
-    private var lLon:Double = lon
-    private var searchService: SearchService? = null
-    private var request: NearbySearchRequest? = null
-    private var location: Coordinate? = null
-    private var listSite: MutableList<Site>? = null
-    private var reSite: RecyclerView? =null
+class LocationFragment(item: Item) : BaseMapFragment(item) {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,30 +91,7 @@ class LocationBottomSheetFragment(lat:Double, lon:Double) : BaseMapFragment() {
     }
     */
 
-    internal class CustomInfoWindowAdapter(mcontext: Context) :
-        HuaweiMap.InfoWindowAdapter {
-        private val mWindow: View = (mcontext as Activity).
-        layoutInflater.inflate(R.layout.custom_info_window, null)
 
-        override fun getInfoWindow(marker: Marker?): View {
-            val mInfoWindow: InfoWindowData? = marker?.tag as InfoWindowData?
-
-            mWindow.infoTile.text = mInfoWindow?.siteName
-            mWindow.infoAddress.text = mInfoWindow?.siteAddress
-
-            val txtvdirection = mWindow.findViewById<TextView>(R.id.infoGetDirections)
-            txtvdirection.setOnClickListener {
-
-            }
-
-            return mWindow
-        }
-
-        override fun getInfoContents(marker: Marker): View? {
-            return null
-        }
-
-    }
 
 
     /*
@@ -161,6 +130,33 @@ class LocationBottomSheetFragment(lat:Double, lon:Double) : BaseMapFragment() {
         }
     }
 */
+
+    internal class CustomInfoWindowAdapter(var mContext: Context,var item: Item) :
+        HuaweiMap.InfoWindowAdapter {
+        private val mWindow: View = (mContext as Activity).
+        layoutInflater.inflate(R.layout.custom_info_window, null)
+
+        override fun getInfoWindow(marker: Marker?): View {
+            val mInfoWindow: InfoWindowData? = marker?.tag as InfoWindowData?
+            mWindow.infoTile.text = mInfoWindow?.siteName
+            mWindow.infoAddress.text = mInfoWindow?.siteAddress
+            val directionText = mWindow.findViewById<TextView>(R.id.infoGetDirections)
+            directionText.setOnClickListener {
+              /*  item.lat=marker?.position?.latitude
+                item.lng=marker?.position?.longitude
+                item.title= marker?.title.toString() // maybe it should create new field like item.locationTitle
+                (mContext as DetailNoteActivity?)?.saveChanges(item)
+               */
+            }
+            return mWindow
+        }
+
+        override fun getInfoContents(marker: Marker): View? {
+            return null
+        }
+
+    }
+
     companion object{
         private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
         const val API_KEY="CV8PceXOYopn/ngZDofcwgFkmqYCo+LbAqjSx+uqBmVckaFf0bNgunMln8bncm+K6LjavJR/r/8N1PVf8ZEn1aVLNDZf"
