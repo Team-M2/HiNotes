@@ -29,7 +29,6 @@ import com.huawei.hms.mlsdk.MLAnalyzerFactory
 import com.huawei.hms.mlsdk.common.MLFrame
 import com.huawei.hms.mlsdk.text.MLLocalTextSetting
 import com.huawei.hms.mlsdk.text.MLText
-import com.huawei.hms.site.api.model.Site
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
@@ -38,7 +37,6 @@ import com.huawei.references.hinotes.ui.base.customPopup
 import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
-import com.huawei.references.hinotes.ui.itemdetail.reminder.IPoiClickListener
 import com.huawei.references.hinotes.ui.itemdetail.reminder.ReminderFragment
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_note.*
@@ -56,7 +54,6 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     private lateinit var noteItemData :Item
     private val takePictureResultCode = 201
     private val pickImageResultCode = 202
-    private var noteDetailChanged = false
     private var mLocationRequest: LocationRequest? = null
     private var settingsClient: SettingsClient? = null
     private var mLocationCallback: LocationCallback? = null
@@ -272,8 +269,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
                 customPopup(this.getString(R.string.delete_item_changes_popup_warning),
                     this.getString(R.string.delete_item_changes_popup_accept),
                     this.getString(R.string.delete_item_changes_popup_reject),
-                    {finish()},
-                    this
+                    {finish()}
                 )
             }
         }

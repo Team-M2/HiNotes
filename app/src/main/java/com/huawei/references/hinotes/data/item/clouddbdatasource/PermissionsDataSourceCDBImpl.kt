@@ -41,6 +41,7 @@ class PermissionsDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) :
                         }
                     }
                     addOnFailureListener{
+                        it.printStackTrace()
                         continuation.resume(DataHolder.Fail(errStr = it.localizedMessage
                             ?: DataConstants.DEFAULT_ERROR_STR))
                     }
@@ -56,5 +57,9 @@ class PermissionsDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?) :
         isNew: Boolean
     ): DataHolder<Any> {
         return DataHolder.Success(Any())
+    }
+
+    override suspend fun deletePermission(userId: String, itemId: Int): DataHolder<Any> {
+        TODO("Not yet implemented")
     }
 }

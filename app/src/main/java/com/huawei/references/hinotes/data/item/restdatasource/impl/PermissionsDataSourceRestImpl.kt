@@ -1,10 +1,12 @@
 package com.huawei.references.hinotes.data.item.restdatasource.impl
 
+import com.huawei.references.hinotes.data.base.DBError
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
 import com.huawei.references.hinotes.data.item.model.Permission
 import com.huawei.references.hinotes.data.item.model.UserRole
+import com.huawei.references.hinotes.data.item.restdatasource.model.ItemRestDTO
 import com.huawei.references.hinotes.data.item.restdatasource.model.PermissionRestDTO
 import com.huawei.references.hinotes.data.item.restdatasource.model.mapToPermission
 import com.huawei.references.hinotes.data.item.restdatasource.service.ApiCallAdapter
@@ -54,6 +56,16 @@ class PermissionsDataSourceRestImpl(
             }
         }
 
+    override suspend fun deletePermission(userId: String, itemId: Int): DataHolder<Any> =
+        apiCallAdapter.adapt<ItemRestDTO> {
+        val query= "DELETE FROM hinotesschema.permission WHERE \"itemId\"=$itemId AND \"userId\"='$userId'"
+        itemRestService.executeQuery(query)
+    }.let {
+        when(it){
+            is DBResult.EmptyQueryResult ->DataHolder.Success(Any())
+            else -> DataHolder.Fail(baseError = DBError("delete error"))
+        }
+    }
 
 
 }

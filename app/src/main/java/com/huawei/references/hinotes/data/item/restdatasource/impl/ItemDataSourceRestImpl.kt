@@ -86,17 +86,23 @@ class ItemDataSourceRestImpl(private val apiCallAdapter: ApiCallAdapter,
             }
         }
 
-
     private suspend fun deleteItemCore(item: Item,userId:String) : DataHolder<Any> =
-        apiCallAdapter.adapt<ItemRestDTO> {
-            val query= "DELETE FROM hinotesschema.item WHERE \"itemId\"=${item.itemId}"
-            itemRestService.executeQuery(query)
-        }.let {
-            when(it){
-                is DBResult.EmptyQueryResult ->DataHolder.Success(Any())
-                else -> DataHolder.Fail(baseError = DBError("delete error"))
+        when(val deletePermissionResult = permissionsDataSource.deletePermission(userId,item.itemId)){
+            is DataHolder.Success->{
+                apiCallAdapter.adapt<ItemRestDTO> {
+                    val query= "DELETE FROM hinotesschema.item WHERE \"itemId\"=${item.itemId}"
+                    itemRestService.executeQuery(query)
+                }.let {
+                    when(it){
+                        is DBResult.EmptyQueryResult ->DataHolder.Success(Any())
+                        else -> DataHolder.Fail(baseError = DBError("delete error"))
+                    }
+                }
             }
+            is DataHolder.Fail -> deletePermissionResult
+            is DataHolder.Loading -> deletePermissionResult
         }
+
 
 
     override suspend fun deleteItems(items: List<Item>, userId: String): DataHolder<Any> {

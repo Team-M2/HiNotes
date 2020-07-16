@@ -16,6 +16,7 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.UserRole
 import com.huawei.references.hinotes.ui.base.*
 import com.huawei.references.hinotes.ui.itemlist.notes.adapter.IOnLongClickListener
@@ -39,6 +40,8 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
 
     protected var firstDataGetCalled = false
 
+    abstract val itemType:ItemType
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -50,17 +53,8 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
         }
 
         observeDataHolderLiveData(getItemListViewModel().deleteILiveData)
-    }
 
-    override fun onStart() {
-        super.onStart()
-        activity?.findViewById<TextView>(R.id.toolbar_title)?.text=getString(pageTitle)
-        runWithAGConnectUserOrOpenLogin {
-            val s=getItemListViewModel().subscribeToLiveData(it.uid)
-            observeDataHolderLiveData(s){
-                fillLists(it)
-            }
-        }
+        getData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -130,7 +124,6 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
             notifyDataSetChanged()
         }
         setDefaultToolbar()
-
     }
 
     protected fun runWithAGConnectUserOrOpenLogin(runBlock: (agConnectUser: AGConnectUser) -> Unit){

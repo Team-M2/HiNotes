@@ -32,6 +32,7 @@ class NotesFragment : ItemListBaseFragment() {
     override val pageTitle: Int = R.string.title_toolbar_notes
 
     override fun getItemListViewModel(): ItemListViewModel = getViewModel()
+    override val itemType: ItemType = ItemType.Note
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -40,12 +41,21 @@ class NotesFragment : ItemListBaseFragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//        if(!firstDataGetCalled){
+//            firstDataGetCalled=true
+//            getData()
+//        }
+//        if(!getItemListViewModel().isDataGet){
+//            getItemListViewModel().isDataGet=true
+//            getData()
+//        }
+    }
+
     override fun onStart() {
         super.onStart()
-        if(!firstDataGetCalled){
-            firstDataGetCalled=true
-            getData()
-        }
+
     }
 
     override fun onCreateView(

@@ -34,7 +34,10 @@ class MainActivity : BaseActivity() {
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.navigation_notes, R.id.navigation_todo_list))
         setupActionBarWithNavController(navController, appBarConfiguration)
-        nav_view.setupWithNavController(navController)
+        nav_view.apply {
+            setupWithNavController(navController)
+            setOnNavigationItemReselectedListener {  }
+        }
 
     }
 

@@ -22,6 +22,8 @@ open class ItemListViewModel(private val itemRepository: ItemRepository) : BaseV
     val deleteILiveData : LiveData<DataHolder<Any>>
         get() = _deleteItemsLiveData
 
+    var isDataGet=false
+
     fun subscribeToLiveData(userId: String) =
         itemRepository.subscribe(SubscriptionParam(userId))
 

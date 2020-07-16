@@ -44,6 +44,7 @@ class ToDoListsFragment : ItemListBaseFragment() {
     override val pageTitle: Int =  R.string.title_toolbar_todo_list
 
     override fun getItemListViewModel(): ItemListViewModel = getViewModel<TodoListViewModel>()
+    override val itemType: ItemType = ItemType.TodoList
 
     @SuppressLint("NewApi")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -64,10 +65,10 @@ class ToDoListsFragment : ItemListBaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        if(!firstDataGetCalled){
-            firstDataGetCalled=true
-            getData()
-        }
+//        if(!firstDataGetCalled){
+//            firstDataGetCalled=true
+//            getData()
+//        }
     }
 
     override fun setOnLongClickListener() {

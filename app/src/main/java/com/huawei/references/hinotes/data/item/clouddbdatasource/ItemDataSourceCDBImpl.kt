@@ -38,6 +38,7 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
                         }
                     }
                     addOnFailureListener{
+                        it.printStackTrace()
                         continuation.resume(DataHolder.Fail(errStr = it.localizedMessage
                             ?: DataConstants.DEFAULT_ERROR_STR))
                     }

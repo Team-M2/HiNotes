@@ -13,4 +13,7 @@ interface PermissionsDataSource {
         role: UserRole,
         isNew: Boolean
     ): DataHolder<Any>
+
+    suspend fun deletePermission(userId: String,
+                                 itemId: Int): DataHolder<Any>
 }
