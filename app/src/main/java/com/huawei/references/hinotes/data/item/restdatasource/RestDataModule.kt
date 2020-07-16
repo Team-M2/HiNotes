@@ -1,9 +1,6 @@
 package com.huawei.references.hinotes.data.item.restdatasource
 
-import com.huawei.references.hinotes.data.item.abstractions.ItemDataSource
-import com.huawei.references.hinotes.data.item.abstractions.LiveDataSource
-import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
-import com.huawei.references.hinotes.data.item.abstractions.SubItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.*
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.restdatasource.RestDataSourceConstants.Companion.BASE_URL
 import com.huawei.references.hinotes.data.item.restdatasource.impl.*
@@ -55,6 +52,10 @@ val restDataModule = module {
 
     factory {
         SubItemDataSourceImpl(get(),get()) as SubItemDataSource
+    }
+
+    factory {
+        ReminderDataSourceImpl(get(),get()) as ReminderDataSource
     }
 
     single {

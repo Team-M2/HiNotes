@@ -47,7 +47,7 @@ class SubItemDataSourceImpl(private val apiCallAdapter: ApiCallAdapter,
 
     override suspend fun deleteSubItem(subItemId: Int): DataHolder<Any> {
         return apiCallAdapter.adapt<TodoListSubItemRestDTO> {
-            val query="delete from hinotesschema.todolistsubitem where \"itemId\"=$subItemId"
+            val query="delete from hinotesschema.todolistsubitem where \"id\"=$subItemId"
             itemRestService.executeQuery(query)
         }.let {
             when(it){
@@ -95,7 +95,7 @@ class SubItemDataSourceImpl(private val apiCallAdapter: ApiCallAdapter,
 
     override suspend fun deleteSubItems(subItemIds: List<Int>): DataHolder<Any> {
         return apiCallAdapter.adapt<TodoListSubItemRestDTO> {
-            val query="BEGIN; ${subItemIds.joinToString(";") { "delete from hinotesschema.todolistsubitem where \"itemId\"=$it"}}; COMMIT;"
+            val query="BEGIN; ${subItemIds.joinToString(";") { "delete from hinotesschema.todolistsubitem where \"id\"=$it"}}; COMMIT;"
             itemRestService.executeQuery(query)
         }.let {
             when(it){

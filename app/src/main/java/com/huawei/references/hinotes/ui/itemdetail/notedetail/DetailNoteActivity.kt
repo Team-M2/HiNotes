@@ -32,7 +32,6 @@ import com.huawei.hms.mlsdk.text.MLText
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
-import com.huawei.references.hinotes.data.item.model.Reminder
 import com.huawei.references.hinotes.data.item.model.UserRole
 import com.huawei.references.hinotes.ui.base.customPopup
 import com.huawei.references.hinotes.ui.base.customToast
@@ -280,7 +279,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
     }
 
     private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","","",
-        arrayListOf(),false,UserRole.Owner, Reminder(),false)
+        arrayListOf(),false,UserRole.Owner, null,false)
 
     private fun performTakePicture() =
         runWithPermissions(Manifest.permission.CAMERA){

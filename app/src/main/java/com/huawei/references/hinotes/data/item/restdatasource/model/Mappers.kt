@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes.data.item.restdatasource.model
 
+import com.huawei.hms.maps.model.LatLng
 import com.huawei.references.hinotes.data.item.model.*
 
 fun PermissionRestDTO.mapToPermission() : Permission {
@@ -52,3 +53,22 @@ fun Item.mapToItemDTO() : ItemRestDTO {
 fun TodoListSubItemRestDTO.mapToTodoListSubItem() : TodoListSubItem{
     return TodoListSubItem(id!!,itemId,createdAt,updatedAt,title,isChecked)
 }
+
+fun ReminderRestDTO.mapToReminder() : Reminder= Reminder(this.id,
+    this.itemId,
+    this.title,
+    LatLng(this.lat!!,this.lng!!),
+    this.radius,
+    this.date,
+    ReminderType.valueOf(this.reminderType!!)!!
+    )
+
+fun Reminder.mapToReminderRestDTO() : ReminderRestDTO= ReminderRestDTO(this.id,
+    this.itemId,
+    this.title,
+    this.location!!.latitude,
+    this.location!!.longitude,
+    this.radius,
+    this.date,
+    this.reminderType!!.type
+)
