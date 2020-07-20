@@ -16,4 +16,12 @@ sealed class DataHolder<out T: Any> {
                        val loadingStr: String=DEFAULT_LOADING_STR
                        ) : DataHolder<Nothing>()
 
+    companion object{
+        fun <T : Any>checkAllSuccess(vararg dataHolders:DataHolder<T>,
+                                     errorMessage:String=DEFAULT_ERROR_STR) : DataHolder<Any> =
+            if(dataHolders.filterIsInstance<Success<T>>().size==dataHolders.size) Success(Any())
+            else Fail(errStr = errorMessage)
+
+    }
+
 }

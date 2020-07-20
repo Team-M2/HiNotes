@@ -48,7 +48,7 @@ class ReminderDataSourceImpl(private val apiCallAdapter: ApiCallAdapter,
     private fun generateInsertQuery(reminder: Reminder,
                                     itemId: Int) =
         "insert into hinotesschema.reminder(\"itemId\",title${reminder.location?.let {",lat,lng" } ?: ""}${reminder.radius?.let { ",radius" }?:""}${reminder.date?.let { ",date" }},\"reminderType\")" +
-                " values ($itemId,'${reminder.title}'${reminder.location?.let{ ",${it.latitude},${it.longitude}" } ?: ""}${reminder.radius?.let {",$it" }?:""}${reminder.date?.let {",$it" }?:""},${reminder.reminderType.type}) returning \"id\""
+                " values ($itemId,'${reminder.title}'${reminder.location?.let{ ",${it.latitude},${it.longitude}" } ?: ""}${reminder.radius?.let {",$it" }?:""}${reminder.date?.let {",'$it'" }?:""},${reminder.reminderType.type}) returning \"id\""
 
 
     private fun generateUpdateQuery(reminder: Reminder,

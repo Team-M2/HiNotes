@@ -81,13 +81,13 @@ class SubItemDataSourceImpl(private val apiCallAdapter: ApiCallAdapter,
         }
     }
 
-    override suspend fun insertMultiple(subItemList: List<TodoListSubItem>, itemId: Int): DataHolder<Any> {
+    override suspend fun insertMultiple(subItemList: List<TodoListSubItem>, itemId: Int): DataHolder<List<Int>> {
         return apiCallAdapter.adapt<TodoListSubItemRestDTO> {
             val query="BEGIN; ${subItemList.joinToString(";"){ "insert into hinotesschema.todolistsubitem(\"itemId\",\"createdAt\",\"updatedAt\",title,\"isChecked\") values ($itemId,NOW(),NOW(),'${it.title}',${it.isChecked}) returning todolistsubitem.id" }}; COMMIT;"
             itemRestService.executeQuery(query)
         }.let {
             when(it){
-                is DBResult.EmptyQueryResult -> DataHolder.Success(Any())
+                is DBResult.EmptyQueryResult -> DataHolder.Success(listOf())
                 else -> DataHolder.Fail()
             }
         }
@@ -105,13 +105,13 @@ class SubItemDataSourceImpl(private val apiCallAdapter: ApiCallAdapter,
         }
     }
 
-    override suspend fun updateMultiple(subItemList: List<TodoListSubItem>, itemId: Int): DataHolder<Any> {
+    override suspend fun updateMultiple(subItemList: List<TodoListSubItem>, itemId: Int): DataHolder<List<Int>> {
         return apiCallAdapter.adapt<TodoListSubItemRestDTO> {
             val query="BEGIN; ${subItemList.joinToString(";") { "UPDATE hinotesschema.todolistsubitem SET \"isChecked\" = ${it.isChecked},\"itemId\"=$itemId,\"title\"='${it.title}', \"updatedAt\"=NOW() WHERE id = ${it.id}" }}; COMMIT;"
             itemRestService.executeQuery(query)
         }.let {
             when(it){
-                is DBResult.EmptyQueryResult -> DataHolder.Success(Any())
+                is DBResult.EmptyQueryResult -> DataHolder.Success(listOf())
                 else -> DataHolder.Fail()
             }
         }

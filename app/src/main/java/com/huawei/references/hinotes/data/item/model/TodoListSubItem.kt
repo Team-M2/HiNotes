@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.util.*
 
 data class TodoListSubItem (
-    val id:Int=-1,
+    var id:Int=-1,
     val itemId:Int=-1,
     val createdAt:Date?=null,
     var updatedAt: Date?=null,

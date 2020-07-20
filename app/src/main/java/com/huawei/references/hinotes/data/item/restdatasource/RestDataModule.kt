@@ -47,7 +47,7 @@ val restDataModule = module {
     }
 
     factory {
-        ItemDataSourceRestImpl(get(),get(),get(),get()) as ItemDataSource
+        ItemDataSourceRestImpl(get(),get(),get(),get(),get()) as ItemDataSource
     }
 
     factory {
@@ -65,6 +65,7 @@ val restDataModule = module {
     factory {
         SubItemLiveDataSourceRestImpl()
     }
+
 
 
 }

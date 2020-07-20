@@ -1,50 +1,25 @@
 package com.huawei.references.hinotes.ui.itemdetail.notedetail
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.RequiresPermission
-import androidx.recyclerview.widget.RecyclerView
-import com.huawei.hms.location.LocationServices
 import com.huawei.hms.maps.HuaweiMap
-import com.huawei.hms.maps.MapView
-import com.huawei.hms.maps.model.Marker
-import com.huawei.hms.site.api.SearchService
-import com.huawei.hms.site.api.model.*
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.data.location.InfoWindowData
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
-import kotlinx.android.synthetic.main.custom_info_window.view.*
+import com.huawei.references.hinotes.ui.itemdetail.reminder.MapType
 
 class LocationFragment(item: Item) : BaseMapFragment(item) {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val locationView =
-            inflater.inflate(R.layout.note_detail_location_bottom_sheet, container, false)
+    ): View? = inflater.inflate(R.layout.note_detail_location_bottom_sheet, container, false)
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.activity)
-        settingsClient = LocationServices.getSettingsClient(this.activity)
-
-        val mapView = locationView.findViewById <MapView> (R.id.note_detail_location_mapView)
-        var mapViewBundle: Bundle? = null
-        if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle("MapViewBundleKey")
-        }
-
-        mapView.onCreate(mapViewBundle)
-        mapView.getMapAsync(this)
-
-        return locationView
-    }
+    override val mapType: MapType = MapType.ITEM_LOCATION
 
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE])
@@ -131,35 +106,6 @@ class LocationFragment(item: Item) : BaseMapFragment(item) {
     }
 */
 
-    internal class CustomInfoWindowAdapter(var mContext: Context,var item: Item) :
-        HuaweiMap.InfoWindowAdapter {
-        private val mWindow: View = (mContext as Activity).
-        layoutInflater.inflate(R.layout.custom_info_window, null)
 
-        override fun getInfoWindow(marker: Marker?): View {
-            val mInfoWindow: InfoWindowData? = marker?.tag as InfoWindowData?
-            mWindow.infoTile.text = mInfoWindow?.siteName
-            mWindow.infoAddress.text = mInfoWindow?.siteAddress
-            val directionText = mWindow.findViewById<TextView>(R.id.infoGetDirections)
-            directionText.setOnClickListener {
-              /*  item.lat=marker?.position?.latitude
-                item.lng=marker?.position?.longitude
-                item.title= marker?.title.toString() // maybe it should create new field like item.locationTitle
-                (mContext as DetailNoteActivity?)?.saveChanges(item)
-               */
-            }
-            return mWindow
-        }
-
-        override fun getInfoContents(marker: Marker): View? {
-            return null
-        }
-
-    }
-
-    companion object{
-        private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
-        const val API_KEY="CV8PceXOYopn/ngZDofcwgFkmqYCo+LbAqjSx+uqBmVckaFf0bNgunMln8bncm+K6LjavJR/r/8N1PVf8ZEn1aVLNDZf"
-    }
 
 }

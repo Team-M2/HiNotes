@@ -54,7 +54,7 @@ fun TodoListSubItemRestDTO.mapToTodoListSubItem() : TodoListSubItem{
     return TodoListSubItem(id!!,itemId,createdAt,updatedAt,title,isChecked)
 }
 
-fun ReminderRestDTO.mapToReminder() : Reminder= Reminder(this.id,
+fun ReminderRestDTO.mapToReminder() : Reminder= Reminder(this.id!!,
     this.itemId,
     this.title,
     LatLng(this.lat!!,this.lng!!),

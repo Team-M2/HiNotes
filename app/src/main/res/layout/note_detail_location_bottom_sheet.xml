@@ -11,7 +11,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.huawei.hms.maps.MapView
-        android:id="@+id/note_detail_location_mapView"
+        android:id="@+id/detailBottomSheetMapView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -21,7 +21,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/poi_recycler_view"
-        app:layout_constraintTop_toBottomOf="@+id/note_detail_location_mapView"
+        app:layout_constraintTop_toBottomOf="@id/detailBottomSheetMapView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

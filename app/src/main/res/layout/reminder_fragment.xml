@@ -7,7 +7,7 @@
     tools:context=".ui.itemdetail.reminder.ReminderFragment">
 
     <com.huawei.hms.maps.MapView
-        android:id="@+id/map_view"
+        android:id="@+id/detailBottomSheetMapView"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         map:cameraTargetLat="51"
@@ -27,7 +27,7 @@
         android:layout_width="150dp"
         android:layout_height="40dp"
         android:layout_marginEnd="16dp"
-        map:layout_constraintBottom_toBottomOf="@+id/map_view"
+        map:layout_constraintBottom_toBottomOf="@id/detailBottomSheetMapView"
         map:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -36,6 +36,6 @@
         android:layout_height="400dp"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toBottomOf="@+id/map_view" />
+        map:layout_constraintTop_toBottomOf="@id/detailBottomSheetMapView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

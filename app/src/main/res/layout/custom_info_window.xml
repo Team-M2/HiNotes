@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:textColor="#2F32BD"
             android:textSize="14sp"
-            android:text="Yönlendir"
+            android:text="Kaydet"
             android:drawableEnd="@drawable/ic_baseline_directions_24"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"/>

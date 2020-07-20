@@ -13,6 +13,8 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import kotlinx.android.synthetic.main.custom_warning_toast.*
 import kotlinx.android.synthetic.main.note_detail_popup.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 private var positiveButtonClickEvent :  () -> Unit = {}
 private var negativeButtonClickEvent :  () -> Unit = {}
@@ -74,3 +76,7 @@ fun BaseActivity.customPopup(popupText:String,positiveButtonText : String, negat
 
 fun HashMap<Item,Boolean>.isAllFalse() : Boolean =
     this.filter { it.value }.isEmpty()
+
+fun Date.formattedToString() : Date = object : Date(){
+    override fun toString(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this)
+}

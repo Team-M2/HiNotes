@@ -4,6 +4,7 @@ import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.item.abstractions.ItemDataSource
 import com.huawei.references.hinotes.data.item.abstractions.LiveDataSource
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.ItemSaveResult
 import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.SubscriptionParam
 
@@ -20,7 +21,7 @@ class ItemRepository(
 
     fun unSubscribe(): Boolean = liveDataSource.unsubscribe()
 
-    suspend fun upsertItem(item: Item, userId: String, isNew: Boolean): DataHolder<Any> =
+    suspend fun upsertItem(item: Item, userId: String, isNew: Boolean): DataHolder<ItemSaveResult> =
         handleResult(itemDataSource.upsertItem(item, userId, isNew), userId, item.type)
 
     suspend fun deleteItem(item: Item, userId: String): DataHolder<Any> =

@@ -41,23 +41,6 @@ class NotesFragment : ItemListBaseFragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        if(!firstDataGetCalled){
-//            firstDataGetCalled=true
-//            getData()
-//        }
-//        if(!getItemListViewModel().isDataGet){
-//            getItemListViewModel().isDataGet=true
-//            getData()
-//        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-    }
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,

@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.util.*
 
 data class Item (
-    val itemId:Int=-1,
+    var itemId:Int=-1,
     val createdAt:Date?=null,
     val updatedAt: Date?=null,
     val type:ItemType,

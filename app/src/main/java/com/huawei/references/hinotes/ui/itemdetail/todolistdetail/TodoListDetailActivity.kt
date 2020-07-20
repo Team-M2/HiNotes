@@ -4,10 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.data.item.model.ItemType
-import com.huawei.references.hinotes.data.item.model.TodoListSubItem
+import com.huawei.references.hinotes.data.item.model.*
 import com.huawei.references.hinotes.ui.base.customPopup
+import com.huawei.references.hinotes.ui.base.formattedToString
 import com.huawei.references.hinotes.ui.base.hide
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
@@ -20,9 +19,7 @@ import kotlin.collections.ArrayList
 
 class TodoListDetailActivity : ItemDetailBaseActivity() {
 
-    private var isNewNote = true
-    private lateinit var todoItem: Item
-
+    //private val viewModelBase: ItemDetailViewModel by viewModel(named<TodoListDetailViewModel>())
     private val viewModel: TodoListDetailViewModel by viewModel()
     private val subItems = ArrayList<TodoListSubItem>()
     private val todoListSubItemsAdapter = TodoListSubItemsAdapter(subItems)
@@ -30,27 +27,35 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        todoItem = intent?.extras?.let {
+        //viewModel = viewModelBase as TodoListDetailViewModel
+        itemData = intent?.extras?.let {
             if (it.containsKey(ITEM_KEY)) {
                 isNewNote=false
                 (intent.extras?.getSerializable(ITEM_KEY) as Item).apply {
-                    getSubItems(itemId)
+                    viewModel.getTodoSubItems(itemId)
+                    viewModel.getReminders(itemId)
                 }
             } else {
                 createItem()
             }
         } ?: createItem()
         super.onCreate(savedInstanceState)
+
         observeDataHolderLiveData(viewModel.todoSubItemsLiveData){
+            subItems.clear()
             subItems.addAll(it)
             todoListSubItemsAdapter.notifyDataSetChanged()
+        }
+        observeDataHolderLiveData(viewModel.reminderLiveData){
+            //TODO: show reminder
         }
         if (isNewNote)
             detail_progress_bar.hide()
     }
 
-    private fun getSubItems(itemId:Int){
-        viewModel.getTodoSubItems(itemId)
+    override fun onSaveSuccessful() {
+        viewModel.getTodoSubItems(itemData.itemId)
+        viewModel.getReminders(itemData.itemId)
     }
 
     override fun setupUI() {
@@ -63,8 +68,8 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
             }
             setContentView(R.layout.activity_detail_todo_list)
         }
-        todo_item_title.setText(todoItem.title)
-        todo_list_item_checkbox.isChecked = todoItem.isChecked ?: false
+        todo_item_title.setText(itemData.title)
+        todo_list_item_checkbox.isChecked = itemData.isChecked ?: false
         todo_list_sub_recycler_view.apply {
             layoutManager = LinearLayoutManager(this@TodoListDetailActivity)
             adapter = todoListSubItemsAdapter
@@ -78,7 +83,7 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
         }
 
         add_todo_item.setOnClickListener {
-            createSubItemAndAdd(if (isNewNote) -1 else todoItem.itemId)
+            createSubItemAndAdd(if (isNewNote) -1 else itemData.itemId)
         }
 
         back_button.setOnClickListener {
@@ -94,14 +99,14 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
                     customPopup(this.getString(R.string.delete_todo_list_popup_warning),
                         this.getString(R.string.delete_todo_list_popup_accept),
                         this.getString(R.string.delete_todo_list_popup_reject)
-                    ) { viewModel.deleteItem(todoItem, it.uid) }
+                    ) { viewModel.deleteItem(itemData, it.uid) }
                 }
             }
         }
 
         saveFab.setOnClickListener {
             runWithAGConnectUserOrOpenLogin {
-                viewModel.saveItem(todoItem.apply {
+                viewModel.saveItem(itemData.apply {
                     todoListSubItems?.let {
                         it.clear()
                         it.addAll(subItems)
@@ -137,7 +142,14 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
         null,
         "",
         "",
-        ""
+        "",
+        reminder = Reminder(-1,
+            -1,
+            "reminderTitle",
+            null,
+            null,
+            Date().formattedToString(),
+            ReminderType.ByTime)
     )
 
     companion object {

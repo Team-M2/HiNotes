@@ -3,13 +3,9 @@ package com.huawei.references.hinotes.ui.itemdetail.notedetail
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.IntentSender.SendIntentException
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Looper
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,11 +14,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
-import androidx.core.app.ActivityCompat
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.huawei.hmf.tasks.Task
-import com.huawei.hms.common.ApiException
-import com.huawei.hms.location.*
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureActivity
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureConstants
 import com.huawei.hms.mlsdk.MLAnalyzerFactory
@@ -37,12 +29,10 @@ import com.huawei.references.hinotes.ui.base.customPopup
 import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
-import com.huawei.references.hinotes.ui.itemdetail.reminder.ReminderFragment
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.choose_image_direction.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
-import kotlinx.android.synthetic.main.note_detail_location_bottom_sheet.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.IOException
 import java.util.*
@@ -50,26 +40,14 @@ import java.util.*
 class DetailNoteActivity : ItemDetailBaseActivity() {
 
     private val viewModel: DetailNoteViewModel by viewModel()
-    private var isNewNote = true
-    private lateinit var noteItemData :Item
     private val takePictureResultCode = 201
     private val pickImageResultCode = 202
-    private var mLocationRequest: LocationRequest? = null
-    private var settingsClient: SettingsClient? = null
-    private var mLocationCallback: LocationCallback? = null
-    var lLat: Double? = null
-    var lLon: Double? = null
-    var mName: String? = null
-    private var bottomSheetBehavior:BottomSheetBehavior<View>? = null
-    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
 
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
     private val recordAudioResultCode = 203
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        settingsClient = LocationServices.getSettingsClient(this)
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        noteItemData=intent?.extras?.let{
+        itemData=intent?.extras?.let{
             if(it.containsKey(ITEM_KEY)){
                 (intent.extras?.getSerializable(ITEM_KEY) as Item).apply {
                     isNewNote=false
@@ -92,10 +70,9 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             }
             setContentView(R.layout.activity_detail_note)
         }
-        bottomSheetBehavior = BottomSheetBehavior.from(note_detail_location_bottom_sheet_layout)
-        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
-        note_detail_title.setText(noteItemData.title)
-        note_detail_description.setText(noteItemData.poiDescription.toString())
+
+        note_detail_title.setText(itemData.title)
+        note_detail_description.setText(itemData.poiDescription.toString())
 
         back_button.setOnClickListener {
             onBackPressed()
@@ -107,13 +84,9 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
                     customPopup(this.getString(R.string.delete_note_popup_warning),
                         this.getString(R.string.delete_note_popup_accept),
                         this.getString(R.string.delete_note_popup_reject)
-                    ) { viewModel.deleteItem(noteItemData,it.uid) }
+                    ) { viewModel.deleteItem(itemData,it.uid) }
                 }
             }
-        }
-
-        location_icon.setOnClickListener {
-            performAddLocation()
         }
 
         microphone_icon.setOnClickListener {
@@ -141,9 +114,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             include_choose_image.visibility= View.GONE
         }
 
-        add_reminder.setOnClickListener {
-            performAddReminder()
-        }
+
 
         saveFab.setOnClickListener {
             if(note_detail_title.text.toString() == "" || note_detail_description.text.toString() == ""){
@@ -151,7 +122,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             }
             else {
                 runWithAGConnectUserOrOpenLogin {
-                    val itemToSave = noteItemData.apply {
+                    val itemToSave = itemData.apply {
                         title = note_detail_title.text.toString()
                         poiDescription = note_detail_description.text.toString()
                     }
@@ -186,7 +157,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         })
     }
 
-    fun saveChanges(item:Item){
+    private fun saveChanges(item:Item){
         runWithAGConnectUserOrOpenLogin {
             viewModel.saveItem(item, it.uid, isNewNote)
         }
@@ -197,9 +168,8 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             runWithAGConnectUserOrOpenLogin {
                 customPopup(this.getString(R.string.delete_item_changes_popup_warning),
                     this.getString(R.string.delete_item_changes_popup_accept),
-                    this.getString(R.string.delete_item_changes_popup_reject),
-                    {finish()}
-                )
+                    this.getString(R.string.delete_item_changes_popup_reject)
+                ) {finish()}
             }
         }
         else{
@@ -250,38 +220,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         startActivityForResult(intent, recordAudioResultCode)
     }
 
-    private fun performAddLocation(){
-        runWithPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.INTERNET){
-            if (bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN) {
-                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
-                val bottomSheetFragment = LocationFragment(noteItemData)
-                bottomSheetFragment.show(this@DetailNoteActivity.supportFragmentManager, bottomSheetFragment.tag)
-            }
-            else {
-                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
-            }
-        }
-    }
 
-    private fun performAddReminder() =
-        runWithPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.INTERNET){
-            if (bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN) {
-                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
-                val bottomSheetFragment = ReminderFragment(noteItemData)
-                bottomSheetFragment.show(this@DetailNoteActivity.supportFragmentManager, bottomSheetFragment.tag)
-            }
-            else {
-                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
-            }
-        }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

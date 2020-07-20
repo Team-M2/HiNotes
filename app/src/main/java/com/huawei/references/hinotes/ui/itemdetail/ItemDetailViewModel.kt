@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.item.ItemRepository
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.ItemSaveResult
 import com.huawei.references.hinotes.ui.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,8 +17,8 @@ abstract class ItemDetailViewModel(private val itemRepository: ItemRepository) :
     val deleteItemLiveData : LiveData<DataHolder<Any>>
         get() = _deleteItemLiveData
 
-    private val _saveItemLiveData = MutableLiveData<DataHolder<Any>>()
-    val saveItemLiveData : LiveData<DataHolder<Any>>
+    private val _saveItemLiveData = MutableLiveData<DataHolder<ItemSaveResult>>()
+    val saveItemLiveData : LiveData<DataHolder<ItemSaveResult>>
         get() = _saveItemLiveData
 
     fun saveItem(item: Item, userId:String, isNew:Boolean){
@@ -33,4 +34,5 @@ abstract class ItemDetailViewModel(private val itemRepository: ItemRepository) :
             _deleteItemLiveData.postValue(itemRepository.deleteItem(item,userId))
         }
     }
+
 }

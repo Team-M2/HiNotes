@@ -11,6 +11,7 @@ import com.huawei.references.hinotes.data.item.clouddbdatasource.model.ItemCDBDT
 import com.huawei.references.hinotes.data.item.clouddbdatasource.model.mapToItem
 import com.huawei.references.hinotes.data.item.clouddbdatasource.model.mapToItemDTO
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.ItemSaveResult
 import com.huawei.references.hinotes.data.item.model.ItemType
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -119,7 +120,7 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
         }
 
 
-    override suspend fun upsertItem(item: Item, userId: String, isNew: Boolean): DataHolder<Any> {
+    override suspend fun upsertItem(item: Item, userId: String, isNew: Boolean): DataHolder<ItemSaveResult> {
         try {
             var itemSize=0
             var lastItemId=0
@@ -153,13 +154,13 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
             }?.result?.let {updateResultItemSize->
                 if(isNew){
                     if(updateResultItemSize-itemSize==1){
-                        return DataHolder.Success(Any())
+                        return DataHolder.Success(ItemSaveResult(1))
                     }
                     //item size not increased
                     else DataHolder.Fail()
                 }
                 else{
-                    return DataHolder.Success(Any())
+                    return DataHolder.Success(ItemSaveResult(1))
                 }
             }?: kotlin.run {
                 return DataHolder.Fail()

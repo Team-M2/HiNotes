@@ -12,4 +12,8 @@ val itemDataModule = module{
         SubItemRepository(get())
     }
 
+    factory {
+        ReminderRepository(get())
+    }
+
 }
