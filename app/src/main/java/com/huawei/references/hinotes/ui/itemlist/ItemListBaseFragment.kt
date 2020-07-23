@@ -38,22 +38,21 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
 
     protected abstract fun getItemListViewModel() : ItemListViewModel
 
-    protected var firstDataGetCalled = false
-
     abstract val itemType:ItemType
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        observeDataHolderLiveData(getItemListViewModel().deleteILiveData)
         observeDataHolderLiveData(getItemListViewModel().itemsLiveData,{
             customToast(requireActivity(),this.getString(R.string.no_recorded_note),false)
             fillLists(listOf())
         }){
             fillLists(it)
         }
+    }
 
-        observeDataHolderLiveData(getItemListViewModel().deleteILiveData)
-
+    override fun onStart() {
+        super.onStart()
         getData()
     }
 

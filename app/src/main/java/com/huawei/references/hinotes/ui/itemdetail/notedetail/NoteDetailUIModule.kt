@@ -8,6 +8,6 @@ import org.koin.dsl.module
 val noteDetailUIModule= module {
 
     viewModel{
-        DetailNoteViewModel(get())
+        DetailNoteViewModel(get(),get())
     } bind ItemDetailViewModel::class
 }

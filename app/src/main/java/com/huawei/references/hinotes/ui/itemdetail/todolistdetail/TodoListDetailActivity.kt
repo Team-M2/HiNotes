@@ -19,7 +19,6 @@ import kotlin.collections.ArrayList
 
 class TodoListDetailActivity : ItemDetailBaseActivity() {
 
-    //private val viewModelBase: ItemDetailViewModel by viewModel(named<TodoListDetailViewModel>())
     private val viewModel: TodoListDetailViewModel by viewModel()
     private val subItems = ArrayList<TodoListSubItem>()
     private val todoListSubItemsAdapter = TodoListSubItemsAdapter(subItems)
@@ -27,14 +26,10 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //viewModel = viewModelBase as TodoListDetailViewModel
         itemData = intent?.extras?.let {
             if (it.containsKey(ITEM_KEY)) {
                 isNewNote=false
-                (intent.extras?.getSerializable(ITEM_KEY) as Item).apply {
-                    viewModel.getTodoSubItems(itemId)
-                    viewModel.getReminders(itemId)
-                }
+                (intent.extras?.getSerializable(ITEM_KEY) as Item)
             } else {
                 createItem()
             }
@@ -46,16 +41,17 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
             subItems.addAll(it)
             todoListSubItemsAdapter.notifyDataSetChanged()
         }
-        observeDataHolderLiveData(viewModel.reminderLiveData){
-            //TODO: show reminder
-        }
         if (isNewNote)
             detail_progress_bar.hide()
     }
 
     override fun onSaveSuccessful() {
-        viewModel.getTodoSubItems(itemData.itemId)
         viewModel.getReminders(itemData.itemId)
+    }
+
+    override fun onGetRemindersCompleted() {
+        super.onGetRemindersCompleted()
+        viewModel.getTodoSubItems(itemData.itemId)
     }
 
     override fun setupUI() {

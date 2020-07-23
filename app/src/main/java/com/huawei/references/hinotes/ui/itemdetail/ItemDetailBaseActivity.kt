@@ -2,7 +2,6 @@ package com.huawei.references.hinotes.ui.itemdetail
 
 import android.Manifest
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -13,6 +12,7 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.Reminder
 import com.huawei.references.hinotes.data.item.model.ReminderType
 import com.huawei.references.hinotes.ui.base.*
 import com.huawei.references.hinotes.ui.itemdetail.notedetail.LocationFragment
@@ -64,6 +64,22 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             finish()
         }
 
+        if(itemData.itemId!=-1)
+            getItemDetailViewModel().getReminders(itemData.itemId)
+
+        observeDataHolderLiveData(getItemDetailViewModel().reminderLiveData,{
+            onGetRemindersCompleted()
+            //TODO: fill no reminder ui
+        }){
+            itemData.reminder=it.first()
+            onGetRemindersCompleted()
+            //TODO: fill reminder ui
+        }
+
+    }
+
+    override fun setupUI() {
+        super.setupUI()
         add_reminder?.setOnClickListener {
             performAddReminder()
         }
@@ -73,9 +89,9 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
         }
 
         bottomSheetBehavior = BottomSheetBehavior.
-            from(note_detail_location_bottom_sheet_layout as View).apply {
-                state = BottomSheetBehavior.STATE_HIDDEN
-            }
+        from(note_detail_location_bottom_sheet_layout as View).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
     }
 
     private fun performAddLocation(){
@@ -95,7 +111,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
         }
     }
 
-
+    protected open fun onGetRemindersCompleted(){}
 
     private fun performAddReminder() =
         runWithPermissions(
@@ -146,7 +162,10 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
                 //TODO: set location ui
             }
             MapType.GEOFENCE->{
-                itemData.reminder?.apply {
+                val reminder=itemData.reminder ?: Reminder(-1,reminderType = ReminderType.ByGeofence).apply {
+                    itemData.reminder=this
+                }
+                reminder.apply {
                     location= LatLng(lat,lng)
                     this.radius=radius
                 }
@@ -163,7 +182,10 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
                 //TODO: set poi location ui
             }
             MapType.GEOFENCE->{
-                itemData.reminder?.apply {
+                val reminder=itemData.reminder ?: Reminder(-1,reminderType = ReminderType.ByGeofence).apply {
+                    itemData.reminder=this
+                }
+                reminder.apply {
                     location= LatLng(site.location.lat,site.location.lng)
                     reminderType=ReminderType.ByGeofence
                     title=site.name
@@ -176,7 +198,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
 
     protected fun <T : Any>observeDataHolderLiveData(liveData: LiveData<DataHolder<T>>,
                                                      noResultBlock: () -> Unit= {},
-                                           runBlock: (data:T) -> Unit){
+                                                     runBlock: (data:T) -> Unit){
         liveData.observe(this, Observer {
             when(it){
                 is DataHolder.Success->{
@@ -185,11 +207,12 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
                 }
                 is DataHolder.Fail->{
                     detail_progress_bar.hide()
-                    customToast(this,this.getString(R.string.failed_get_data),true)
                     if(it.baseError is NoRecordFoundError){
                         noResultBlock.invoke()
                     }
-                    else Toast.makeText(this,it.errStr, Toast.LENGTH_LONG).show()
+                    else {
+                        customToast(this,it.errStr,true)
+                    }
                 }
                 is DataHolder.Loading->{
                     detail_progress_bar.show()

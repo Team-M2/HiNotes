@@ -57,7 +57,7 @@ fun TodoListSubItemRestDTO.mapToTodoListSubItem() : TodoListSubItem{
 fun ReminderRestDTO.mapToReminder() : Reminder= Reminder(this.id!!,
     this.itemId,
     this.title,
-    LatLng(this.lat!!,this.lng!!),
+    if(this.lat!=null && this.lng!=null) LatLng(this.lat!!,this.lng!!) else null,
     this.radius,
     this.date,
     ReminderType.valueOf(this.reminderType!!)!!

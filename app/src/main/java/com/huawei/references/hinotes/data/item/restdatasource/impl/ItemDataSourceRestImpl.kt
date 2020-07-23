@@ -189,10 +189,9 @@ class ItemDataSourceRestImpl(
                         val insertSubItemResult=subItemDataSource.insertMultiple(
                             item.todoListSubItems ?: listOf(), itemDbResult.id
                         )
-                        val addReminderResult = if(item.type==ItemType.TodoList &&
-                                item.reminder!=null){
+                        val addReminderResult = if(item.reminder!=null){
                             reminderDataSource.upsert(item.reminder!!,item.itemId,isNew)
-                        } else DataHolder.Success(item.reminder!!.id!!)
+                        } else DataHolder.Success(-1)
 
                         when(DataHolder.checkAllSuccess(permResult,insertSubItemResult,addReminderResult)){
                             is DataHolder.Success ->

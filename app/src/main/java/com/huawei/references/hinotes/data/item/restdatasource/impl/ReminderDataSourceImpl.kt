@@ -47,12 +47,12 @@ class ReminderDataSourceImpl(private val apiCallAdapter: ApiCallAdapter,
 
     private fun generateInsertQuery(reminder: Reminder,
                                     itemId: Int) =
-        "insert into hinotesschema.reminder(\"itemId\",title${reminder.location?.let {",lat,lng" } ?: ""}${reminder.radius?.let { ",radius" }?:""}${reminder.date?.let { ",date" }},\"reminderType\")" +
+        "insert into hinotesschema.reminder(\"itemId\",title${reminder.location?.let {",lat,lng" } ?: ""}${reminder.radius?.let { ",radius" } ?: ""}${reminder.date?.let { ",date" } ?: ""},\"reminderType\")" +
                 " values ($itemId,'${reminder.title}'${reminder.location?.let{ ",${it.latitude},${it.longitude}" } ?: ""}${reminder.radius?.let {",$it" }?:""}${reminder.date?.let {",'$it'" }?:""},${reminder.reminderType.type}) returning \"id\""
 
 
     private fun generateUpdateQuery(reminder: Reminder,
-                                    itemId: Int) = "UPDATE hinotesschema.reminder SET \"itemId\"=$itemId,\"title\"='${reminder.title}'${reminder.location?.let{ ",lat=${it.latitude},lng=${it.longitude}" } ?: ""}${reminder.radius?.let {",radius=$it" }?:""}${reminder.date?.let {",date=$it" }?:""},\"reminderType\"=${reminder.reminderType.type} WHERE id = ${reminder.id}"
+                                    itemId: Int) = "UPDATE hinotesschema.reminder SET \"itemId\"=$itemId,\"title\"='${reminder.title}'${reminder.location?.let{ ",lat=${it.latitude},lng=${it.longitude}" } ?: ""}${reminder.radius?.let {",radius=$it" }?:""}${reminder.date?.let {",date=$it" } ?: ""},\"reminderType\"=${reminder.reminderType.type} WHERE id = ${reminder.id}"
 
     override suspend fun deleteReminder(reminderId: Int): DataHolder<Any> {
         return apiCallAdapter.adapt<ReminderRestDTO> {
