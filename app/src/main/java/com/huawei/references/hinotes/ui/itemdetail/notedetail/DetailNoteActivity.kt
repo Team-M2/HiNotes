@@ -163,7 +163,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         }
     }
 
-    private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","","",
+    private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","","","",
         arrayListOf(),false,UserRole.Owner, null,false)
 
     private fun performTakePicture() =

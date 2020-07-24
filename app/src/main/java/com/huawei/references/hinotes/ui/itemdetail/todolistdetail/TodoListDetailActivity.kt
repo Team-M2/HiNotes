@@ -139,6 +139,7 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
         "",
         "",
         "",
+        "",
         reminder = Reminder(-1,
             -1,
             "reminderTitle",

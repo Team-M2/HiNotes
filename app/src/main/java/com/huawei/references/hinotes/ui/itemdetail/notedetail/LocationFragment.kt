@@ -13,7 +13,7 @@ import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.itemdetail.reminder.MapType
 import kotlinx.android.synthetic.main.note_detail_location_bottom_sheet.view.*
 
-class LocationFragment(item: Item) : BaseMapFragment(item) {
+class LocationFragment(var item: Item) : BaseMapFragment(item) {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,10 +25,14 @@ class LocationFragment(item: Item) : BaseMapFragment(item) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.save_text.setOnClickListener {
-            //todo:save location
+            item.lat = selectedPoi?.location?.lat
+            item.lng = selectedPoi?.location?.lng
+            item.poiDescription = selectedPoi?.name
         }
         view.delete_text.setOnClickListener {
-            //todo:delete location
+            if(item.lat == null && item.lng == null){
+                //todo:delete location
+            }
         }
     }
 

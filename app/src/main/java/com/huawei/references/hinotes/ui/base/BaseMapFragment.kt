@@ -49,7 +49,6 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
 
     abstract val mapType:MapType
 
-
     protected val parentViewModel : ItemDetailViewModel by lazy {
         requireActivity().getViewModel<ItemDetailViewModel>()
     }
