@@ -47,7 +47,7 @@ class NoteSectionAdapter(
         val itemHolder: NoteItemViewHolder = holder as NoteItemViewHolder
         val noteItem: Item = list[position]
         itemHolder.noteTitle.text = noteItem.title
-        itemHolder.noteDescription.text = noteItem.poiDescription
+        itemHolder.noteDescription.text = noteItem.description
         itemHolder.noteCreatedDate.text = noteItem.updatedAt.toString().subSequence(0,20)
 
         itemHolder.rootView.setOnClickListener { v ->

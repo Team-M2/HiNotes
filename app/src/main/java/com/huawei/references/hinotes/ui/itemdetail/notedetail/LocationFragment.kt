@@ -27,7 +27,7 @@ class LocationFragment(var item: Item) : BaseMapFragment(item) {
         view.save_text.setOnClickListener {
             item.lat = selectedPoi?.location?.lat
             item.lng = selectedPoi?.location?.lng
-            item.poiDescription = selectedPoi?.name
+            item.description = selectedPoi?.name
         }
         view.delete_text.setOnClickListener {
             if(item.lat == null && item.lng == null){

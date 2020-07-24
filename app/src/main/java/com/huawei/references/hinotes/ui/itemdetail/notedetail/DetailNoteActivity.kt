@@ -74,7 +74,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
         }
 
         note_detail_title.setText(itemData.title)
-        note_detail_description.setText(itemData.poiDescription.toString())
+        note_detail_description.setText(itemData.description.toString())
 
         back_button.setOnClickListener {
             onBackPressed()
@@ -109,7 +109,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
                 runWithAGConnectUserOrOpenLogin {
                     val itemToSave = itemData.apply {
                         title = note_detail_title.text.toString()
-                        poiDescription = note_detail_description.text.toString()
+                        description = note_detail_description.text.toString()
                     }
                     noteDetailChanged = false
                     saveChanges(itemToSave)
