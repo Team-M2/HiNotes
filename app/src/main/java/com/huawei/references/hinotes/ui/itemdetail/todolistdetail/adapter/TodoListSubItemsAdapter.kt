@@ -10,7 +10,7 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.TodoListSubItem
 import kotlinx.android.synthetic.main.todo_list_sub_item_list.view.*
 
-class TodoListSubItemsAdapter(var todoListSubItems:List<TodoListSubItem>) : RecyclerView.Adapter<TodoListSubItemsAdapter.FeedViewHolder>() {
+class TodoListSubItemsAdapter(var todoListSubItems:MutableList<TodoListSubItem>) : RecyclerView.Adapter<TodoListSubItemsAdapter.FeedViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
         val view = LayoutInflater.from(parent.
@@ -42,6 +42,11 @@ class TodoListSubItemsAdapter(var todoListSubItems:List<TodoListSubItem>) : Recy
 
         holder.itemView.sub_item_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
             todoListSubItems[position].isChecked=isChecked
+        }
+
+        holder.itemView.delete_sub_item.setOnClickListener {
+            todoListSubItems.removeAt(position)
+            notifyDataSetChanged()
         }
     }
 

@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes.ui.base
 
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -13,6 +14,7 @@ import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapView
 import com.huawei.hms.maps.OnMapReadyCallback
 import com.huawei.hms.maps.model.*
+import com.huawei.hms.maps.model.CameraPosition
 import com.huawei.hms.site.api.SearchResultListener
 import com.huawei.hms.site.api.SearchService
 import com.huawei.hms.site.api.SearchServiceFactory
@@ -22,18 +24,19 @@ import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.location.InfoWindowData
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
+import com.huawei.references.hinotes.ui.itemdetail.notedetail.LocationFragment
 import com.huawei.references.hinotes.ui.itemdetail.reminder.MapType
 import com.huawei.references.hinotes.ui.itemdetail.reminder.adapter.IPoiClickListener
 import com.huawei.references.hinotes.ui.itemdetail.reminder.adapter.PoiItemsAdapter
 import kotlinx.android.synthetic.main.custom_info_window.view.*
-import kotlinx.android.synthetic.main.reminder_fragment.*
+import kotlinx.android.synthetic.main.reminder_by_location_fragment.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
 
 abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragment(), OnMapReadyCallback,
-    IPoiClickListener {
+    IPoiClickListener, HuaweiMap.OnMarkerClickListener {
     protected var hMap:HuaweiMap?=null
     var mapViewBundle: Bundle? = null
     var fusedLocationProviderClient : FusedLocationProviderClient ?= null
@@ -42,6 +45,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
     private var searchService: SearchService? = null
     private var markerList : ArrayList<Marker> = arrayListOf()
     protected var currentRadius=100.0
+    var selectedPoi:Site?=null
 
     abstract val mapType:MapType
 
@@ -68,7 +72,6 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
         val mapView=view.findViewById<MapView>(R.id.detailBottomSheetMapView)
         mapView.onCreate(mapViewBundle)
         mapView.getMapAsync(this)
-
     }
 
     override fun onMapReady(huaweiMap: HuaweiMap?) {
@@ -78,9 +81,11 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
             uiSettings.isMyLocationButtonEnabled = true
             getLocation(settingsClient,fusedLocationProviderClient,this)
         }
+        hMap?.setOnMarkerClickListener(this@BaseMapFragment)
     }
 
-    private fun setMarkersToMap(placeList : List<Site>){
+    private fun addMarker(placeList : List<Site>){
+        markerList.clear()
         placeList.forEach {
             val latlng = LatLng(it.location.lat, it.location.lng)
             val info = InfoWindowData(it.siteId,
@@ -97,6 +102,9 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
                 clusterable(false)
             }
 
+
+            // crashed uncaughtException stacktrace is java.lang.IllegalStateException:
+            // Fragment LocationFragment{32e271} (b53af7fb-8182-43e7-b823-7816b764545e)} not attached to an activity.
 
             (requireActivity() as? ItemDetailBaseActivity)?.let {
                 val customInfoWindow = CustomInfoWindowAdapter(
@@ -122,7 +130,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
         val mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 if (locationResult != null) {
-                    hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude), 17F))
+                    hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude), 16.5F))
                     onLocationGet(locationResult.lastLocation)
                     getPoiList(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
                 }
@@ -152,7 +160,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
         val resultListener: SearchResultListener<NearbySearchResponse> =
             object : SearchResultListener<NearbySearchResponse> {
                 override fun onSearchResult(results: NearbySearchResponse) {
-                    setMarkersToMap(results.sites)
+                    addMarker(results.sites)
                     poi_recycler_view?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     poi_recycler_view?.adapter =
                         PoiItemsAdapter(
@@ -169,20 +177,17 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
 
     override fun setOnPoiClickListener(site: Site, index: Int) {
         markerList.getOrNull(index)?.showInfoWindow()
-        val cameraBuild = CameraPosition.Builder().target(
-            LatLng(site.location.lat, site.location.lng)
-        ).zoom(18f).build()
-        val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraBuild)
-        hMap?.animateCamera(cameraUpdate)
         (activity as? ItemDetailBaseActivity)?.let {
             it.poiSelected(site,mapType,currentRadius)
         }
-
+        cameraUpdate(site.location.lat,site.location.lng)
+        selectedPoi = site
     }
 
     internal class CustomInfoWindowAdapter(private val itemDetailBaseActivity: ItemDetailBaseActivity,
                                            private val baseMapFragment: BaseMapFragment,
-                                           private val mapType: MapType) :
+                                           private val mapType: MapType
+    ) :
         HuaweiMap.InfoWindowAdapter {
         private val mWindow: View = itemDetailBaseActivity.
         layoutInflater.inflate(R.layout.custom_info_window, null)
@@ -191,17 +196,33 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
             val mInfoWindow: InfoWindowData? = marker?.tag as InfoWindowData?
             mWindow.infoTile.text = mInfoWindow?.siteName
             mWindow.infoAddress.text = mInfoWindow?.siteAddress
-            val directionText = mWindow.findViewById<TextView>(R.id.infoGetDirections)
-            directionText.setOnClickListener {
-                marker?.position?.let {
-                    itemDetailBaseActivity.locationSelected(it.latitude,it.longitude,mapType,baseMapFragment.currentRadius)}
-            }
+            //val directionText = mWindow.findViewById<TextView>(R.id.infoGetDirections)
+            //directionText.setOnClickListener {
+            //    marker?.position?.let {
+            //        itemDetailBaseActivity.locationSelected(it.latitude,it.longitude,mapType,baseMapFragment.currentRadius)}
+            //}
             return mWindow
         }
 
         override fun getInfoContents(marker: Marker): View? {
             return null
         }
+    }
+
+    private fun cameraUpdate(lat:Double,lng:Double){
+        val cameraBuild = CameraPosition.Builder().target(
+            LatLng(lat, lng)
+        ).zoom(17f).build()
+        val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraBuild)
+        hMap?.animateCamera(cameraUpdate)
+    }
+
+    override fun onMarkerClick(p0: Marker?): Boolean {
+        selectedPoi?.name=p0?.title
+        selectedPoi?.location?.lat = p0?.position?.latitude!!
+        selectedPoi?.location?.lng = p0.position?.longitude!!
+        cameraUpdate(p0.position?.latitude!!,p0.position?.longitude!!)
+        return true
     }
 
     companion object{

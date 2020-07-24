@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.itemdetail.reminder.ReminderByLocationFragment">
+
+    <com.huawei.hms.maps.MapView
+        android:id="@+id/detailBottomSheetMapView"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        map:cameraTargetLat="51"
+        map:cameraTargetLng="10"
+        map:cameraZoom="8.5"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.0"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toBottomOf="@+id/frameLayout2"
+        map:mapType="normal"
+        map:uiCompass="true"
+        map:uiZoomControls="true">
+
+    </com.huawei.hms.maps.MapView>
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        map:layout_constraintBottom_toBottomOf="@id/detailBottomSheetMapView"
+        map:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/poi_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toBottomOf="@id/detailBottomSheetMapView" >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <FrameLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/delete_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:padding="8dp"
+        android:text="Delete"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        map:layout_constraintBottom_toBottomOf="@+id/frameLayout2"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="@+id/frameLayout2" />
+
+    <TextView
+        android:id="@+id/save_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:padding="8dp"
+        android:text="Save"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        map:layout_constraintBottom_toBottomOf="@+id/frameLayout2"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintTop_toTopOf="@+id/frameLayout2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,10 +10,12 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import com.github.javiersantos.bottomdialogs.BottomDialog
 import com.huawei.hmf.tasks.Task
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureActivity
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureConstants
@@ -25,13 +27,13 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
 import com.huawei.references.hinotes.data.item.model.UserRole
+import com.huawei.references.hinotes.ui.base.customBottomDialogs
 import com.huawei.references.hinotes.ui.base.customPopup
 import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_note.*
-import kotlinx.android.synthetic.main.choose_image_direction.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.IOException
@@ -95,26 +97,9 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
 
         image_icon.setOnClickListener {
             hideKeyboard()
-            include_choose_image.visibility= View.VISIBLE
+            //include_choose_image.visibility= View.VISIBLE
+            customBottomDialogs("Take Picture","Pick Image",getDrawable(R.drawable.camera_icon),getDrawable(R.drawable.gallery_icon),{performTakePicture()},{performPickImage()})
         }
-
-        choose_take_picture_text.setOnClickListener {
-            performTakePicture()
-        }
-
-        choose_pick_image_text.setOnClickListener {
-            performPickImage()
-        }
-
-        choose_image_cancel.setOnClickListener {
-            include_choose_image.visibility= View.GONE
-        }
-
-        choose_event_background.setOnClickListener {
-            include_choose_image.visibility= View.GONE
-        }
-
-
 
         saveFab.setOnClickListener {
             if(note_detail_title.text.toString() == "" || note_detail_description.text.toString() == ""){
@@ -155,6 +140,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         })
+        super.setupUI()
     }
 
     private fun saveChanges(item:Item){
@@ -205,11 +191,9 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
                 Toast.makeText(this,this.getString(R.string.text_recognition_could_not_read),Toast.LENGTH_LONG).show()
             }
             val resultText=it.stringValue.replace("\n"," ")
-            include_choose_image.visibility= View.GONE
             note_detail_description.text = note_detail_description.text.append(resultText)
         }.addOnFailureListener {
             Toast.makeText(this,this.getString(R.string.text_recognition_failed),Toast.LENGTH_SHORT).show()
-            include_choose_image.visibility= View.GONE
         }
     }
 

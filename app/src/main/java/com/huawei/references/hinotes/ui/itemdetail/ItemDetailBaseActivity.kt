@@ -2,6 +2,7 @@ package com.huawei.references.hinotes.ui.itemdetail
 
 import android.Manifest
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -17,7 +18,8 @@ import com.huawei.references.hinotes.data.item.model.ReminderType
 import com.huawei.references.hinotes.ui.base.*
 import com.huawei.references.hinotes.ui.itemdetail.notedetail.LocationFragment
 import com.huawei.references.hinotes.ui.itemdetail.reminder.MapType
-import com.huawei.references.hinotes.ui.itemdetail.reminder.ReminderFragment
+import com.huawei.references.hinotes.ui.itemdetail.reminder.ReminderByTimeFragment
+import com.huawei.references.hinotes.ui.itemdetail.reminder.ReminderByLocationFragment
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
@@ -41,6 +43,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             noteDetailChanged = false
             isNewNote=false
             itemData.itemId=it.itemId
+
 //            it.subItemIds?.let {serverSubItemList->
 //                val newIds=serverSubItemList.filter {
 //                        serverSubItemId->
@@ -55,6 +58,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
 //            it.reminderId?.let {
 //                 itemData.reminder?.id=it
 //            }
+
             onSaveSuccessful()
             customToast(this,this.getString(R.string.note_successfully_saved),false)
         }
@@ -75,13 +79,12 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             onGetRemindersCompleted()
             //TODO: fill reminder ui
         }
-
     }
 
     override fun setupUI() {
         super.setupUI()
         add_reminder?.setOnClickListener {
-            performAddReminder()
+            customBottomDialogs(this.getString(R.string.add_reminder_by_time),this.getString(R.string.add_reminder_by_location),getDrawable(R.drawable.calendar_reminder_icon),getDrawable(R.drawable.location_reminder_icon),{performAddReminderByTime()},{performAddReminderByLocation()})
         }
 
         location_icon?.setOnClickListener {
@@ -113,7 +116,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
 
     protected open fun onGetRemindersCompleted(){}
 
-    private fun performAddReminder() =
+    private fun performAddReminderByTime() =
         runWithPermissions(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -122,7 +125,24 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             Manifest.permission.INTERNET){
             if (bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN) {
                 bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
-                val bottomSheetFragment = ReminderFragment(itemData)
+                val bottomSheetFragment = ReminderByTimeFragment()
+                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+            }
+            else {
+                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
+
+    private fun performAddReminderByLocation() =
+        runWithPermissions(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.INTERNET){
+            if (bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN) {
+                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+                val bottomSheetFragment = ReminderByLocationFragment(itemData)
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
             }
             else {

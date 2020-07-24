@@ -66,17 +66,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
-    <include
-        android:id="@+id/include_choose_image"
-        layout="@layout/choose_image_direction"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ProgressBar
         android:id="@+id/detail_progress_bar"
         style="?android:attr/progressBarStyle"

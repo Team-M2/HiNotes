@@ -20,15 +20,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
         android:background="@color/colorAddItemViewsBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/delete_sub_item"
         app:layout_constraintStart_toEndOf="@+id/sub_item_checkbox"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/view4"
+        android:id="@+id/item_diveder"
         android:layout_width="wrap_content"
         android:layout_height="2dp"
         android:layout_marginTop="8dp"
@@ -36,4 +34,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sub_item_title" />
+
+    <ImageView
+        android:id="@+id/delete_sub_item"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/delete_icon" />
 </androidx.constraintlayout.widget.ConstraintLayout>
