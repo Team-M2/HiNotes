@@ -12,7 +12,7 @@ import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.itemdetail.reminder.MapType
 
-class LocationFragment(item: Item) : BaseMapFragment(item) {
+class LocationFragment(var item: Item) : BaseMapFragment(item) {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
