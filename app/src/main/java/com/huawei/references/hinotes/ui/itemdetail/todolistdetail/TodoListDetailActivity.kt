@@ -41,6 +41,10 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
         observeDataHolderLiveData(viewModel.todoSubItemsLiveData){
             subItems.clear()
             subItems.addAll(it)
+            itemData.todoListSubItems?.apply {
+                clear()
+                addAll(it)
+            }
             todoListSubItemsAdapter.notifyDataSetChanged()
         }
         if (isNewNote)
