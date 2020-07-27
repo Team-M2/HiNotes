@@ -200,6 +200,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
         (activity as? ItemDetailBaseActivity)?.poiSelected(site,mapType,currentRadius)
         cameraUpdate(site.location.lat,site.location.lng)
         selectedPoi = site
+        //TODO: call base detail activity map callbacks
     }
 
     internal class CustomInfoWindowAdapter(itemDetailBaseActivity: ItemDetailBaseActivity,
@@ -219,6 +220,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
             //    marker?.position?.let {
             //        itemDetailBaseActivity.locationSelected(it.latitude,it.longitude,mapType,baseMapFragment.currentRadius)}
             //}
+            //TODO: call base detail activity map callbacks
             return mWindow
         }
 
@@ -240,6 +242,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
         selectedPoi?.location?.lat = p0?.position?.latitude!!
         selectedPoi?.location?.lng = p0.position?.longitude!!
         cameraUpdate(p0.position?.latitude!!,p0.position?.longitude!!)
+        //TODO: call base detail activity map callbacks
         return true
     }
 
