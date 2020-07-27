@@ -1,4 +1,4 @@
-package com.huawei.references.hinotes.ui.itemdetail.notedetail
+package com.huawei.references.hinotes.ui.itemdetail
 
 import android.Manifest
 import android.os.Bundle
@@ -11,7 +11,6 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.itemdetail.reminder.MapType
-import kotlinx.android.synthetic.main.note_detail_location_bottom_sheet.view.*
 
 class LocationFragment(item: Item) : BaseMapFragment(item) {
 
@@ -21,16 +20,6 @@ class LocationFragment(item: Item) : BaseMapFragment(item) {
     ): View? = inflater.inflate(R.layout.note_detail_location_bottom_sheet, container, false)
 
     override val mapType: MapType = MapType.ITEM_LOCATION
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.save_text.setOnClickListener {
-            //todo:save location
-        }
-        view.delete_text.setOnClickListener {
-            //todo:delete location
-        }
-    }
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE])
     override fun onMapReady(huaweiMap: HuaweiMap?) {

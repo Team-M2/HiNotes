@@ -13,6 +13,7 @@ data class Item (
     var lng:Double?=null,
     val poiName:String?=null,
     var poiDescription:String?=null,
+    var description:String?=null,
     var title:String,
     val todoListSubItems:MutableList<TodoListSubItem>?= mutableListOf(),
     var isChecked:Boolean?=false,

@@ -1,7 +1,7 @@
 package com.huawei.references.hinotes.ui.itemdetail.todolistdetail
 
 import android.os.Bundle
-import androidx.appcompat.app.ActionBar
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.*
@@ -21,7 +21,9 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
 
     private val viewModel: TodoListDetailViewModel by viewModel()
     private val subItems = ArrayList<TodoListSubItem>()
-    private val todoListSubItemsAdapter = TodoListSubItemsAdapter(subItems)
+    private val subItemIdsToDelete = ArrayList<Int>()
+    private val reminderIdsToDelete = ArrayList<Int>()
+    private val todoListSubItemsAdapter = TodoListSubItemsAdapter(subItems,subItemIdsToDelete)
 
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
 
@@ -57,14 +59,9 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
     override fun setupUI() {
         if(!contentViewIsSet){
             contentViewIsSet=true
-            supportActionBar?.apply {
-                setDisplayShowTitleEnabled(false)
-                displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-                setCustomView(R.layout.item_detail_toolbar)
-            }
             setContentView(R.layout.activity_detail_todo_list)
         }
-        todo_item_title.setText(itemData.title)
+        super.setupUI()
         todo_list_item_checkbox.isChecked = itemData.isChecked ?: false
         todo_list_sub_recycler_view.apply {
             layoutManager = LinearLayoutManager(this@TodoListDetailActivity)
@@ -86,9 +83,6 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
             onBackPressed()
         }
 
-        microphone_icon.setOnClickListener {
-        }
-
         delete_icon.setOnClickListener {
             if (!isNewNote) {
                 runWithAGConnectUserOrOpenLogin {
@@ -107,9 +101,11 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
                         it.clear()
                         it.addAll(subItems)
                     }
-                    title = todo_item_title.text.toString()
+                    title = findViewById<TextView>(R.id.item_detail_title)?.text.toString()
+                    description= findViewById<TextView>(R.id.item_detail_description)?.text.toString()
                     isChecked = todo_list_item_checkbox.isChecked
-                }, it.uid, isNewNote)
+                }, it.uid, isNewNote, subItemIdsToDelete.map { it },reminderIdsToDelete)
+                subItemIdsToDelete.clear()
             }
         }
     }
@@ -136,6 +132,7 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
         false,
         null,
         null,
+        "",
         "",
         "",
         "",

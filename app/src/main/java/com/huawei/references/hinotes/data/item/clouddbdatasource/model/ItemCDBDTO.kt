@@ -15,6 +15,7 @@ data class ItemCDBDTO(@PrimaryKey
                       val lng:Double?,
                       val poiName:String?,
                       val poiDescription:String?,
+                      val description:String?,
                       val title:String,
                       val isChecked:Boolean?,
                       val reminder:Reminder?,

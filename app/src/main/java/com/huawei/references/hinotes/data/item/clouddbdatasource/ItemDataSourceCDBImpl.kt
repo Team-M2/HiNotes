@@ -120,7 +120,13 @@ class ItemDataSourceCDBImpl(private val cloudDBZone: CloudDBZone?,
         }
 
 
-    override suspend fun upsertItem(item: Item, userId: String, isNew: Boolean): DataHolder<ItemSaveResult> {
+    override suspend fun upsertItem(
+        item: Item,
+        userId: String,
+        isNew: Boolean,
+        subItemIdsToDelete: List<Int>,
+        reminderIdsToDelete: List<Int>
+    ): DataHolder<ItemSaveResult> {
         try {
             var itemSize=0
             var lastItemId=0

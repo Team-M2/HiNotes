@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes.data.item.restdatasource.impl
 
+import android.util.Log
 import com.huawei.references.hinotes.data.base.DBError
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
@@ -67,7 +68,7 @@ class ItemDataSourceRestImpl(
     ): DataHolder<List<Item>> =
         apiCallAdapter.adapt<ItemRestDTO> {
             val query =
-                "select json_agg(json_build_object('itemId',item.\"itemId\",'createdAt',\"createdAt\",'updatedAt',\"updatedAt\",'type',\"type\",'isOpen',\"isOpen\",'lat',\"lat\",'lng',\"lng\",'poiDescription',\"poiDescription\",'title',\"title\",'isChecked',\"isChecked\",'isPinned',\"isPinned\",'role',\"role\")) from hinotesschema.item INNER JOIN hinotesschema.permission ON permission.\"itemId\"=item.\"itemId\" WHERE \"type\"=${itemType.type} AND permission.\"userId\"='$userId'"
+                "select json_agg(json_build_object('itemId',item.\"itemId\",'createdAt',\"createdAt\",'updatedAt',\"updatedAt\",'type',\"type\",'isOpen',\"isOpen\",'lat',\"lat\",'lng',\"lng\",'poiDescription',\"poiDescription\",'description',\"description\",'title',\"title\",'isChecked',\"isChecked\",'isPinned',\"isPinned\",'role',\"role\")) from hinotesschema.item INNER JOIN hinotesschema.permission ON permission.\"itemId\"=item.\"itemId\" WHERE \"type\"=${itemType.type} AND permission.\"userId\"='$userId'"
             itemRestService.executeQuery(query)
         }.let {
             when (it) {
@@ -148,9 +149,16 @@ class ItemDataSourceRestImpl(
         else DataHolder.Success(Any())
     }
 
-    override suspend fun upsertItem(item: Item, userId: String, isNew: Boolean): DataHolder<ItemSaveResult> {
+    override suspend fun upsertItem(
+        item: Item,
+        userId: String,
+        isNew: Boolean,
+        subItemIdsToDelete: List<Int>,
+        reminderIdsToDelete: List<Int>
+    ): DataHolder<ItemSaveResult> {
+        Log.d("delete","size: "+subItemIdsToDelete.size.toString())
         return if (isNew) {
-            upsertCore(userId, item, isNew)
+            upsertCore(userId, item, isNew,subItemIdsToDelete)
         } else {
 //            when(val res=permissionsDataSource.getPermissions(userId)){
 //                is DataHolder.Success ->{
@@ -167,15 +175,15 @@ class ItemDataSourceRestImpl(
 //                is DataHolder.Fail -> res
 //                is DataHolder.Loading -> res
 //            }
-            upsertCore(userId, item, isNew)
+            upsertCore(userId, item, isNew,subItemIdsToDelete)
         }
     }
 
-    private suspend fun upsertCore(userId: String, item: Item, isNew: Boolean): DataHolder<ItemSaveResult> =
+    private suspend fun upsertCore(userId: String, item: Item, isNew: Boolean,subItemIdsToDelete: List<Int>): DataHolder<ItemSaveResult> =
         if (isNew) {
             apiCallAdapter.adapt<Any> {
                 val query =
-                    "insert into hinotesschema.item(\"createdAt\",\"updatedAt\",\"type\",\"isOpen\",lat,lng,\"poiDescription\",\"title\",\"isChecked\",\"isPinned\") values (${if (isNew) "NOW()," else ""}NOW(),${item.type.type},${item.isOpen},${item.lat ?: "NULL"},${item.lng ?: "NULL"},${item.poiDescription?.let { "'$it'" } ?: "NULL"},'${item.title}',${item.isChecked},${item.isPinned}) returning \"itemId\""
+                    "insert into hinotesschema.item(\"createdAt\",\"updatedAt\",type,\"isOpen\",lat,lng,\"poiDescription\",description,title,\"isChecked\",\"isPinned\") values (${if (isNew) "NOW()," else ""}NOW(),${item.type.type},${item.isOpen},${item.lat ?: "NULL"},${item.lng ?: "NULL"},${item.poiDescription?.let { "'$it'" } ?: "NULL"},${item.description?.let { "'$it'" } ?: "NULL"},'${item.title}',${item.isChecked},${item.isPinned}) returning \"itemId\""
                 itemRestService.executeQuery(query)
             }.let { itemDbResult ->
                 when (itemDbResult) {
@@ -228,7 +236,24 @@ class ItemDataSourceRestImpl(
                         reminderDataSource.upsert(it,item.itemId,it.id==-1)
                     } ?: DataHolder.Success(Any())
 
-                    when(DataHolder.checkAllSuccess(itemResult,reminderResult)){
+                    val reminderDeleteResult=subItemIdsToDelete.takeIf { it.isNotEmpty() }?.let {
+                        reminderDataSource.deleteReminders(it)
+                    } ?: DataHolder.Success(-1)
+
+                    Log.d("delete","1")
+                    val deleteSubItemResult=subItemIdsToDelete.takeIf { it.isNotEmpty() }?.let{
+                        Log.d("delete","2")
+                        subItemDataSource.deleteSubItems(subItemIdsToDelete)
+                    } ?: DataHolder.Success(-1)
+
+                    Log.d("delete","3")
+                    Log.d("delete",deleteSubItemResult.toString())
+
+                    when(DataHolder.checkAllSuccess(itemResult,
+                            reminderResult,
+                            deleteSubItemResult,
+                            reminderDeleteResult
+                        )){
                         is DataHolder.Success -> updateItemCore(item)
                         else -> DataHolder.Fail(errStr = "update error")
                     }
@@ -240,7 +265,7 @@ class ItemDataSourceRestImpl(
         apiCallAdapter.adapt<Any> {
             val query =
                 "UPDATE hinotesschema.item SET \"updatedAt\" = NOW(),\"type\"=${item.type.type},\"isOpen\"=${item.isOpen},lat=${item.lat},lng=${item.lng},\"poiDescription\"=${item.poiDescription.takeIf { (it ?: "").isNotBlank() }
-                    ?.let { "'$it'" } ?: "NULL"},\"title\"='${item.title}',\"isChecked\"=${item.isChecked},\"isPinned\"=${item.isPinned} where \"itemId\"=${item.itemId}"
+                    ?.let { "'$it'" } ?: "NULL"},description=${item.description?.let { "'$it'" } ?: "NULL"},\"title\"='${item.title}',\"isChecked\"=${item.isChecked},\"isPinned\"=${item.isPinned} where \"itemId\"=${item.itemId}"
             itemRestService.executeQuery(query)
         }.let {
             when (it) {

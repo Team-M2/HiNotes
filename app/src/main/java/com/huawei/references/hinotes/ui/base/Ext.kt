@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -116,4 +117,14 @@ fun HashMap<Item,Boolean>.isAllFalse() : Boolean =
 
 fun Date.formattedToString() : Date = object : Date(){
     override fun toString(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this)
+}
+
+fun Activity.hideKeyboard() {
+    val imm: InputMethodManager =
+        this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    var view: View? = this.currentFocus
+    if (view == null) {
+        view = View(this)
+    }
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
 }

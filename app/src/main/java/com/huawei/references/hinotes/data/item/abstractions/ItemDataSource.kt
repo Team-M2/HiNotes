@@ -13,7 +13,12 @@ interface ItemDataSource {
 
     suspend fun getItemsByUserId(userId: String,itemType: ItemType) : DataHolder<List<Item>>
 
-    suspend fun upsertItem(item: Item, userId: String, isNew:Boolean): DataHolder<ItemSaveResult>
+    suspend fun upsertItem(item: Item,
+                           userId: String,
+                           isNew:Boolean,
+                           subItemIdsToDelete: List<Int>,
+                           reminderIdsToDelete: List<Int>
+                           ): DataHolder<ItemSaveResult>
 
     suspend fun deleteItem(item: Item, userId: String) : DataHolder<Any>
 

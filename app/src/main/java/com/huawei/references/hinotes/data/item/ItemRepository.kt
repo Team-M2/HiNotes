@@ -21,8 +21,12 @@ class ItemRepository(
 
     fun unSubscribe(): Boolean = liveDataSource.unsubscribe()
 
-    suspend fun upsertItem(item: Item, userId: String, isNew: Boolean): DataHolder<ItemSaveResult> =
-        handleResult(itemDataSource.upsertItem(item, userId, isNew), userId, item.type)
+    suspend fun upsertItem(item: Item,
+                           userId: String,
+                           isNew: Boolean,
+                           subItemIdsToDelete: List<Int>,
+                           reminderIdsToDelete: List<Int>): DataHolder<ItemSaveResult> =
+        handleResult(itemDataSource.upsertItem(item, userId, isNew,subItemIdsToDelete,reminderIdsToDelete),userId,item.type)
 
     suspend fun deleteItem(item: Item, userId: String): DataHolder<Any> =
         handleResult(itemDataSource.deleteItem(item, userId), userId, item.type)
