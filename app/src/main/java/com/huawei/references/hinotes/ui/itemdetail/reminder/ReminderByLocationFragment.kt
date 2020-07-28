@@ -19,17 +19,19 @@ import com.huawei.hms.maps.model.Circle
 import com.huawei.hms.maps.model.CircleOptions
 import com.huawei.hms.maps.model.LatLng
 import com.huawei.hms.maps.model.Marker
+import com.huawei.hms.site.api.model.Coordinate
 import com.huawei.hms.site.api.model.Site
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseActivity
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
-import com.huawei.references.hinotes.ui.base.customToast
+import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import kotlinx.android.synthetic.main.reminder_by_location_fragment.view.*
 
 
 class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
     var circle: Circle?=null
+    var userLocation:Location?=null
     override val mapType: MapType = MapType.GEOFENCE
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,14 +55,13 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
             selectedPoi?.location?.lat?.let { it1 -> getLocationInBackground(it1,
                 selectedPoi?.location?.lat!!, currentRadius.toFloat()
             ) }
+            (activity as? ItemDetailBaseActivity)?.poiSelected(selectedPoi!!,MapType.GEOFENCE,currentRadius)
             this.dismiss()
         }
 
         view.delete_text.setOnClickListener {
             this.dismiss()
         }
-
-
     }
 
     override fun onCreateView(
@@ -74,11 +75,15 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
     override fun onMapReady(huaweiMap: HuaweiMap?) {
         super.onMapReady(huaweiMap)
         hMap=huaweiMap
+
     }
 
     override fun onLocationGet(location: Location) {
         super.onLocationGet(location)
         addCircle(location.latitude, location.longitude)
+        userLocation=location
+        selectedPoi?.location = Coordinate(userLocation!!.latitude,userLocation!!.longitude)
+        selectedPoi?.name = "Your Location"
     }
 
     private fun addCircle(lat:Double, lng:Double){
@@ -102,23 +107,21 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         geofenceList?.add(
             Geofence.Builder()
                 .setUniqueId("mGeofence")
-                .setValidContinueTime(10000000000)
+                .setValidContinueTime(Geofence.GEOFENCE_NEVER_EXPIRE)
+                .setNotificationInterval(10000)
                 .setRoundArea(lat, lng, radius)
                 .setConversions(Geofence.ENTER_GEOFENCE_CONVERSION or Geofence.EXIT_GEOFENCE_CONVERSION)
                 .build()
         )
         idList?.add("mGeofence")
 
-      getAddGeofenceRequest(geofenceList!!)
-
+        getAddGeofenceRequest(geofenceList!!)
         geofenceService.createGeofenceList(getAddGeofenceRequest(geofenceList), pendingIntent)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    (requireActivity() as? BaseActivity)?.
-                        customToast("Reminder added successfully",false)
+                    //(requireActivity() as? BaseActivity)?.customToast("Reminder added successfully",false)
                 } else {
-                    (requireActivity() as? BaseActivity)?.
-                        customToast("Reminder add failed",false)
+                    //(requireActivity() as? BaseActivity)?.customToast("Reminder add failed",false)
                 }
             }
     }
@@ -133,6 +136,7 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
     private fun getPendingIntent(): PendingIntent {
         val intent = Intent(this.activity, BroadcastReceiver::class.java)
         intent.putExtra("reminderType",0)
+        intent.putExtra("reminderTitle",item.title)
         intent.action = BroadcastReceiver.ACTION_PROCESS_LOCATION
         return PendingIntent.getBroadcast(this.activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
@@ -147,4 +151,6 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         p0?.position?.latitude?.let { addCircle(it,p0.position.longitude) }
         return super.onMarkerClick(p0)
     }
+
+
 }

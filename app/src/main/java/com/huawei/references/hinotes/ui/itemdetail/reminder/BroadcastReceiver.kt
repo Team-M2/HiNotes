@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.icu.text.CaseMap
 import android.location.Location
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -13,14 +14,16 @@ import androidx.core.app.NotificationManagerCompat
 import com.huawei.hms.location.GeofenceData
 import com.huawei.references.hinotes.MainActivity
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.ui.itemdetail.reminder.ReminderByTimeFragment.Companion.notification_
 
 
 class BroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val reminderType = intent!!.getIntExtra("reminderType", -1)
+        val reminderTitle = intent.getStringExtra("reminderTitle")
+        var notificationDescription:String?=null
+
         if(reminderType == 1){
-            val notificationManager =
+            /*val notificationManager =
                 context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val importance = NotificationManager.IMPORTANCE_HIGH
@@ -34,40 +37,26 @@ class BroadcastReceiver : BroadcastReceiver() {
             }
             val id = intent!!.getIntExtra("notificationId", 0)
             assert(notificationManager != null)
-            notificationManager!!.notify(id, notification_)
+//            notificationManager!!.notify(id, notification_)
+
+             */
+            notificationDescription = "It is time for the $reminderTitle note."
+            showNotification(context, reminderTitle, notificationDescription)
         }
-        else{
-            if (intent != null) {
-                val action = intent.action
-                val sb = StringBuilder()
-                val next = "\n"
-                if (ACTION_PROCESS_LOCATION == action) {
-                    val geofenceData = GeofenceData.getDataFromIntent(intent)
-                    if (geofenceData != null) {
-                        showNotification(context)
-                        val errorCode = geofenceData.errorCode
-                        val conversion = geofenceData.conversion
-                        val list =
-                            geofenceData.convertingGeofenceList
-                        val mLocation: Location = geofenceData.convertingLocation
-                        val status = geofenceData.isSuccess
-                        sb.append("errorCode: $errorCode$next")
-                        sb.append("conversion: $conversion$next")
-                        for (i in list.indices) {
-                            sb.append("geoFence id :" + list[i].uniqueId + next)
-                        }
-                        sb.append(
-                            "location is :" + mLocation.getLongitude()
-                                .toString() + " " + mLocation.getLatitude().toString() + next
-                        )
-                        sb.append("is successful :$status")
-                    }
+        else if(reminderType == 0){
+            val action = intent.action
+            if (ACTION_PROCESS_LOCATION == action) {
+                val geofenceData = GeofenceData.getDataFromIntent(intent)
+                if (geofenceData != null) {
+                    notificationDescription=
+                        "You have reached or left the area you have created for the $reminderTitle note."
+                    showNotification(context,reminderTitle,notificationDescription)
                 }
             }
         }
     }
 
-    private fun showNotification(context: Context?) {
+    private fun showNotification(context: Context?,title: String?, notificationDescription:String?) {
         val channelId="channelId"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "channelName"
@@ -89,14 +78,16 @@ class BroadcastReceiver : BroadcastReceiver() {
 
         val builder = NotificationCompat.Builder(context!!, channelId)
             .setSmallIcon(R.drawable.reminder_icon)
-            .setContentTitle("My reminder notification")
-            .setContentText("Much longer text that cannot fit one line...")
-            .setStyle(
+            .setContentTitle(title)
+            .setContentText(notificationDescription)
+            /*.setStyle(
                 NotificationCompat.BigTextStyle()
                 .bigText("Much longer text that cannot fit one line..."))
+
+             */
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-        with(NotificationManagerCompat.from(context!!)) {
+        with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
             notify(1, builder.build())
         }
@@ -104,6 +95,6 @@ class BroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_PROCESS_LOCATION =
-            "com.huawei.hmssample.geofence.GeoFenceBroadcastReceiver.ACTION_PROC ESS_LOCATION"
+            "com.huawei.references.hinotes.ui.itemdetail.reminder.BroadcastReceiver.ACTION_PROCESS_LOCATION"
     }
 }
