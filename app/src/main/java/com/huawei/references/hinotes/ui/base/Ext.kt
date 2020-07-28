@@ -2,19 +2,24 @@ package com.huawei.references.hinotes.ui.base
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.github.javiersantos.bottomdialogs.BottomDialog
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
+import kotlinx.android.synthetic.main.choose_reminder_direction.view.*
 import kotlinx.android.synthetic.main.custom_warning_toast.*
 import kotlinx.android.synthetic.main.note_detail_popup.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 private var positiveButtonClickEvent :  () -> Unit = {}
 private var negativeButtonClickEvent :  () -> Unit = {}
@@ -74,9 +79,52 @@ fun BaseActivity.customPopup(popupText:String,positiveButtonText : String, negat
     }
 }
 
+
+fun BaseActivity.customBottomDialogs(firstButtonText : String, secondButtonText : String, firstIcon:Drawable?, secondIcon:Drawable?,  firstClickEvent :() -> Unit = {} , secondClickEvent :() -> Unit = {}){
+    val mDialogView = LayoutInflater.from(this).inflate(R.layout.choose_reminder_direction,
+        null).apply {
+        this.choose_first_text.text = firstButtonText
+        this.choose_second_text.text = secondButtonText
+        this.choose_first_icon.setImageDrawable(firstIcon)
+        this.choose_second_icon.setImageDrawable(secondIcon)
+    }
+
+    val bottomDialog = BottomDialog.Builder(this)
+        .setTitle("Options")
+        .setContent("Which method do you want to add reminders for?")
+        .setCustomView(mDialogView)
+        .show()
+
+    mDialogView.choose_first_text.setOnClickListener {
+        firstClickEvent.invoke()
+        bottomDialog.dismiss()
+    }
+
+    mDialogView.choose_second_text.setOnClickListener {
+        secondClickEvent.invoke()
+        bottomDialog.dismiss()
+    }
+
+    mDialogView.choose_dialog_cancel.setOnClickListener {
+        bottomDialog.dismiss()
+    }
+}
+
+
+
 fun HashMap<Item,Boolean>.isAllFalse() : Boolean =
     this.filter { it.value }.isEmpty()
 
 fun Date.formattedToString() : Date = object : Date(){
     override fun toString(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this)
+}
+
+fun Activity.hideKeyboard() {
+    val imm: InputMethodManager =
+        this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    var view: View? = this.currentFocus
+    if (view == null) {
+        view = View(this)
+    }
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
 }

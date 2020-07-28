@@ -35,6 +35,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name=".ui.itemdetail.reminder.BroadcastReceiver"
+            android:exported="false"
+            android:enabled="true">
+        </receiver>
     </application>
 
 </manifest>

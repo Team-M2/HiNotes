@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes.ui.itemdetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -36,10 +37,21 @@ abstract class ItemDetailViewModel(private val itemRepository: ItemRepository,
         }
     }
 
-    fun saveItem(item: Item, userId:String, isNew:Boolean){
+    fun saveItem(item: Item,
+                 userId:String,
+                 isNew:Boolean,
+                 subItemIdsToDelete: List<Int>,
+                 reminderIdsToDelete: List<Int>
+                ){
         _saveItemLiveData.value=DataHolder.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _saveItemLiveData.postValue(itemRepository.upsertItem(item,userId,isNew))
+            Log.d("delete","size: "+subItemIdsToDelete.size.toString())
+            _saveItemLiveData.postValue(itemRepository.upsertItem(item,
+                userId,
+                isNew,
+                subItemIdsToDelete,
+                reminderIdsToDelete
+                ))
         }
     }
 

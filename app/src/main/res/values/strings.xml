@@ -24,6 +24,8 @@
     <string name="no_recorded_note">No recorded note was found.</string>
     <string name="failed_get_data">Failed to get data.</string>
     <string name="failed_to_login">Failed to log in.</string>
+    <string name="add_reminder_by_time">Add reminder by time</string>
+    <string name="add_reminder_by_location">Add reminder by location</string>
 
 
     <string name="hw_id">HuaweiId</string>
