@@ -13,16 +13,20 @@ import android.view.ViewGroup
 import androidx.core.app.NotificationCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.huawei.references.hinotes.R
-import kotlinx.android.synthetic.main.reminder_by_time_fragment.*
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
+import com.huawei.references.hinotes.ui.itemdetail.reminder.adapter.TimeReminderTabAdapter
 import kotlinx.android.synthetic.main.reminder_by_time_fragment.view.*
+import kotlinx.android.synthetic.main.reminder_by_time_fragment.view.tabLayout
+import java.util.*
 
-class ReminderByTimeFragment : BottomSheetDialogFragment() {
-
+class ReminderByTimeFragment(var item:Item) : BottomSheetDialogFragment() {
     companion object{
-        private val default_notification_channel_id = "default"
-        var notification_:Notification?=null
+        var reminderStaticCalendar: Calendar?=null
     }
-
+    private var reminderCalendar: Calendar?=null
+    private var notification_:Notification?=null
+    private val default_notification_channel_id = "default"
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,11 +36,17 @@ class ReminderByTimeFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        date_picker.minDate = System.currentTimeMillis() - 1000;
+        reminderCalendar = Calendar.getInstance()
+        reminderStaticCalendar = Calendar.getInstance()
+        val adapter = TimeReminderTabAdapter(this.childFragmentManager)
+        adapter.addFragment(DateFragment(), "Date")
+        adapter.addFragment(HourFragment(), "Hour")
+        view.viewPager.adapter=adapter
+        view.tabLayout.setupWithViewPager(view.viewPager)
 
         view.save_text.setOnClickListener {
-            scheduleNotification(getNotification("Notification")!!,10000)
+            scheduleNotification(getNotification("Notification")!!,60000)
+            (activity as? ItemDetailBaseActivity)?.timeSelected(reminderStaticCalendar?.time!!)
             this.dismiss()
         }
 
@@ -49,18 +59,20 @@ class ReminderByTimeFragment : BottomSheetDialogFragment() {
         val notificationIntent = Intent(this.activity, BroadcastReceiver::class.java)
         notification_ = notification
         notificationIntent.putExtra("notificationId", 1)
-        notificationIntent.putExtra("notification", notification)
+        notificationIntent.putExtra("reminderTitle",item.title)
+        notificationIntent.putExtra("reminderDescription",item.description)
         notificationIntent.putExtra("reminderType",1)
         val pendingIntent = PendingIntent.getBroadcast(
             this.activity,
             0,
             notificationIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT
         )
         val futureInMillis: Long = SystemClock.elapsedRealtime() + delay
         val alarmManager: AlarmManager =
             (this.context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager?)!!
-        alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent)
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            reminderStaticCalendar?.timeInMillis!!, pendingIntent)
     }
 
     private fun getNotification(content: String): Notification? {

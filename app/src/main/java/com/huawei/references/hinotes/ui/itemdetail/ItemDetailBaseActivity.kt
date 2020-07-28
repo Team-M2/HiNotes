@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -38,6 +39,8 @@ import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import java.io.IOException
+import java.sql.Time
+import java.util.*
 
 abstract class ItemDetailBaseActivity : BaseActivity() {
 
@@ -145,6 +148,12 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
         findViewById<TextView>(R.id.item_detail_description)?.
         text=itemData.description ?: ""
 
+        if(itemData.poiDescription != "" && itemData.lat != 0.0 && itemData.lng != 0.0){
+            location_icon.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
+        }
+        if(itemData.reminder != null){
+            add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
+        }
     }
 
     private fun performAddLocation(){
@@ -157,7 +166,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 val bottomSheetFragment =
                     LocationFragment(
-                        itemData
+                        itemData,bottomSheetBehavior
                     )
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
             }
@@ -178,7 +187,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             Manifest.permission.INTERNET){
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                val bottomSheetFragment = ReminderByTimeFragment()
+                val bottomSheetFragment = ReminderByTimeFragment(itemData)
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
             }
             else {
@@ -276,7 +285,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             }
             MapType.GEOFENCE->{
                 val reminder=itemData.reminder ?:
-                    Reminder(-1,reminderType = ReminderType.ByGeofence).apply {
+                Reminder(-1,reminderType = ReminderType.ByGeofence).apply {
                     itemData.reminder=this
                 }
                 reminder.apply {
@@ -293,6 +302,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             MapType.ITEM_LOCATION ->{
                 itemData.lat=site.location.lat
                 itemData.lng=site.location.lng
+                itemData.poiDescription=site.name
                 //TODO: set poi location ui
             }
             MapType.GEOFENCE->{
@@ -308,6 +318,17 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
                 //TODO: set location reminder ui
             }
         }
+    }
+
+    fun timeSelected(date: Date){
+        val reminder=itemData.reminder ?: Reminder(-1,reminderType = ReminderType.ByTime).apply {
+            itemData.reminder=this
+        }
+        reminder.apply {
+            reminderType=ReminderType.ByTime
+            this.date=date
+        }
+        //TODO: set location reminder ui
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

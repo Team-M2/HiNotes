@@ -1,5 +1,12 @@
 package com.huawei.references.hinotes
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
 import android.widget.ImageView
 import androidx.appcompat.app.ActionBar
 import androidx.navigation.findNavController
@@ -10,8 +17,10 @@ import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.references.hinotes.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : BaseActivity() {
 
+    @SuppressLint("BatteryLife")
     override fun setupUI(){
         if(!contentViewIsSet){
             contentViewIsSet=true
@@ -38,6 +47,17 @@ class MainActivity : BaseActivity() {
             setOnNavigationItemReselectedListener {  }
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val intent = Intent()
+            val packageName = packageName
+            val pm =
+                getSystemService(Context.POWER_SERVICE) as PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                intent.data = Uri.parse("package:$packageName")
+                startActivity(intent)
+            }
+        }
     }
 
 }

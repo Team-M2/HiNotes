@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.custom_info_window.view.*
 import kotlinx.android.synthetic.main.reminder_by_location_fragment.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import java.io.UnsupportedEncodingException
+import java.lang.Exception
 import java.net.URLEncoder
 
 
@@ -42,7 +43,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
     private var searchService: SearchService? = null
     private var markerList : ArrayList<Marker> = arrayListOf()
     protected var currentRadius=100.0
-    var selectedPoi:Site?=null
+    var selectedPoi:Site?=Site()
 
     abstract val mapType:MapType
 
@@ -72,25 +73,20 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
         val mapView=view.findViewById<MapView>(R.id.detailBottomSheetMapView)
         mapView.onCreate(mapViewBundle)
         mapView.getMapAsync(this)
-
-        view.findViewById<TextView>(R.id.save_text)?.setOnClickListener {
-
-        }
-
-        view.findViewById<TextView>(R.id.delete_text)?.setOnClickListener {
-
-        }
     }
 
     fun handleSearchResult(results: NearbySearchResponse){
         if(isFragmentActive){
-            addMarker(results.sites)
-            poi_recycler_view?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            poi_recycler_view?.adapter =
-                PoiItemsAdapter(
-                    results.sites,
-                    this@BaseMapFragment
-                )
+            if(results.sites != null) {
+                addMarker(results.sites)
+                poi_recycler_view?.layoutManager =
+                    LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                poi_recycler_view?.adapter =
+                    PoiItemsAdapter(
+                        results.sites,
+                        this@BaseMapFragment
+                    )
+            }
         }
 
     }
@@ -113,6 +109,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
     private fun addMarker(placeList : List<Site>){
         markerList.clear()
         placeList.forEach {
+            val latlng = LatLng(it.location.lat, it.location.lng)
             val info = InfoWindowData(it.siteId,
                 it.name,
                 it.formatAddress,
@@ -120,7 +117,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
                 it.location.lng
             )
             val options = MarkerOptions().apply {
-                position(LatLng(it.location.lat, it.location.lng))
+                position(latlng)
                 title(it.name)
                 draggable(false)
                 icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
@@ -131,16 +128,21 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
             // crashed uncaughtException stacktrace is java.lang.IllegalStateException:
             // Fragment LocationFragment{32e271} (b53af7fb-8182-43e7-b823-7816b764545e)} not attached to an activity.
 
-            (requireActivity() as? ItemDetailBaseActivity)?.let {
-                val customInfoWindow = CustomInfoWindowAdapter(
-                    it,this,mapType
-                )
-                hMap?.apply {
-                    setInfoWindowAdapter(customInfoWindow)
-                    markerList.add(addMarker(options).apply {
+            try {
+                (requireActivity() as? ItemDetailBaseActivity)?.let {
+                    val customInfoWindow = CustomInfoWindowAdapter(
+                        it,this,mapType
+                    )
+                    hMap?.apply {
+                        setInfoWindowAdapter(customInfoWindow)
+                        markerList.add(addMarker(options).apply {
                             tag=info
                         })
+                    }
                 }
+            }
+            catch (e:Exception){
+
             }
         }
     }
@@ -154,10 +156,10 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
         val locationSettingsRequest: LocationSettingsRequest = builder.build()
         val mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult?.apply {
-                    hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), 16.5F))
-                    onLocationGet(lastLocation)
-                    getPoiList(lastLocation.latitude, lastLocation.longitude)
+                if (locationResult != null) {
+                    hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude), 16.5F))
+                    onLocationGet(locationResult.lastLocation)
+                    getPoiList(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
                 }
             }
         }
@@ -197,7 +199,7 @@ abstract class BaseMapFragment(private var item: Item): BottomSheetDialogFragmen
 
     override fun setOnPoiClickListener(site: Site, index: Int) {
         markerList.getOrNull(index)?.showInfoWindow()
-        (activity as? ItemDetailBaseActivity)?.poiSelected(site,mapType,currentRadius)
+        //(activity as? ItemDetailBaseActivity)?.poiSelected(site,mapType,currentRadius)
         cameraUpdate(site.location.lat,site.location.lng)
         selectedPoi = site
         //TODO: call base detail activity map callbacks
