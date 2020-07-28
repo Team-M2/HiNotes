@@ -44,7 +44,8 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
         super.onActivityCreated(savedInstanceState)
         observeDataHolderLiveData(getItemListViewModel().deleteILiveData)
         observeDataHolderLiveData(getItemListViewModel().itemsLiveData,{
-            customToast(requireActivity(),this.getString(R.string.no_recorded_note),false)
+            (requireActivity() as? BaseActivity)?.
+                customToast(getString(R.string.no_recorded_note),false)
             fillLists(listOf())
         }){
             fillLists(it)

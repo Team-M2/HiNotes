@@ -7,7 +7,6 @@ import android.widget.TextView
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemType
-import com.huawei.references.hinotes.data.item.model.UserRole
 import com.huawei.references.hinotes.ui.base.customPopup
 import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
@@ -15,7 +14,6 @@ import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 class DetailNoteActivity : ItemDetailBaseActivity() {
 
@@ -30,9 +28,9 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
                 }
             }
             else{
-                createNote()
+                createItem(ItemType.Note)
             }
-        }?: createNote()
+        }?: createItem(ItemType.Note)
         super.onCreate(savedInstanceState)
     }
 
@@ -51,7 +49,7 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             if(findViewById<TextView>(R.id.item_detail_title)?.text.toString() == "" ||
                 findViewById<TextView>(R.id.item_detail_description)
             ?.text.toString() == ""){
-                customToast(this,this.getString(R.string.note_detail_check_title_description),true)
+                customToast(getString(R.string.note_detail_check_title_description),true)
             }
             else {
                 runWithAGConnectUserOrOpenLogin {
@@ -111,9 +109,6 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
             super.onBackPressed()
         }
     }
-
-    private fun createNote()=Item(11, Date(),Date(),ItemType.Note,false,0.0,0.0,"","","","",
-        arrayListOf(),false,UserRole.Owner, null,false)
 
     companion object{
         const val ITEM_KEY="ITEM_KEY"

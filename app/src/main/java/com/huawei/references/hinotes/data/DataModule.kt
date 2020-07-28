@@ -6,6 +6,7 @@ import com.huawei.agconnect.cloud.database.CloudDBZone
 import com.huawei.agconnect.cloud.database.CloudDBZoneConfig
 import com.huawei.references.hinotes.data.item.itemDataModule
 import com.huawei.references.hinotes.data.item.restdatasource.restDataModule
+import com.huawei.references.hinotes.data.ml.mlDataModule
 import org.koin.dsl.module
 
 val dataCoreModule = module {
@@ -40,5 +41,5 @@ fun openDbZone(agConnectCloudDBInstance : AGConnectCloudDB) : CloudDBZone? =
     }
 
 // decide which dataSource module will be used
-val dataModule = dataCoreModule + itemDataModule + restDataModule
+val dataModule = dataCoreModule + itemDataModule + restDataModule + mlDataModule
 //val dataModule = dataCoreModule + itemDataModule + cloudDbDataSourceModule

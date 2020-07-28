@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.data.item.model.*
-import com.huawei.references.hinotes.ui.base.customPopup
-import com.huawei.references.hinotes.ui.base.formattedToString
+import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.model.ItemType
+import com.huawei.references.hinotes.data.item.model.TodoListSubItem
 import com.huawei.references.hinotes.ui.base.hide
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
 import com.huawei.references.hinotes.ui.itemdetail.todolistdetail.adapter.TodoListSubItemsAdapter
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
-import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import kotlin.collections.ArrayList
@@ -33,9 +32,9 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
                 isNewNote=false
                 (intent.extras?.getSerializable(ITEM_KEY) as Item)
             } else {
-                createItem()
+                createItem(ItemType.TodoList)
             }
-        } ?: createItem()
+        } ?: createItem(ItemType.TodoList)
         super.onCreate(savedInstanceState)
 
         observeDataHolderLiveData(viewModel.todoSubItemsLiveData){
@@ -83,20 +82,20 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
             createSubItemAndAdd(if (isNewNote) -1 else itemData.itemId)
         }
 
-        back_button.setOnClickListener {
-            onBackPressed()
-        }
-
-        delete_icon.setOnClickListener {
-            if (!isNewNote) {
-                runWithAGConnectUserOrOpenLogin {
-                    customPopup(this.getString(R.string.delete_todo_list_popup_warning),
-                        this.getString(R.string.delete_todo_list_popup_accept),
-                        this.getString(R.string.delete_todo_list_popup_reject)
-                    ) { viewModel.deleteItem(itemData, it.uid) }
-                }
-            }
-        }
+//        back_button.setOnClickListener {
+//            onBackPressed()
+//        }
+//
+//        delete_icon.setOnClickListener {
+//            if (!isNewNote) {
+//                runWithAGConnectUserOrOpenLogin {
+//                    customPopup(this.getString(R.string.delete_todo_list_popup_warning),
+//                        this.getString(R.string.delete_todo_list_popup_accept),
+//                        this.getString(R.string.delete_todo_list_popup_reject)
+//                    ) { viewModel.deleteItem(itemData, it.uid) }
+//                }
+//            }
+//        }
 
         saveFab.setOnClickListener {
             runWithAGConnectUserOrOpenLogin {
@@ -127,27 +126,6 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
         )
         todoListSubItemsAdapter.notifyDataSetChanged()
     }
-
-    private fun createItem() = Item(
-        -1,
-        Date(),
-        Date(),
-        ItemType.TodoList,
-        false,
-        null,
-        null,
-        "",
-        "",
-        "",
-        "",
-        reminder = Reminder(-1,
-            -1,
-            "reminderTitle",
-            null,
-            null,
-            Date().formattedToString(),
-            ReminderType.ByTime)
-    )
 
     companion object {
         const val ITEM_KEY = "ITEM_KEY"

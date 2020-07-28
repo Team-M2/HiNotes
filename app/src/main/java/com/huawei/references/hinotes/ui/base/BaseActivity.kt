@@ -40,7 +40,7 @@ abstract class BaseActivity: AppCompatActivity() {
                 setupUI()
             }
             else{
-                customToast(this,this.getString(R.string.failed_to_login),true)
+                customToast(getString(R.string.failed_to_login),true)
                 finish()
             }
         }

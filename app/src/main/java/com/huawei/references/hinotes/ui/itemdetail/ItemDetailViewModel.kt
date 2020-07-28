@@ -1,5 +1,6 @@
 package com.huawei.references.hinotes.ui.itemdetail
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,12 +11,14 @@ import com.huawei.references.hinotes.data.item.ReminderRepository
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.data.item.model.ItemSaveResult
 import com.huawei.references.hinotes.data.item.model.Reminder
+import com.huawei.references.hinotes.data.ml.MLRepository
 import com.huawei.references.hinotes.ui.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class ItemDetailViewModel(private val itemRepository: ItemRepository,
-                                   private val reminderRepository: ReminderRepository
+                                   private val reminderRepository: ReminderRepository,
+                                   private val mlRepository: MLRepository
 ) : BaseViewModel(){
 
     private val _deleteItemLiveData = MutableLiveData<DataHolder<Any>>()
@@ -29,6 +32,10 @@ abstract class ItemDetailViewModel(private val itemRepository: ItemRepository,
     private val _reminderLiveData = MutableLiveData<DataHolder<List<Reminder>>>()
     val reminderLiveData : LiveData<DataHolder<List<Reminder>>>
         get() = _reminderLiveData
+
+    private val _textRecognitionLiveData = MutableLiveData<DataHolder<String>>()
+    val textRecognitionLiveData : LiveData<DataHolder<String>>
+        get() = _textRecognitionLiveData
 
     fun getReminders(itemId:Int){
         _reminderLiveData.value=DataHolder.Loading()
@@ -59,6 +66,13 @@ abstract class ItemDetailViewModel(private val itemRepository: ItemRepository,
         _deleteItemLiveData.value=DataHolder.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             _deleteItemLiveData.postValue(itemRepository.deleteItem(item,userId))
+        }
+    }
+
+    fun performTextRecognition(bitmap: Bitmap){
+        _textRecognitionLiveData.value=DataHolder.Loading()
+        viewModelScope.launch(Dispatchers.Main) {
+            _textRecognitionLiveData.postValue(mlRepository.recognizeImage(bitmap))
         }
     }
 

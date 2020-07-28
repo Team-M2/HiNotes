@@ -6,8 +6,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val todoListDetailUIModule= module {
-
-    viewModel() {
-        TodoListDetailViewModel(get(),get(),get())
+    viewModel{
+        TodoListDetailViewModel(get(),get(),get(),get())
     } bind ItemDetailViewModel::class
 }

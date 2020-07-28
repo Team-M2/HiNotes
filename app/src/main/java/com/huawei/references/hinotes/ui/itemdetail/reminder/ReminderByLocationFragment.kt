@@ -1,6 +1,6 @@
 package com.huawei.references.hinotes.ui.itemdetail.reminder
 
-import android.app.*
+import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
 import android.location.Location
@@ -22,6 +22,7 @@ import com.huawei.hms.maps.model.Marker
 import com.huawei.hms.site.api.model.Site
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.ui.base.BaseActivity
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.base.customToast
 import kotlinx.android.synthetic.main.reminder_by_location_fragment.view.*
@@ -113,10 +114,11 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         geofenceService.createGeofenceList(getAddGeofenceRequest(geofenceList), pendingIntent)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    customToast(this.requireActivity(),"Reminder added successfully",false)
+                    (requireActivity() as? BaseActivity)?.
+                        customToast("Reminder added successfully",false)
                 } else {
-                    customToast(this.requireActivity(),"Reminder added failed",false)
-
+                    (requireActivity() as? BaseActivity)?.
+                        customToast("Reminder add failed",false)
                 }
             }
     }

@@ -34,17 +34,17 @@ fun View.hide(){
     this.visibility=View.GONE
 }
 
-fun customToast(context:Activity, toastMessage:String, isWarningToast:Boolean){
-    val inflater = context.layoutInflater
-    val toast = Toast(context)
+fun BaseActivity.customToast(toastMessage:String, isWarningToast:Boolean){
+    val inflater = this.layoutInflater
+    val toast = Toast(this)
     toast.duration = Toast.LENGTH_LONG
     val layout = inflater.inflate(
         R.layout.custom_warning_toast,
-        context.custom_toast_constraint)
+        this.custom_toast_constraint)
     val toastTextView: TextView = layout.findViewById<View>(R.id.custom_toast_text) as TextView
     val toastImageView: ImageView = layout.findViewById<View>(R.id.custom_toast_image) as ImageView
     if(!isWarningToast){
-        toastImageView.setImageDrawable(context.getDrawable(R.drawable.info_icon))
+        toastImageView.setImageDrawable(this.getDrawable(R.drawable.info_icon))
         toast.duration = Toast.LENGTH_SHORT
     }
     toastTextView.text = toastMessage
