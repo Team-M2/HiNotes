@@ -18,7 +18,6 @@ abstract class ItemDetailBottomSheetFragment : BottomSheetDialogFragment() {
             dismiss()
         }
     }
-
 }
 
 enum class ItemDetailBottomSheetType{

@@ -21,11 +21,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-private var positiveButtonClickEvent :  () -> Unit = {}
-private var negativeButtonClickEvent :  () -> Unit = {}
-private var positiveButtonText: String?=null
-private var negativeButtonText: String?=null
-
 fun View.show(){
     this.visibility=View.VISIBLE
 }

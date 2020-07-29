@@ -1,7 +1,5 @@
 package com.huawei.references.hinotes.ui.itemdetail.reminder
 
-import android.app.PendingIntent
-import android.content.Intent
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -11,10 +9,6 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
-import com.huawei.hms.location.Geofence
-import com.huawei.hms.location.GeofenceRequest
-import com.huawei.hms.location.GeofenceService
-import com.huawei.hms.location.LocationServices
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.model.Circle
 import com.huawei.hms.maps.model.CircleOptions
@@ -84,54 +78,6 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         circle=hMap?.addCircle(
             CircleOptions().center(LatLng(lat, lng)).radius(100.0).fillColor(Color.TRANSPARENT)
         )
-    }
-
-    private fun getLocationInBackground(lat:Double,lng:Double,radius:Float) {
-        var geofenceService: GeofenceService?=null
-        val idList: ArrayList<String?>?= arrayListOf()
-        val geofenceList: ArrayList<Geofence?>?= arrayListOf()
-        var TAG: String?=null
-        var pendingIntent: PendingIntent?=null
-        pendingIntent=getPendingIntent()
-        geofenceService = LocationServices.getGeofenceService(this.activity)
-
-        TAG = "geoFence"
-
-        geofenceList?.add(
-            Geofence.Builder()
-                .setUniqueId("mGeofence")
-                .setValidContinueTime(Geofence.GEOFENCE_NEVER_EXPIRE)
-                .setNotificationInterval(10000)
-                .setRoundArea(lat, lng, radius)
-                .setConversions(Geofence.ENTER_GEOFENCE_CONVERSION or Geofence.EXIT_GEOFENCE_CONVERSION)
-                .build()
-        )
-        idList?.add("mGeofence")
-
-        getAddGeofenceRequest(geofenceList!!)
-        geofenceService.createGeofenceList(getAddGeofenceRequest(geofenceList), pendingIntent)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    //(requireActivity() as? BaseActivity)?.customToast("Reminder added successfully",false)
-                } else {
-                    //(requireActivity() as? BaseActivity)?.customToast("Reminder add failed",false)
-                }
-            }
-    }
-
-    private fun getAddGeofenceRequest(geofenceList:ArrayList<Geofence?>): GeofenceRequest? {
-        val builder = GeofenceRequest.Builder()
-        builder.setInitConversions(GeofenceRequest.ENTER_INIT_CONVERSION)
-        builder.createGeofenceList(geofenceList)
-        return builder.build()
-    }
-
-    private fun getPendingIntent(): PendingIntent {
-        val intent = Intent(this.activity, BroadcastReceiver::class.java)
-        intent.putExtra("reminderType",0)
-        intent.putExtra("reminderTitle",item.title)
-        intent.action = BroadcastReceiver.ACTION_PROCESS_LOCATION
-        return PendingIntent.getBroadcast(this.activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun setOnPoiClickListener(site: Site, index: Int) {

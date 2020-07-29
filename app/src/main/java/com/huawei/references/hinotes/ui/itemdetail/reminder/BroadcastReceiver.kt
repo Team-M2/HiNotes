@@ -6,8 +6,6 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.icu.text.CaseMap
-import android.location.Location
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -23,23 +21,6 @@ class BroadcastReceiver : BroadcastReceiver() {
         var notificationDescription:String?=null
 
         if(reminderType == 1){
-            /*val notificationManager =
-                context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val importance = NotificationManager.IMPORTANCE_HIGH
-                val notificationChannel = NotificationChannel(
-                    "1001",
-                    "NOTIFICATION_CHANNEL_NAME",
-                    importance
-                )
-                assert(notificationManager != null)
-                notificationManager!!.createNotificationChannel(notificationChannel)
-            }
-            val id = intent!!.getIntExtra("notificationId", 0)
-            assert(notificationManager != null)
-//            notificationManager!!.notify(id, notification_)
-
-             */
             notificationDescription = "It is time for the $reminderTitle note."
             showNotification(context, reminderTitle, notificationDescription)
         }
@@ -80,11 +61,6 @@ class BroadcastReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.reminder_icon)
             .setContentTitle(title)
             .setContentText(notificationDescription)
-            /*.setStyle(
-                NotificationCompat.BigTextStyle()
-                .bigText("Much longer text that cannot fit one line..."))
-
-             */
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
         with(NotificationManagerCompat.from(context)) {

@@ -2,7 +2,6 @@ package com.huawei.references.hinotes.ui.itemlist.todolist.adapter
 
 import android.content.Intent
 import android.view.View
-import android.widget.CompoundButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.huawei.references.hinotes.R
@@ -39,10 +38,6 @@ class TodoListSectionAdapter(
         return TodoListItemViewHolder(
             view
         )
-    }
-
-    private val checkListener= CompoundButton.OnCheckedChangeListener{_,isCheckedParam ->
-        val s=isCheckedParam
     }
 
     override fun onBindItemViewHolder(
@@ -92,11 +87,6 @@ class TodoListSectionAdapter(
             onLongClickListener.setOnLongClickListener()
             true
         }
-
-
-//        holder.itemView.todo_list_sub_checkbox.setOnCheckedChangeListener { _, isChecked ->
-//            list[position].isChecked=isChecked
-//        }
     }
 
     override fun getHeaderViewHolder(view: View): RecyclerView.ViewHolder {

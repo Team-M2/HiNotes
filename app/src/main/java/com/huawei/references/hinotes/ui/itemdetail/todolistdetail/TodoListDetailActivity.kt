@@ -81,21 +81,6 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
             createSubItemAndAdd(if (isNewNote) -1 else itemData.itemId)
         }
 
-//        back_button.setOnClickListener {
-//            onBackPressed()
-//        }
-//
-//        delete_icon.setOnClickListener {
-//            if (!isNewNote) {
-//                runWithAGConnectUserOrOpenLogin {
-//                    customPopup(this.getString(R.string.delete_todo_list_popup_warning),
-//                        this.getString(R.string.delete_todo_list_popup_accept),
-//                        this.getString(R.string.delete_todo_list_popup_reject)
-//                    ) { viewModel.deleteItem(itemData, it.uid) }
-//                }
-//            }
-//        }
-
         saveFab.setOnClickListener {
             runWithAGConnectUserOrOpenLogin {
                 viewModel.saveItem(itemData.apply {

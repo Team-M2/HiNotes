@@ -14,7 +14,6 @@ android {
         }
     }
 
-
     compileSdkVersion 29
 
     defaultConfig {
@@ -73,8 +72,6 @@ dependencies {
     implementation 'com.huawei.hms:location:4.0.3.301'
     implementation 'com.huawei.hms:site:4.0.2.300'
 
-
-    implementation 'com.huawei.agconnect:agconnect-database:1.2.1.301'
     // Koin AndroidX ViewModel features
     implementation "org.koin:koin-androidx-viewmodel:2.1.0"
     // Koin AndroidX Experimental features

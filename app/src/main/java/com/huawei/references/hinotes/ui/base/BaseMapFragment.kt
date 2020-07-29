@@ -17,8 +17,8 @@ import com.huawei.hms.site.api.SearchService
 import com.huawei.hms.site.api.SearchServiceFactory
 import com.huawei.hms.site.api.model.*
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.data.item.model.InfoWindowData
 import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.data.location.InfoWindowData
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
 import com.huawei.references.hinotes.ui.itemdetail.reminder.MapType
@@ -114,12 +114,14 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         markerList.clear()
         placeList.forEach {
             val latlng = LatLng(it.location.lat, it.location.lng)
-            val info = InfoWindowData(it.siteId,
-                it.name,
-                it.formatAddress,
-                it.location.lat,
-                it.location.lng
-            )
+            val info =
+                InfoWindowData(
+                    it.siteId,
+                    it.name,
+                    it.formatAddress,
+                    it.location.lat,
+                    it.location.lng
+                )
             val options = MarkerOptions().apply {
                 position(latlng)
                 title(it.name)

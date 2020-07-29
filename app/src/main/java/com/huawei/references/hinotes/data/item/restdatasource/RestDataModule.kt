@@ -1,9 +1,14 @@
 package com.huawei.references.hinotes.data.item.restdatasource
 
-import com.huawei.references.hinotes.data.item.abstractions.*
-import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.data.item.abstractions.ItemDataSource
+import com.huawei.references.hinotes.data.item.abstractions.PermissionsDataSource
+import com.huawei.references.hinotes.data.item.abstractions.ReminderDataSource
+import com.huawei.references.hinotes.data.item.abstractions.SubItemDataSource
 import com.huawei.references.hinotes.data.item.restdatasource.RestDataSourceConstants.Companion.BASE_URL
-import com.huawei.references.hinotes.data.item.restdatasource.impl.*
+import com.huawei.references.hinotes.data.item.restdatasource.impl.ItemDataSourceRestImpl
+import com.huawei.references.hinotes.data.item.restdatasource.impl.PermissionsDataSourceRestImpl
+import com.huawei.references.hinotes.data.item.restdatasource.impl.ReminderDataSourceImpl
+import com.huawei.references.hinotes.data.item.restdatasource.impl.SubItemDataSourceImpl
 import com.huawei.references.hinotes.data.item.restdatasource.service.ApiCallAdapter
 import com.huawei.references.hinotes.data.item.restdatasource.service.ItemRestService
 import okhttp3.OkHttpClient
@@ -57,15 +62,5 @@ val restDataModule = module {
     factory {
         ReminderDataSourceImpl(get(),get()) as ReminderDataSource
     }
-
-    single {
-        LiveDataSourceRestImpl() as LiveDataSource<Item>
-    }
-
-    factory {
-        SubItemLiveDataSourceRestImpl()
-    }
-
-
 
 }

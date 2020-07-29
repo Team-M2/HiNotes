@@ -23,5 +23,4 @@ class TodoListViewModel(private val itemRepository: ItemRepository) : ItemListVi
         }
     }
 
-
 }

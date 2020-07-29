@@ -5,7 +5,7 @@ import org.koin.dsl.module
 val itemDataModule = module{
 
     factory {
-        ItemRepository(get(),get())
+        ItemRepository(get())
     }
 
     factory {

@@ -63,14 +63,6 @@ class ToDoListsFragment : ItemListBaseFragment() {
         return inflater.inflate(R.layout.fragment_todo_list, container, false)
     }
 
-    override fun onStart() {
-        super.onStart()
-//        if(!firstDataGetCalled){
-//            firstDataGetCalled=true
-//            getData()
-//        }
-    }
-
     override fun setOnLongClickListener() {
         sectionedAdapter.notifyDataSetChanged()
         super.setOnLongClickListener()

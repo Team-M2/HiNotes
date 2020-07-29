@@ -1,6 +1,5 @@
 package com.huawei.references.hinotes.data.item.restdatasource.impl
 
-import android.util.Log
 import com.huawei.references.hinotes.data.base.DBError
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.base.NoRecordFoundError
@@ -156,27 +155,7 @@ class ItemDataSourceRestImpl(
         subItemIdsToDelete: List<Int>,
         reminderIdsToDelete: List<Int>
     ): DataHolder<ItemSaveResult> {
-        Log.d("delete","size: "+subItemIdsToDelete.size.toString())
-        return if (isNew) {
-            upsertCore(userId, item, isNew,subItemIdsToDelete,reminderIdsToDelete)
-        } else {
-//            when(val res=permissionsDataSource.getPermissions(userId)){
-//                is DataHolder.Success ->{
-//                    res.data.takeIf { it.isNotEmpty() }?.let {
-//                        var permReturn: DataHolder<Any> = DataHolder.Fail(baseError = NoPermissionError())
-//                        it.forEach {
-//                            if(it.userRole== UserRole.Owner || it.userRole== UserRole.Write){
-//                                permReturn=DataHolder.Success(Any())
-//                            }
-//                        }
-//                        permReturn
-//                    } ?: DataHolder.Fail(baseError = NoPermissionError())
-//                }
-//                is DataHolder.Fail -> res
-//                is DataHolder.Loading -> res
-//            }
-            upsertCore(userId, item, isNew,subItemIdsToDelete,reminderIdsToDelete)
-        }
+        return upsertCore(userId, item, isNew,subItemIdsToDelete,reminderIdsToDelete)
     }
 
     private suspend fun upsertCore(userId: String,
@@ -239,14 +218,9 @@ class ItemDataSourceRestImpl(
                         } ?: DataHolder.Success(Any())
 
 
-                    Log.d("delete","1")
                     val deleteSubItemResult=subItemIdsToDelete.takeIf { it.isNotEmpty() }?.let{
-                        Log.d("delete","2")
                         subItemDataSource.deleteSubItems(subItemIdsToDelete)
                     } ?: DataHolder.Success(-1)
-
-                    Log.d("delete","3")
-                    Log.d("delete",deleteSubItemResult.toString())
 
                     when(DataHolder.checkAllSuccess(itemResult,
                             deleteSubItemResult
@@ -268,16 +242,12 @@ class ItemDataSourceRestImpl(
             when (it) {
                 is DBResult.EmptyQueryResult -> {
                     val reminderResult=item.reminder?.let {
-                        Log.d("delete","10")
                         reminderDataSource.upsert(it,item.itemId,it.id==-1)
                     } ?: DataHolder.Success(Any())
-                    Log.d("delete","11")
 
                     val reminderDeleteResult=reminderIdsToDelete.takeIf { it.isNotEmpty() }?.let {
-                        Log.d("delete","12")
                         reminderDataSource.deleteReminders(it)
                     } ?: DataHolder.Success(-1)
-                    Log.d("delete","13")
 
                     when(DataHolder.checkAllSuccess(
                         reminderResult,reminderDeleteResult
@@ -285,8 +255,6 @@ class ItemDataSourceRestImpl(
                         is DataHolder.Success ->  DataHolder.Success(ItemSaveResult(item.itemId))
                         else -> DataHolder.Fail(errStr = "update error")
                     }
-
-
                 }
                 else -> DataHolder.Fail(baseError = DBError("Update error"))
             }
@@ -305,6 +273,4 @@ class ItemDataSourceRestImpl(
             is DataHolder.Fail -> updateSubRes
             is DataHolder.Loading -> updateSubRes
         }
-
-
 }

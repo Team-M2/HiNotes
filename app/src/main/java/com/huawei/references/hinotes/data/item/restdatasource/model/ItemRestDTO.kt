@@ -1,7 +1,6 @@
 package com.huawei.references.hinotes.data.item.restdatasource.model
 
 import com.google.gson.annotations.SerializedName
-import com.huawei.agconnect.cloud.database.CloudDBZoneObject
 import com.huawei.references.hinotes.data.item.model.Reminder
 import java.util.*
 
@@ -20,4 +19,4 @@ data class ItemRestDTO(@SerializedName("itemId") var itemId:Int,
                        @SerializedName("isPinned") val isPinned:Boolean?,
                        @SerializedName("reminder") val reminder:Reminder?,
                        @SerializedName("role") val role:Int?
-) : CloudDBZoneObject()
+)
