@@ -1,5 +1,7 @@
 package com.huawei.references.hinotes.ui.itemdetail.reminder
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -9,6 +11,10 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
+import com.huawei.hms.location.Geofence
+import com.huawei.hms.location.GeofenceRequest
+import com.huawei.hms.location.GeofenceService
+import com.huawei.hms.location.LocationServices
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.model.Circle
 import com.huawei.hms.maps.model.CircleOptions
