@@ -2,44 +2,36 @@ package com.huawei.references.hinotes.ui.itemdetail.reminder
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import android.view.MotionEvent
 import android.view.View
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
+@Suppress("unused")
+class LockableBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
+    constructor() : super()
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-class LockableBottomSheetBehavior<V : View?> : BottomSheetBehavior<V> {
-    private var mLocked = false
-
-    constructor() {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {}
-
-    fun setLocked(locked: Boolean) {
-        mLocked = locked
-    }
+    var swipeEnabled = false
 
     override fun onInterceptTouchEvent(
         parent: CoordinatorLayout,
         child: V,
         event: MotionEvent
     ): Boolean {
-        var handled = false
-        if (!mLocked) {
-            handled = super.onInterceptTouchEvent(parent, child, event)
+        return if (swipeEnabled) {
+            super.onInterceptTouchEvent(parent, child, event)
+        } else {
+            false
         }
-        return handled
     }
 
-    override fun onTouchEvent(
-        parent: CoordinatorLayout,
-        child: V,
-        event: MotionEvent
-    ): Boolean {
-        var handled = false
-        if (!mLocked) {
-            handled = super.onTouchEvent(parent, child, event)
+    override fun onTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
+        return if (swipeEnabled) {
+            super.onTouchEvent(parent, child, event)
+        } else {
+            false
         }
-        return handled
     }
 
     override fun onStartNestedScroll(
@@ -50,16 +42,32 @@ class LockableBottomSheetBehavior<V : View?> : BottomSheetBehavior<V> {
         axes: Int,
         type: Int
     ): Boolean {
-        if(!mLocked)
-        return super.onStartNestedScroll(
-            coordinatorLayout,
-            child,
-            directTargetChild,
-            target,
-            axes,
-            type
-        )
-        return false
+        return if (swipeEnabled) {
+            super.onStartNestedScroll(
+                coordinatorLayout,
+                child,
+                directTargetChild,
+                target,
+                axes,
+                type
+            )
+        } else {
+            false
+        }
+    }
+
+    override fun onNestedPreScroll(
+        coordinatorLayout: CoordinatorLayout,
+        child: V,
+        target: View,
+        dx: Int,
+        dy: Int,
+        consumed: IntArray,
+        type: Int
+    ) {
+        if (swipeEnabled) {
+            super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
+        }
     }
 
     override fun onStopNestedScroll(
@@ -68,8 +76,9 @@ class LockableBottomSheetBehavior<V : View?> : BottomSheetBehavior<V> {
         target: View,
         type: Int
     ) {
-        if (!mLocked)
-        super.onStopNestedScroll(coordinatorLayout, child, target, type)
+        if (swipeEnabled) {
+            super.onStopNestedScroll(coordinatorLayout, child, target, type)
+        }
     }
 
     override fun onNestedPreFling(
@@ -79,9 +88,10 @@ class LockableBottomSheetBehavior<V : View?> : BottomSheetBehavior<V> {
         velocityX: Float,
         velocityY: Float
     ): Boolean {
-        var handled = false
-        if(!mLocked)
-        handled = super.onNestedPreFling(coordinatorLayout, child, target, velocityX, velocityY)
-        return handled
+        return if (swipeEnabled) {
+            super.onNestedPreFling(coordinatorLayout, child, target, velocityX, velocityY)
+        } else {
+            false
+        }
     }
 }

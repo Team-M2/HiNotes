@@ -27,6 +27,7 @@ class TodoListSubItemsAdapter(var todoListSubItems:MutableList<TodoListSubItem>,
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
         holder.itemView.sub_item_title.tag=position
+        val position_:Int=holder.itemView.sub_item_title.tag as Int
         holder.itemView.sub_item_title.setText(todoListSubItems[position].title)
         holder.itemView.sub_item_checkbox.isChecked = todoListSubItems[position].isChecked
 
@@ -43,8 +44,15 @@ class TodoListSubItemsAdapter(var todoListSubItems:MutableList<TodoListSubItem>,
             }
         })
 
-        holder.itemView.sub_item_checkbox.setOnCheckedChangeListener { _, isChecked ->
-            todoListSubItems[position].isChecked=isChecked
+        holder.itemView.sub_item_checkbox.setOnClickListener {
+            if(holder.itemView.sub_item_checkbox.isChecked) {
+                holder.itemView.sub_item_checkbox.isChecked=true
+                todoListSubItems[position].isChecked=true
+            }
+            else{
+                holder.itemView.sub_item_checkbox.isChecked=false
+                todoListSubItems[position].isChecked=false
+            }
         }
 
         holder.itemView.delete_sub_item.setOnClickListener {

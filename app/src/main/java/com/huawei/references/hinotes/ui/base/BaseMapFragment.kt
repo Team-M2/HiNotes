@@ -41,7 +41,9 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
     private var searchService: SearchService? = null
     private var markerList : ArrayList<Marker> = arrayListOf()
     protected var currentRadius=100.0
-    var selectedPoi:Site=Site()
+    var selectedPoi:Site = Site()
+    var userLastLocation:LocationResult?=null
+
 
     abstract val mapType:MapType
 
@@ -63,7 +65,7 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         searchService = SearchServiceFactory.create(context, encodedApiKey)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.activity)
         settingsClient = LocationServices.getSettingsClient(this.activity)
-
+        selectedPoi.location = Coordinate(0.0,0.0)
         savedInstanceState?.let { mapViewBundle=it }
 
         view.findViewById<MapView>(R.id.detailBottomSheetMapView)?.apply {
@@ -82,6 +84,15 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         if(isFragmentActive){
             if(results.sites != null) {
                 addMarker(results.sites)
+                if(item.lat != 0.0 && item.lng != 0.0 && mapType == MapType.ITEM_LOCATION)
+                    addSavedMarker()
+                poi_recycler_view?.layoutManager =
+                    LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                poi_recycler_view?.adapter =
+                    PoiItemsAdapter(
+                        results.sites,
+                        this@BaseMapFragment
+                    )
                 poi_recycler_view?.apply {
                     layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -93,6 +104,7 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
                 }
             }
         }
+
     }
 
     override fun onStop() {
@@ -130,6 +142,10 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
                 clusterable(false)
             }
 
+
+            // crashed uncaughtException stacktrace is java.lang.IllegalStateException:
+            // Fragment LocationFragment{32e271} (b53af7fb-8182-43e7-b823-7816b764545e)} not attached to an activity.
+
             try {
                 (requireActivity() as? ItemDetailBaseActivity)?.let {
                     val customInfoWindow = CustomInfoWindowAdapter(
@@ -149,6 +165,41 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         }
     }
 
+    private fun addSavedMarker(){
+            val latlng = LatLng(item.lat!!, item.lng!!)
+            val info = InfoWindowData("-2",
+                "Saved location",
+                item.poiDescription.toString(),
+                item.lat!!,
+                item.lng!!
+            )
+            val options = MarkerOptions().apply {
+                position(latlng)
+                title(item.poiDescription)
+                draggable(false)
+                icon(BitmapDescriptorFactory.fromResource(R.drawable.saved_marker_icon))
+                clusterable(false)
+            }
+
+            try {
+                (requireActivity() as? ItemDetailBaseActivity)?.let {
+                    val customInfoWindow = CustomInfoWindowAdapter(
+                        it,this,mapType
+                    )
+                    hMap?.apply {
+                        setInfoWindowAdapter(customInfoWindow)
+                        markerList.add(addMarker(options).apply {
+                            tag=info
+                        })
+                    }
+                }
+                val marker: Marker = hMap!!.addMarker(options)
+                marker.showInfoWindow()
+                cameraUpdate(latlng.latitude,latlng.longitude)
+            }
+            catch (e:Exception){ }
+    }
+
     protected open fun onLocationGet(location: Location){}
 
     private fun getLocation(settingsClient: SettingsClient?, fusedLocationProviderClient: FusedLocationProviderClient?, hMap: HuaweiMap?) {
@@ -162,6 +213,7 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
                     hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), 16.5F))
                     onLocationGet(lastLocation)
                     getPoiList(lastLocation.latitude, lastLocation.longitude)
+                    userLastLocation=locationResult
                 }
             }
         }
@@ -201,8 +253,11 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
 
     override fun setOnPoiClickListener(site: Site, index: Int) {
         markerList.getOrNull(index)?.showInfoWindow()
+        //(activity as? ItemDetailBaseActivity)?.poiSelected(site,mapType,currentRadius)
         cameraUpdate(site.location.lat,site.location.lng)
-        selectedPoi=site
+        selectedPoi = site
+        markerList[index].showInfoWindow()
+        //TODO: call base detail activity map callbacks
     }
 
     internal class CustomInfoWindowAdapter(itemDetailBaseActivity: ItemDetailBaseActivity,
@@ -215,8 +270,14 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
 
         override fun getInfoWindow(marker: Marker?): View {
             val mInfoWindow: InfoWindowData? = marker?.tag as InfoWindowData?
-            mWindow.infoTile.text = mInfoWindow?.siteName
+            mWindow.infoTile.text = marker?.title
             mWindow.infoAddress.text = mInfoWindow?.siteAddress
+            //val directionText = mWindow.findViewById<TextView>(R.id.infoGetDirections)
+            //directionText.setOnClickListener {
+            //    marker?.position?.let {
+            //        itemDetailBaseActivity.locationSelected(it.latitude,it.longitude,mapType,baseMapFragment.currentRadius)}
+            //}
+            //TODO: call base detail activity map callbacks
             return mWindow
         }
 
@@ -241,8 +302,16 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
                 location.lng=it.position.longitude
             }
             cameraUpdate(it.position?.latitude!!,it.position?.longitude!!)
+            p0.showInfoWindow()
         }
         return true
+    }
+
+    fun selectUserLastLocation(){
+        selectedPoi.location?.lat = userLastLocation?.lastLocation?.latitude!!
+        selectedPoi.location?.lng = userLastLocation?.lastLocation?.longitude!!
+        selectedPoi.name = "Your Location"
+        cameraUpdate(selectedPoi.location?.lat!!, selectedPoi.location?.lng!!)
     }
 
     companion object{

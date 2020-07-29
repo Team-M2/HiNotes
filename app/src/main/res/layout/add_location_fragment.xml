@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:orientation="vertical"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="56dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/note_detail_location_bottom_sheet_layout"
     android:layout_height="match_parent"
+    app:layout_behavior="com.huawei.references.hinotes.ui.itemdetail.reminder.LockableBottomSheetBehavior"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.huawei.hms.maps.MapView
@@ -22,10 +20,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/poi_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="250dp"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailBottomSheetMapView" />
+        app:layout_constraintTop_toBottomOf="@+id/nearby_places_text" />
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -63,5 +62,44 @@
         app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/get_location_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:padding="4dp"
+        android:paddingStart="36dp"
+        android:text="@string/get_current_location"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/get_location_image"
+        app:layout_constraintTop_toBottomOf="@+id/detailBottomSheetMapView" />
+
+    <ImageView
+        android:id="@+id/get_location_image"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/get_location_text"
+        app:layout_constraintStart_toStartOf="@+id/poi_recycler_view"
+        app:layout_constraintTop_toTopOf="@+id/get_location_text"
+        app:srcCompat="@drawable/current_location_icon" />
+
+    <TextView
+        android:id="@+id/nearby_places_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="#EDEDED"
+        android:padding="4dp"
+        android:paddingStart="64dp"
+        android:text="@string/nearby_places"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/get_location_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

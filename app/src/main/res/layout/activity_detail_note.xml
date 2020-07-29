@@ -75,8 +75,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
     <include
         android:id="@+id/mapBottomSheet"
         android:visibility="gone"
-        layout="@layout/note_detail_location_bottom_sheet" />
+        layout="@layout/add_location_fragment" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

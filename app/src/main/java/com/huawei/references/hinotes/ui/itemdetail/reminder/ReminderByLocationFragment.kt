@@ -20,6 +20,7 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.base.ItemDetailBottomSheetType
+import kotlinx.android.synthetic.main.reminder_by_location_fragment.view.*
 
 
 class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
@@ -49,6 +50,9 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
 
         view.findViewById<TextView>(R.id.save_text)
 
+        view.delete_text.setOnClickListener {
+            this.dismiss()
+        }
     }
 
     override fun onCreateView(
@@ -71,6 +75,7 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         userLocation=location
         selectedPoi.location = Coordinate(userLocation!!.latitude,userLocation!!.longitude)
         selectedPoi.name = "Your Location"
+        selectedPoi.address
     }
 
     private fun addCircle(lat:Double, lng:Double){
@@ -78,6 +83,54 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         circle=hMap?.addCircle(
             CircleOptions().center(LatLng(lat, lng)).radius(100.0).fillColor(Color.TRANSPARENT)
         )
+    }
+
+    private fun getLocationInBackground(lat:Double,lng:Double,radius:Float) {
+        var geofenceService: GeofenceService?=null
+        val idList: ArrayList<String?>?= arrayListOf()
+        val geofenceList: ArrayList<Geofence?>?= arrayListOf()
+        var TAG: String?=null
+        var pendingIntent: PendingIntent?=null
+        pendingIntent=getPendingIntent()
+        geofenceService = LocationServices.getGeofenceService(this.activity)
+
+        TAG = "geoFence"
+
+        geofenceList?.add(
+            Geofence.Builder()
+                .setUniqueId("mGeofence")
+                .setValidContinueTime(Geofence.GEOFENCE_NEVER_EXPIRE)
+                .setNotificationInterval(10000)
+                .setRoundArea(lat, lng, radius)
+                .setConversions(Geofence.ENTER_GEOFENCE_CONVERSION or Geofence.EXIT_GEOFENCE_CONVERSION)
+                .build()
+        )
+        idList?.add("mGeofence")
+
+        getAddGeofenceRequest(geofenceList!!)
+        geofenceService.createGeofenceList(getAddGeofenceRequest(geofenceList), pendingIntent)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    //customToast(this.context,"Reminder added successfully",false)
+                } else {
+                    //customToast(this.requireActivity(),"Reminder added failed",false)
+                }
+            }
+    }
+
+    private fun getAddGeofenceRequest(geofenceList:ArrayList<Geofence?>): GeofenceRequest? {
+        val builder = GeofenceRequest.Builder()
+        builder.setInitConversions(GeofenceRequest.ENTER_INIT_CONVERSION)
+        builder.createGeofenceList(geofenceList)
+        return builder.build()
+    }
+
+    private fun getPendingIntent(): PendingIntent {
+        val intent = Intent(this.activity, BroadcastReceiver::class.java)
+        intent.putExtra("reminderType",0)
+        intent.putExtra("reminderTitle",item.title)
+        intent.action = BroadcastReceiver.ACTION_PROCESS_LOCATION
+        return PendingIntent.getBroadcast(this.activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun setOnPoiClickListener(site: Site, index: Int) {
@@ -91,5 +144,8 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         return super.onMarkerClick(p0)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 
 }
