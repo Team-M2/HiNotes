@@ -29,10 +29,11 @@ class AddLocationFragment(var item: Item, var bottomSheetBehavior: BottomSheetBe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.save_text.setOnClickListener {
-            (activity as? ItemDetailBaseActivity)?.poiSelected(selectedPoi!!,MapType.ITEM_LOCATION,0.0)
+            (activity as? ItemDetailBaseActivity)?.poiSelected(selectedPoi,MapType.ITEM_LOCATION,0.0)
             this.dismiss()
         }
         view.delete_text.setOnClickListener {
+            (activity as? ItemDetailBaseActivity)?.bottomSheetDeleteButtonClicked(itemDetailBottomSheetType)
             this.dismiss()
         }
         view.get_location_image.setOnClickListener {

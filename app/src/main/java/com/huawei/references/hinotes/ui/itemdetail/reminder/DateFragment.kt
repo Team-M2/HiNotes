@@ -18,15 +18,17 @@ class DateFragment(var item:Item):Fragment() {
     @SuppressLint("NewApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.date_picker.minDate = System.currentTimeMillis() - 1000
-        view.date_picker.setOnDateChangedListener { view, year, monthOfYear, dayOfMonth ->
-            ReminderByTimeFragment.reminderStaticCalendar?.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            ReminderByTimeFragment.reminderStaticCalendar?.set(Calendar.YEAR, year)
-            ReminderByTimeFragment.reminderStaticCalendar?.set(Calendar.MONTH, monthOfYear)
-        }
         view.date_picker.apply {
-            minDate = System.currentTimeMillis() - 1000
-            updateDate(Integer.parseInt(DateFormat.format("yyyy", item.reminder?.date).toString()),Integer.parseInt(DateFormat.format("MM", item.reminder?.date).toString()),Integer.parseInt(DateFormat.format("dd", item.reminder?.date).toString()))
+            setOnDateChangedListener { view, year, monthOfYear, dayOfMonth -> ReminderByTimeFragment.reminderStaticCalendar?.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                ReminderByTimeFragment.reminderStaticCalendar?.set(Calendar.YEAR, year)
+                ReminderByTimeFragment.reminderStaticCalendar?.set(Calendar.MONTH, monthOfYear) }
+                minDate = System.currentTimeMillis() - 1000
+                if(item.reminder!=null && item.reminder?.itemId != -1) {
+                updateDate(Integer.parseInt(DateFormat.format("yyyy", item.reminder?.date).toString()),
+                    Integer.parseInt(DateFormat.format("MM", item.reminder?.date).toString())-1,
+                    Integer.parseInt(DateFormat.format("dd", item.reminder?.date).toString())
+                )
+            }
         }
     }
 

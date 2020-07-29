@@ -47,8 +47,6 @@ class ReminderByTimeFragment(var item:Item) : ItemDetailBottomSheetFragment() {
         view.viewPager.adapter=adapter
         view.tabLayout.setupWithViewPager(view.viewPager)
 
-        println("mcmc $item")
-
         view.save_text.setOnClickListener {
             scheduleNotification(getNotification("Notification")!!,60000)
             (activity as? ItemDetailBaseActivity)?.timeReminderSelected(reminderStaticCalendar?.time!!)
@@ -58,10 +56,6 @@ class ReminderByTimeFragment(var item:Item) : ItemDetailBottomSheetFragment() {
         view.delete_text.setOnClickListener {
             this.dismiss()
             (activity as? ItemDetailBaseActivity)?.bottomSheetDeleteButtonClicked(itemDetailBottomSheetType)
-        }
-
-        if(item.reminder != null){
-
         }
     }
 

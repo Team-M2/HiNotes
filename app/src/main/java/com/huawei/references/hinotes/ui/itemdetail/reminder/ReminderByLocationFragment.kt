@@ -26,6 +26,7 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.base.ItemDetailBottomSheetType
+import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import kotlinx.android.synthetic.main.reminder_by_location_fragment.view.*
 
 
@@ -54,7 +55,13 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
 
-        view.findViewById<TextView>(R.id.save_text)
+        view.save_text.setOnClickListener {
+            selectedPoi.location?.lat?.let { it1 -> getLocationInBackground(it1,
+                selectedPoi.location?.lng!!, currentRadius.toFloat()
+            ) }
+            (activity as? ItemDetailBaseActivity)?.poiSelected(selectedPoi!!,MapType.GEOFENCE,currentRadius)
+            this.dismiss()
+        }
 
         view.delete_text.setOnClickListener {
             this.dismiss()
@@ -72,22 +79,31 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
     override fun onMapReady(huaweiMap: HuaweiMap?) {
         super.onMapReady(huaweiMap)
         hMap=huaweiMap
-
+        /*
+        if(item.reminder != null && item.reminder?.itemId != -1){
+            addSavedMarker(item.reminder?.location?.latitude!!,item.reminder?.location?.longitude!!)
+            addCircle(item.reminder?.location?.latitude!!,item.reminder?.location?.longitude!!,
+                item.reminder?.radius!!
+            )
+            cameraUpdate(item.reminder?.location?.latitude!!,item.reminder?.location?.longitude!!)
+        }
+        
+         */
     }
 
     override fun onLocationGet(location: Location) {
         super.onLocationGet(location)
-        addCircle(location.latitude, location.longitude)
+        addCircle(location.latitude, location.longitude,100.0)
         userLocation=location
         selectedPoi.location = Coordinate(userLocation!!.latitude,userLocation!!.longitude)
         selectedPoi.name = "Your Location"
         selectedPoi.address
     }
 
-    private fun addCircle(lat:Double, lng:Double){
+    private fun addCircle(lat:Double, lng:Double,radius: Double){
         circle?.remove()
         circle=hMap?.addCircle(
-            CircleOptions().center(LatLng(lat, lng)).radius(100.0).fillColor(Color.TRANSPARENT)
+            CircleOptions().center(LatLng(lat, lng)).radius(radius).fillColor(Color.TRANSPARENT)
         )
     }
 
@@ -115,13 +131,7 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
 
         getAddGeofenceRequest(geofenceList!!)
         geofenceService.createGeofenceList(getAddGeofenceRequest(geofenceList), pendingIntent)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    //customToast(this.context,"Reminder added successfully",false)
-                } else {
-                    //customToast(this.requireActivity(),"Reminder added failed",false)
-                }
-            }
+            .addOnCompleteListener { task -> }
     }
 
     private fun getAddGeofenceRequest(geofenceList:ArrayList<Geofence?>): GeofenceRequest? {
@@ -141,12 +151,12 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
 
     override fun setOnPoiClickListener(site: Site, index: Int) {
         selectedPoi=site
-        selectedPoi?.location?.lat?.let { addCircle(it, selectedPoi?.location?.lng!!) }
+        selectedPoi.location?.lat?.let { addCircle(it, selectedPoi.location?.lng!!,100.0) }
         super.setOnPoiClickListener(site, index)
     }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
-        p0?.position?.latitude?.let { addCircle(it,p0.position.longitude) }
+        p0?.position?.latitude?.let { addCircle(it,p0.position.longitude,100.0) }
         return super.onMarkerClick(p0)
     }
 

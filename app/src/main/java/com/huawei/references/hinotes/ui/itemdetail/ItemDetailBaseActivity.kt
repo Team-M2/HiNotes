@@ -114,13 +114,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             setCustomView(R.layout.item_detail_toolbar)
         }
         add_reminder?.setOnClickListener {
-            customBottomDialogs(
-                this.getString(R.string.add_reminder_by_time),
-                this.getString(R.string.add_reminder_by_location),
-                getDrawable(R.drawable.calendar_reminder_icon),
-                getDrawable(R.drawable.location_reminder_icon),
-                { performAddReminderByTime() },
-                { performAddReminderByLocation() })
+            checkReminderExist()
         }
 
         location_icon?.setOnClickListener {
@@ -156,13 +150,12 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
         }
 
         findViewById<TextView>(R.id.item_detail_title)?.text = itemData.title
-        findViewById<TextView>(R.id.item_detail_description)?.
-        text=itemData.description ?: ""
+        findViewById<TextView>(R.id.item_detail_description)?.text=itemData.description ?: ""
 
-        if(!((itemData.poiDescription == "" && itemData.lat == 0.0 && itemData.lng == 0.0) || itemData.poiDescription == null)){
+        if(!((itemData.poiDescription == null && itemData.lat == null && itemData.lng == null) || !(itemData.lat == 0.0 && itemData.lng == 0.0))){
             location_icon.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
         }
-        if(!(itemData.reminder == null || itemData.reminder?.date == null)){
+        if(!(itemData.reminder?.title == "reminderTitle" || itemData.reminder == null)){
             add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
         }
     }
@@ -198,7 +191,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.INTERNET
         ) {
-            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+            if (bottomSheetBehavior.state == 3 || bottomSheetBehavior.state == 5) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 val bottomSheetFragment = ReminderByTimeFragment(itemData)
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
@@ -214,7 +207,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.INTERNET){
-            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+            if (bottomSheetBehavior.state == 3 || bottomSheetBehavior.state == 5) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 val bottomSheetFragment = ReminderByLocationFragment(itemData)
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
@@ -318,6 +311,30 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
         itemData.reminder=null
     }
 
+    private fun checkReminderExist(){
+        if(itemData.reminder != null && itemData.itemId != -1){
+            customBottomDialogs(
+                this.getString(R.string.update_reminder_by_location),
+                this.getString(R.string.delete_reminder_by_time),
+                getDrawable(R.drawable.refresh_cloud),
+                getDrawable(R.drawable.delete_icon),
+                { updateReminder() },
+                { deleteReminder() })
+        }
+        else{
+            addReminder()
+        }
+    }
+
+    private fun updateReminder(){
+        if(itemData.reminder?.reminderType == ReminderType.ByTime){
+            performAddReminderByTime()
+        }
+        else{
+            performAddReminderByLocation()
+        }
+    }
+
     fun timeReminderSelected(date: Date){
         bottomSheetDeleteButtonClicked(ItemDetailBottomSheetType.REMINDER)
         itemData.reminder=Reminder(-1,reminderType = ReminderType.ByTime).apply {
@@ -326,6 +343,20 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
         }
         add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag),
             android.graphics.PorterDuff.Mode.SRC_IN)
+    }
+
+    private fun addReminder(){
+        customBottomDialogs(
+            this.getString(R.string.add_reminder_by_time),
+            this.getString(R.string.add_reminder_by_location),
+            getDrawable(R.drawable.calendar_reminder_icon),
+            getDrawable(R.drawable.location_reminder_icon),
+            { performAddReminderByTime() },
+            { performAddReminderByLocation() })
+    }
+
+    private fun deleteReminder(){
+        bottomSheetDeleteButtonClicked(ItemDetailBottomSheetType.REMINDER)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -70,6 +70,7 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
             runWithAGConnectUserOrOpenLogin {
                 getItemListViewModel().deleteItems(myItemsSectionAdapter.getSelectedItems() +
                         sharedItemsSectionAdapter.getSelectedItems(),it.uid)
+                sectionedAdapter.notifyDataSetChanged()
             }
         }
 

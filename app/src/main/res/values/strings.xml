@@ -26,6 +26,8 @@
     <string name="failed_to_login">Failed to log in.</string>
     <string name="add_reminder_by_time">Add reminder by time</string>
     <string name="add_reminder_by_location">Add reminder by location</string>
+    <string name="delete_reminder_by_time">Delete reminder</string>
+    <string name="update_reminder_by_location">Update reminder</string>
     <string name="get_current_location">Get Current Location</string>
     <string name="nearby_places">Nearby Places</string>
 

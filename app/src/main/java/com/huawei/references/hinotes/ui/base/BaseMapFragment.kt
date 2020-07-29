@@ -84,8 +84,8 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         if(isFragmentActive){
             if(results.sites != null) {
                 addMarker(results.sites)
-                if(item.lat != 0.0 && item.lng != 0.0 && mapType == MapType.ITEM_LOCATION)
-                    addSavedMarker()
+                if(item.lat != null && item.lng != null && mapType == MapType.ITEM_LOCATION)
+                    addSavedMarker(item.lat!!, item.lng!!)
                 poi_recycler_view?.layoutManager =
                     LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 poi_recycler_view?.adapter =
@@ -165,14 +165,12 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         }
     }
 
-    private fun addSavedMarker(){
-            val latlng = LatLng(item.lat!!, item.lng!!)
+    fun addSavedMarker(lat: Double,lng: Double){
+            val latlng = LatLng(lat, lng)
             val info = InfoWindowData("-2",
                 "Saved location",
                 item.poiDescription.toString(),
-                item.lat!!,
-                item.lng!!
-            )
+                lat, lng)
             val options = MarkerOptions().apply {
                 position(latlng)
                 title(item.poiDescription)
@@ -286,7 +284,7 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         }
     }
 
-    private fun cameraUpdate(lat:Double,lng:Double){
+    fun cameraUpdate(lat:Double,lng:Double){
         val cameraBuild = CameraPosition.Builder().target(
             LatLng(lat, lng)
         ).zoom(17f).build()
