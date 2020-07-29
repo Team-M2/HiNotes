@@ -16,9 +16,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.huawei.agconnect.auth.AGConnectUser
+import com.huawei.hmf.tasks.Task
 import com.huawei.hms.maps.model.LatLng
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureActivity
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureConstants
+import com.huawei.hms.mlsdk.MLAnalyzerFactory
+import com.huawei.hms.mlsdk.common.MLFrame
+import com.huawei.hms.mlsdk.text.MLLocalTextSetting
+import com.huawei.hms.mlsdk.text.MLText
 import com.huawei.hms.site.api.model.Site
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.base.DataHolder
@@ -35,6 +40,7 @@ import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import java.io.IOException
+import java.sql.Time
 import java.util.*
 
 abstract class ItemDetailBaseActivity : BaseActivity() {
@@ -150,7 +156,15 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
         }
 
         findViewById<TextView>(R.id.item_detail_title)?.text = itemData.title
-        findViewById<TextView>(R.id.item_detail_description)?.text = itemData.description ?: ""
+        findViewById<TextView>(R.id.item_detail_description)?.
+        text=itemData.description ?: ""
+
+        if(!((itemData.poiDescription == "" && itemData.lat == 0.0 && itemData.lng == 0.0) || itemData.poiDescription == null)){
+            location_icon.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
+        }
+        if(!(itemData.reminder == null || itemData.reminder?.date == null)){
+            add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
+        }
     }
 
     private fun performAddLocation() {
@@ -164,7 +178,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 val bottomSheetFragment =
-                    LocationFragment(
+                    AddLocationFragment(
                         itemData,bottomSheetBehavior
                     )
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
@@ -199,13 +213,13 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.INTERNET
-        ) {
+            Manifest.permission.INTERNET){
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 val bottomSheetFragment = ReminderByLocationFragment(itemData)
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-            } else {
+            }
+            else {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
         }

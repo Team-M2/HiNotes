@@ -26,6 +26,7 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.base.ItemDetailBottomSheetType
+import kotlinx.android.synthetic.main.reminder_by_location_fragment.view.*
 
 
 class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
@@ -55,6 +56,9 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
 
         view.findViewById<TextView>(R.id.save_text)
 
+        view.delete_text.setOnClickListener {
+            this.dismiss()
+        }
     }
 
     override fun onCreateView(
@@ -77,6 +81,7 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         userLocation=location
         selectedPoi.location = Coordinate(userLocation!!.latitude,userLocation!!.longitude)
         selectedPoi.name = "Your Location"
+        selectedPoi.address
     }
 
     private fun addCircle(lat:Double, lng:Double){
@@ -112,9 +117,9 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         geofenceService.createGeofenceList(getAddGeofenceRequest(geofenceList), pendingIntent)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    //(requireActivity() as? BaseActivity)?.customToast("Reminder added successfully",false)
+                    //customToast(this.context,"Reminder added successfully",false)
                 } else {
-                    //(requireActivity() as? BaseActivity)?.customToast("Reminder add failed",false)
+                    //customToast(this.requireActivity(),"Reminder added failed",false)
                 }
             }
     }
@@ -145,5 +150,8 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         return super.onMarkerClick(p0)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 
 }

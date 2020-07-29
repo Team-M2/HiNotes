@@ -42,10 +42,12 @@ class ReminderByTimeFragment(var item:Item) : ItemDetailBottomSheetFragment() {
         reminderCalendar = Calendar.getInstance()
         reminderStaticCalendar = Calendar.getInstance()
         val adapter = TimeReminderTabAdapter(this.childFragmentManager)
-        adapter.addFragment(DateFragment(), "Date")
-        adapter.addFragment(HourFragment(), "Hour")
+        adapter.addFragment(DateFragment(item), "Date")
+        adapter.addFragment(HourFragment(item), "Hour")
         view.viewPager.adapter=adapter
         view.tabLayout.setupWithViewPager(view.viewPager)
+
+        println("mcmc $item")
 
         view.save_text.setOnClickListener {
             scheduleNotification(getNotification("Notification")!!,60000)
@@ -56,6 +58,10 @@ class ReminderByTimeFragment(var item:Item) : ItemDetailBottomSheetFragment() {
         view.delete_text.setOnClickListener {
             this.dismiss()
             (activity as? ItemDetailBaseActivity)?.bottomSheetDeleteButtonClicked(itemDetailBottomSheetType)
+        }
+
+        if(item.reminder != null){
+
         }
     }
 
@@ -68,14 +74,15 @@ class ReminderByTimeFragment(var item:Item) : ItemDetailBottomSheetFragment() {
         notificationIntent.putExtra("reminderType",1)
         val pendingIntent = PendingIntent.getBroadcast(
             this.activity,
-            0,
+            item.itemId,
             notificationIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val futureInMillis: Long = SystemClock.elapsedRealtime() + delay
+        //val futureInMillis: Long = SystemClock.elapsedRealtime() + delay
+        //var x :Long = ((reminderStaticCalendar?.timeInMillis!!).toString().substring(0, 10)).toLong();
         val alarmManager: AlarmManager =
             (this.context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager?)!!
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
             reminderStaticCalendar?.timeInMillis!!, pendingIntent)
     }
 
@@ -86,6 +93,7 @@ class ReminderByTimeFragment(var item:Item) : ItemDetailBottomSheetFragment() {
             )
         builder.setContentTitle("Scheduled Notification")
         builder.setContentText(content)
+        builder.priority = NotificationCompat.PRIORITY_DEFAULT
         builder.setSmallIcon(R.drawable.reminder_icon)
         builder.setAutoCancel(true)
         builder.setChannelId("1001")
