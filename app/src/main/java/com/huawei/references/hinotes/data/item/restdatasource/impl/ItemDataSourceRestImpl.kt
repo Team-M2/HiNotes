@@ -158,7 +158,7 @@ class ItemDataSourceRestImpl(
     ): DataHolder<ItemSaveResult> {
         Log.d("delete","size: "+subItemIdsToDelete.size.toString())
         return if (isNew) {
-            upsertCore(userId, item, isNew,subItemIdsToDelete)
+            upsertCore(userId, item, isNew,subItemIdsToDelete,reminderIdsToDelete)
         } else {
 //            when(val res=permissionsDataSource.getPermissions(userId)){
 //                is DataHolder.Success ->{
@@ -175,11 +175,15 @@ class ItemDataSourceRestImpl(
 //                is DataHolder.Fail -> res
 //                is DataHolder.Loading -> res
 //            }
-            upsertCore(userId, item, isNew,subItemIdsToDelete)
+            upsertCore(userId, item, isNew,subItemIdsToDelete,reminderIdsToDelete)
         }
     }
 
-    private suspend fun upsertCore(userId: String, item: Item, isNew: Boolean,subItemIdsToDelete: List<Int>): DataHolder<ItemSaveResult> =
+    private suspend fun upsertCore(userId: String,
+                                   item: Item,
+                                   isNew: Boolean,
+                                   subItemIdsToDelete: List<Int>,
+                                   reminderIdsToDelete: List<Int>): DataHolder<ItemSaveResult> =
         if (isNew) {
             apiCallAdapter.adapt<Any> {
                 val query =
@@ -194,9 +198,11 @@ class ItemDataSourceRestImpl(
                             UserRole.Owner,
                             true
                         )
+
                         val insertSubItemResult=subItemDataSource.insertMultiple(
                             item.todoListSubItems ?: listOf(), itemDbResult.id
                         )
+
                         val addReminderResult = if(item.reminder!=null){
                             reminderDataSource.upsert(item.reminder!!,item.itemId,isNew)
                         } else DataHolder.Success(-1)
@@ -215,7 +221,7 @@ class ItemDataSourceRestImpl(
         } else {
             when (item.type) {
                 ItemType.Note -> {
-                    updateItemCore(item)
+                    updateItemCore(item,reminderIdsToDelete)
                 }
                 ItemType.TodoList -> {
                     // inserts sub items with id -1 , updates others
@@ -232,13 +238,6 @@ class ItemDataSourceRestImpl(
                             DataHolder.checkAllSuccess(insertResult,updateResult)
                         } ?: DataHolder.Success(Any())
 
-                    val reminderResult=item.reminder?.let {
-                        reminderDataSource.upsert(it,item.itemId,it.id==-1)
-                    } ?: DataHolder.Success(Any())
-
-                    val reminderDeleteResult=subItemIdsToDelete.takeIf { it.isNotEmpty() }?.let {
-                        reminderDataSource.deleteReminders(it)
-                    } ?: DataHolder.Success(-1)
 
                     Log.d("delete","1")
                     val deleteSubItemResult=subItemIdsToDelete.takeIf { it.isNotEmpty() }?.let{
@@ -250,18 +249,16 @@ class ItemDataSourceRestImpl(
                     Log.d("delete",deleteSubItemResult.toString())
 
                     when(DataHolder.checkAllSuccess(itemResult,
-                            reminderResult,
-                            deleteSubItemResult,
-                            reminderDeleteResult
+                            deleteSubItemResult
                         )){
-                        is DataHolder.Success -> updateItemCore(item)
+                        is DataHolder.Success -> updateItemCore(item,reminderIdsToDelete)
                         else -> DataHolder.Fail(errStr = "update error")
                     }
                 }
             }
         }
 
-    private suspend fun updateItemCore(item: Item): DataHolder<ItemSaveResult> =
+    private suspend fun updateItemCore(item: Item,reminderIdsToDelete: List<Int>): DataHolder<ItemSaveResult> =
         apiCallAdapter.adapt<Any> {
             val query =
                 "UPDATE hinotesschema.item SET \"updatedAt\" = NOW(),\"type\"=${item.type.type},\"isOpen\"=${item.isOpen},lat=${item.lat},lng=${item.lng},\"poiDescription\"=${item.poiDescription.takeIf { (it ?: "").isNotBlank() }
@@ -269,7 +266,28 @@ class ItemDataSourceRestImpl(
             itemRestService.executeQuery(query)
         }.let {
             when (it) {
-                is DBResult.EmptyQueryResult -> DataHolder.Success(ItemSaveResult(item.itemId))
+                is DBResult.EmptyQueryResult -> {
+                    val reminderResult=item.reminder?.let {
+                        Log.d("delete","10")
+                        reminderDataSource.upsert(it,item.itemId,it.id==-1)
+                    } ?: DataHolder.Success(Any())
+                    Log.d("delete","11")
+
+                    val reminderDeleteResult=reminderIdsToDelete.takeIf { it.isNotEmpty() }?.let {
+                        Log.d("delete","12")
+                        reminderDataSource.deleteReminders(it)
+                    } ?: DataHolder.Success(-1)
+                    Log.d("delete","13")
+
+                    when(DataHolder.checkAllSuccess(
+                        reminderResult,reminderDeleteResult
+                    )){
+                        is DataHolder.Success ->  DataHolder.Success(ItemSaveResult(item.itemId))
+                        else -> DataHolder.Fail(errStr = "update error")
+                    }
+
+
+                }
                 else -> DataHolder.Fail(baseError = DBError("Update error"))
             }
         }
@@ -282,7 +300,7 @@ class ItemDataSourceRestImpl(
         when (val updateSubRes =
             subItemDataSource.checkUncheckSubItemByItemId(item.itemId, isChecked)) {
             is DataHolder.Success -> {
-                updateItemCore(item.apply { this.isChecked = isChecked })
+                updateItemCore(item.apply { this.isChecked = isChecked }, listOf())
             }
             is DataHolder.Fail -> updateSubRes
             is DataHolder.Loading -> updateSubRes

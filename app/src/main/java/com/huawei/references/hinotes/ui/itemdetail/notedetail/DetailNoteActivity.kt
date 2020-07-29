@@ -11,8 +11,6 @@ import com.huawei.references.hinotes.ui.base.customPopup
 import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailViewModel
-import com.judemanutd.autostarter.AutoStartPermissionHelper
-import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -94,7 +92,8 @@ class DetailNoteActivity : ItemDetailBaseActivity() {
 
     private fun saveChanges(item:Item){
         runWithAGConnectUserOrOpenLogin {
-            viewModel.saveItem(item, it.uid, isNewNote, listOf(), listOf())
+            viewModel.saveItem(item, it.uid, isNewNote, listOf(), reminderIdsToDelete.map { it })
+            reminderIdsToDelete.clear()
         }
     }
 

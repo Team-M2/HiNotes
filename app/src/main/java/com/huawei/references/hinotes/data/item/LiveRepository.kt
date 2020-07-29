@@ -3,7 +3,6 @@ package com.huawei.references.hinotes.data.item
 import com.huawei.references.hinotes.data.base.DataHolder
 import com.huawei.references.hinotes.data.item.abstractions.LiveDataSource
 import com.huawei.references.hinotes.data.item.model.ItemType
-import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.coroutineContext
 
@@ -16,10 +15,10 @@ abstract class LiveRepository<T> (protected val liveDataSource: LiveDataSource<T
             is DataHolder.Success -> {
                 withContext(coroutineContext) {
                     //triggering live data
-                    async {
-                        liveDataSource.setItems(DataHolder.Loading())
-                        liveDataSource.setItems(getItems(userId, itemType))
-                    }
+//                    async {
+//                        liveDataSource.setItems(DataHolder.Loading())
+//                        liveDataSource.setItems(getItems(userId, itemType))
+//                    }
                     result
                 }
             }

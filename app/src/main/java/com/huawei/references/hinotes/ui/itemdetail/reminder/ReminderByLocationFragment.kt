@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.TextView
 import com.huawei.hms.location.Geofence
 import com.huawei.hms.location.GeofenceRequest
 import com.huawei.hms.location.GeofenceService
@@ -23,16 +24,17 @@ import com.huawei.hms.site.api.model.Coordinate
 import com.huawei.hms.site.api.model.Site
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
-import com.huawei.references.hinotes.ui.base.BaseActivity
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
-import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
-import kotlinx.android.synthetic.main.reminder_by_location_fragment.view.*
+import com.huawei.references.hinotes.ui.base.ItemDetailBottomSheetType
 
 
 class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
     var circle: Circle?=null
     var userLocation:Location?=null
     override val mapType: MapType = MapType.GEOFENCE
+
+    override val itemDetailBottomSheetType: ItemDetailBottomSheetType =
+        ItemDetailBottomSheetType.REMINDER
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,17 +53,8 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
 
-        view.save_text.setOnClickListener {
-            selectedPoi?.location?.lat?.let { it1 -> getLocationInBackground(it1,
-                selectedPoi?.location?.lat!!, currentRadius.toFloat()
-            ) }
-            (activity as? ItemDetailBaseActivity)?.poiSelected(selectedPoi!!,MapType.GEOFENCE,currentRadius)
-            this.dismiss()
-        }
+        view.findViewById<TextView>(R.id.save_text)
 
-        view.delete_text.setOnClickListener {
-            this.dismiss()
-        }
     }
 
     override fun onCreateView(
@@ -82,8 +75,8 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         super.onLocationGet(location)
         addCircle(location.latitude, location.longitude)
         userLocation=location
-        selectedPoi?.location = Coordinate(userLocation!!.latitude,userLocation!!.longitude)
-        selectedPoi?.name = "Your Location"
+        selectedPoi.location = Coordinate(userLocation!!.latitude,userLocation!!.longitude)
+        selectedPoi.name = "Your Location"
     }
 
     private fun addCircle(lat:Double, lng:Double){

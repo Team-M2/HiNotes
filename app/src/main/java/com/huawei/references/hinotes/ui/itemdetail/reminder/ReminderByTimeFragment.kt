@@ -11,16 +11,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.NotificationCompat
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.ui.base.ItemDetailBottomSheetFragment
+import com.huawei.references.hinotes.ui.base.ItemDetailBottomSheetType
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import com.huawei.references.hinotes.ui.itemdetail.reminder.adapter.TimeReminderTabAdapter
 import kotlinx.android.synthetic.main.reminder_by_time_fragment.view.*
-import kotlinx.android.synthetic.main.reminder_by_time_fragment.view.tabLayout
 import java.util.*
 
-class ReminderByTimeFragment(var item:Item) : BottomSheetDialogFragment() {
+class ReminderByTimeFragment(var item:Item) : ItemDetailBottomSheetFragment() {
     companion object{
         var reminderStaticCalendar: Calendar?=null
     }
@@ -34,6 +34,9 @@ class ReminderByTimeFragment(var item:Item) : BottomSheetDialogFragment() {
     ): View? =
         inflater.inflate(R.layout.reminder_by_time_fragment, container, false)
 
+    override val itemDetailBottomSheetType: ItemDetailBottomSheetType =
+        ItemDetailBottomSheetType.REMINDER
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         reminderCalendar = Calendar.getInstance()
@@ -46,12 +49,13 @@ class ReminderByTimeFragment(var item:Item) : BottomSheetDialogFragment() {
 
         view.save_text.setOnClickListener {
             scheduleNotification(getNotification("Notification")!!,60000)
-            (activity as? ItemDetailBaseActivity)?.timeSelected(reminderStaticCalendar?.time!!)
+            (activity as? ItemDetailBaseActivity)?.timeReminderSelected(reminderStaticCalendar?.time!!)
             this.dismiss()
         }
 
         view.delete_text.setOnClickListener {
             this.dismiss()
+            (activity as? ItemDetailBaseActivity)?.bottomSheetDeleteButtonClicked(itemDetailBottomSheetType)
         }
     }
 

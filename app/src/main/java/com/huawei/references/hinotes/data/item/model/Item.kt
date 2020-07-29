@@ -11,7 +11,7 @@ data class Item (
     val isOpen:Boolean=false,
     var lat:Double?=null,
     var lng:Double?=null,
-    val poiName:String?=null,
+    var poiName:String?=null,
     var poiDescription:String?=null,
     var description:String?=null,
     var title:String,

@@ -35,7 +35,6 @@ import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import java.io.IOException
-import java.sql.Time
 import java.util.*
 
 abstract class ItemDetailBaseActivity : BaseActivity() {
@@ -53,6 +52,8 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
     private val takePictureResultCode = 201
     private val pickImageResultCode = 202
     private val recordAudioResultCode = 203
+
+    protected val reminderIdsToDelete = ArrayList<Int>()
 
     override fun onStart() {
         super.onStart()
@@ -77,6 +78,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             //TODO: fill no reminder ui
         }) {
             itemData.reminder = it.first()
+            add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
             onGetRemindersCompleted()
             //TODO: fill reminder ui
         }
@@ -89,6 +91,12 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             findViewById<TextView>(R.id.item_detail_description)?.apply {
                 append(it)
             }
+        }
+
+        if(!itemData.poiDescription.isNullOrEmpty() &&
+            (itemData.lat!=null && itemData.lat!=0.0) &&
+            (itemData.lat!=null && itemData.lat!=0.0)){
+            location_icon.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
         }
     }
 
@@ -143,13 +151,6 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
 
         findViewById<TextView>(R.id.item_detail_title)?.text = itemData.title
         findViewById<TextView>(R.id.item_detail_description)?.text = itemData.description ?: ""
-
-        if(itemData.poiDescription != "" && itemData.lat != 0.0 && itemData.lng != 0.0){
-            location_icon.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
-        }
-        if(itemData.reminder != null){
-            add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
-        }
     }
 
     private fun performAddLocation() {
@@ -251,64 +252,66 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
         startActivityForResult(intent, recordAudioResultCode)
     }
 
-    fun locationSelected(lat: Double, lng: Double, mapType: MapType, radius: Double) {
-        when (mapType) {
-            MapType.ITEM_LOCATION -> {
-                itemData.lat = lat
-                itemData.lng = lng
-                //TODO: set location ui
-            }
-            MapType.GEOFENCE -> {
-                val reminder = itemData.reminder ?: Reminder(
-                    -1,
-                    reminderType = ReminderType.ByGeofence
-                ).apply {
-                    itemData.reminder = this
-                }
-                reminder.apply {
-                    location = LatLng(lat, lng)
-                    this.radius = radius
-                }
-                //TODO: set location reminder ui
-            }
-        }
-    }
-
     fun poiSelected(site: Site, mapType: MapType,radius: Double){
         when(mapType){
             MapType.ITEM_LOCATION ->{
                 itemData.lat=site.location.lat
                 itemData.lng=site.location.lng
                 itemData.poiDescription=site.name
-                //TODO: set poi location ui
+                if(itemData.poiDescription != "" && itemData.lat != 0.0 && itemData.lng != 0.0){
+                    location_icon.setColorFilter(ContextCompat.getColor(this, R.color.image_flag),
+                        android.graphics.PorterDuff.Mode.SRC_IN)
+                }
             }
             MapType.GEOFENCE -> {
-                val reminder = itemData.reminder ?: Reminder(
+                bottomSheetDeleteButtonClicked(ItemDetailBottomSheetType.REMINDER)
+                itemData.reminder = Reminder(
                     -1,
                     reminderType = ReminderType.ByGeofence
                 ).apply {
-                    itemData.reminder = this
-                }
-                reminder.apply {
                     location = LatLng(site.location.lat, site.location.lng)
                     reminderType = ReminderType.ByGeofence
                     title = site.name
                     this.radius = radius
                 }
-                //TODO: set location reminder ui
+                add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag),
+                    android.graphics.PorterDuff.Mode.SRC_IN)
             }
         }
     }
 
-    fun timeSelected(date: Date){
-        val reminder=itemData.reminder ?: Reminder(-1,reminderType = ReminderType.ByTime).apply {
-            itemData.reminder=this
+    fun bottomSheetDeleteButtonClicked(itemDetailBottomSheetType:ItemDetailBottomSheetType){
+        when(itemDetailBottomSheetType){
+            ItemDetailBottomSheetType.REMINDER ->{
+                itemData.reminder?.let {
+                    if(it.id>0) reminderIdsToDelete.add(it.id)
+                }
+
+                add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.black),
+                    android.graphics.PorterDuff.Mode.SRC_IN)
+            }
+            ItemDetailBottomSheetType.LOCATION->{
+                itemData.apply {
+                    poiDescription=null
+                    poiName=null
+                    lat=null
+                    lng=null
+                }
+                location_icon.setColorFilter(ContextCompat.getColor(this, R.color.black),
+                    android.graphics.PorterDuff.Mode.SRC_IN)
+            }
         }
-        reminder.apply {
+        itemData.reminder=null
+    }
+
+    fun timeReminderSelected(date: Date){
+        bottomSheetDeleteButtonClicked(ItemDetailBottomSheetType.REMINDER)
+        itemData.reminder=Reminder(-1,reminderType = ReminderType.ByTime).apply {
             reminderType=ReminderType.ByTime
             this.date=date
         }
-        //TODO: set location reminder ui
+        add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag),
+            android.graphics.PorterDuff.Mode.SRC_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

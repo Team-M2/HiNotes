@@ -21,7 +21,6 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
     private val viewModel: TodoListDetailViewModel by viewModel()
     private val subItems = ArrayList<TodoListSubItem>()
     private val subItemIdsToDelete = ArrayList<Int>()
-    private val reminderIdsToDelete = ArrayList<Int>()
     private val todoListSubItemsAdapter = TodoListSubItemsAdapter(subItems,subItemIdsToDelete)
 
     override fun getItemDetailViewModel(): ItemDetailViewModel =viewModel
@@ -107,8 +106,9 @@ class TodoListDetailActivity : ItemDetailBaseActivity() {
                     title = findViewById<TextView>(R.id.item_detail_title)?.text.toString()
                     description= findViewById<TextView>(R.id.item_detail_description)?.text.toString()
                     isChecked = todo_list_item_checkbox.isChecked
-                }, it.uid, isNewNote, subItemIdsToDelete.map { it },reminderIdsToDelete)
+                }, it.uid, isNewNote, subItemIdsToDelete.map { it },reminderIdsToDelete.map { it })
                 subItemIdsToDelete.clear()
+                reminderIdsToDelete.clear()
             }
         }
     }
