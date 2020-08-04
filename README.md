@@ -34,7 +34,7 @@ Huawei's is an advanced reference note application created with HMS kits for pho
 ## FAQ :question:
 **1. I downloaded the project files but can't build the project?**
 
-You need to download & integrate own **ag-connect.json** file from **AppGallery Connect Console** Check our medium tutorial [:link:](https://medium.com/huawei-developers/android-integrating-your-apps-with-huawei-hms-core-1f1e2a090e98) or check out offical tutorial [:link:](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/android-sdk-integrating-sdk-0000001050156692)
+You need to download & integrate own **ag-connect.json** file from **AppGallery Connect Console**. Check our medium tutorial [:link:](https://medium.com/huawei-developers/android-integrating-your-apps-with-huawei-hms-core-1f1e2a090e98) or check out offical tutorial [:link:](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/android-sdk-integrating-sdk-0000001050156692)
 ## Useful Links :link:
 * [Huawei Developers Medium Page](https://medium.com/huawei-developers)
 * [Huawei Developers Forum](https://forums.developer.huawei.com/forumPortal/en/home)
