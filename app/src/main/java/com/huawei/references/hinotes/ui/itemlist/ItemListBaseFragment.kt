@@ -42,7 +42,11 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        observeDataHolderLiveData(getItemListViewModel().deleteILiveData)
+        observeDataHolderLiveData(getItemListViewModel().deleteILiveData){
+            userMyItemList.removeAll(myItemsSectionAdapter.getSelectedItems())
+            userSharedItemList.removeAll(sharedItemsSectionAdapter.getSelectedItems())
+            updateRV()
+        }
         observeDataHolderLiveData(getItemListViewModel().itemsLiveData,{
             (requireActivity() as? BaseActivity)?.
                 customToast(getString(R.string.no_recorded_note),false)
@@ -96,7 +100,7 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
         signOutIcon.visibility = View.GONE
     }
 
-    fun setDefaultToolbar(){
+    private fun setDefaultToolbar(){
         val deleteIcon: ImageView = requireActivity().findViewById(R.id.toolbar_delete_icon)
         val cancelIcon: ImageView = requireActivity().findViewById(R.id.toolbar_cancel_icon)
         val signOutIcon: ImageView = requireActivity().findViewById(R.id.toolbar_sign_out_icon)
@@ -114,6 +118,10 @@ abstract class ItemListBaseFragment() : BaseFragment(), IOnLongClickListener {
             if(it.role==UserRole.Owner) userMyItemList.add(it)
             else userSharedItemList.add(it)
         }
+        updateRV()
+    }
+
+    private fun updateRV(){
         sectionedAdapter.apply {
             removeAllSections()
             addSection(myItemsSectionAdapter.apply {

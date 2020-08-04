@@ -23,8 +23,9 @@ class NotesFragment : ItemListBaseFragment() {
 
     override val myItemsSectionAdapter: SectionAdapter = NoteSectionAdapter(
         "My Notes",
-        this
-    )
+        this)
+
+
     override val sharedItemsSectionAdapter: SectionAdapter = NoteSectionAdapter(
         "Shared Notes",
         this
