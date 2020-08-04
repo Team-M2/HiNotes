@@ -78,12 +78,11 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
 
         observeDataHolderLiveData(getItemDetailViewModel().reminderLiveData, {
             onGetRemindersCompleted()
-            //TODO: fill no reminder ui
+            add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.black), android.graphics.PorterDuff.Mode.SRC_IN)
         }) {
             itemData.reminder = it.first()
             add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag), android.graphics.PorterDuff.Mode.SRC_IN)
             onGetRemindersCompleted()
-            //TODO: fill reminder ui
         }
 
         observeDataHolderLiveData(getItemDetailViewModel().textRecognitionLiveData,
