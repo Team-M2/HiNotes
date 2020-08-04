@@ -2,4 +2,53 @@
     <string name="app_name">HiNotes</string>
     <string name="title_notes">Notes</string>
     <string name="title_todo_list">To-Do List</string>
+    <string name="title_toolbar_notes">My Notes</string>
+    <string name="title_toolbar_todo_list">My To-Do List</string>
+    <string name="title_login">Login</string>
+    <string name="title_register">Register</string>
+    <string name="text_recognition_failed">Text recognition operation failed. Please try again.</string>
+    <string name="speech_to_text_failed">Speech to text operation failed. Please try again.</string>
+    <string name="text_recognition_could_not_read">Text Recognition operation could not read text from the image. Please try again.</string>
+    <string name="delete_note_popup_warning">Are you sure you want to delete this note?</string>
+    <string name="delete_note_popup_accept">Delete</string>
+    <string name="delete_note_popup_reject">Cancel</string>
+    <string name="delete_todo_list_popup_warning">Are you sure you want to delete this to-do list?</string>
+    <string name="delete_todo_list_popup_accept">Delete</string>
+    <string name="delete_todo_list_popup_reject">Cancel</string>
+    <string name="delete_item_changes_popup_warning">Do you want the changes deleted?</string>
+    <string name="delete_item_changes_popup_accept">Delete</string>
+    <string name="delete_item_changes_popup_reject">Cancel</string>
+    <string name="note_detail_check_title_description">Note detail or description cannot be empty.</string>
+    <string name="note_successfully_deleted">Changes have been successfully deleted.</string>
+    <string name="note_successfully_saved">Changes have been successfully saved.</string>
+    <string name="no_recorded_note">No recorded note was found.</string>
+    <string name="failed_get_data">Failed to get data.</string>
+    <string name="failed_to_login">Failed to log in.</string>
+    <string name="add_reminder_by_time">Add reminder by time</string>
+    <string name="add_reminder_by_location">Add reminder by location</string>
+
+
+    <string name="hw_id">HuaweiId</string>
+    <string name="hw_pay">HuaweiPay</string>
+    <string name="hw_push">HuaweiPUSH</string>
+    <string name="hw_sns">HuaweiSns</string>
+    <string name="hw_location">HuaweiLocation</string>
+    <string name="hw_opendevice">HuaweiOpendevice</string>
+    <string name="hw_ppskit">HuaweiPpskit</string>
+    <string name="hw_game">HuaweiGame</string>
+    <string name="sample_description">Huawei Account Kit Demo</string>
+    <string name="sample_hwid_description">Huawei Account Usage Process</string>
+    <string name="hwid_login_header">HiNotes Login Page</string>
+    <string name="hwid_register_header">HiNotes Register Page</string>
+    <string name="hwid_sign_in">ID-Token Mode Signln</string>
+    <string name="hwid_sign_out">SignOut</string>
+    <string name="hwid_code">Get Code</string>
+    <string name="hwid_pass">Login</string>
+    <string name="hwid_repass">Change Password</string>
+    <string name="info_login">If the user is registered, they can log in with their email and password or with their email and code information.</string>
+    <string name="info_register">User must verify their e-mail address via code during registration.</string>
+    <string name="hwid_register">Register</string>
+    <string name="hwid_revokeAccess">Facebook</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

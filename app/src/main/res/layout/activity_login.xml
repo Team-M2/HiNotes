@@ -1,0 +1,43 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    tools:context=".ui.login.LoginActivity"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/header_login"
+            android:layout_margin="8dp"
+            android:text="@string/hwid_login_header"
+            style="@style/TitleStyle"
+            />
+
+        <com.huawei.hms.support.hwid.ui.HuaweiIdAuthButton
+            android:layout_margin="8dp"
+            android:id="@+id/hwid_signin"
+            style="@style/ButtonStyle"
+            />
+
+        <Button
+            android:layout_margin="8dp"
+            android:id="@+id/btn_to_login"
+            style="@style/ButtonStyle"
+            android:text="@string/hwid_pass" />
+
+        <Button
+            android:layout_margin="8dp"
+            android:id="@+id/btn_to_register"
+            style="@style/ButtonStyle"
+            android:text="@string/hwid_register" />
+    </LinearLayout>
+    <include
+        android:visibility="gone"
+        layout="@layout/login_bottom_sheet" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

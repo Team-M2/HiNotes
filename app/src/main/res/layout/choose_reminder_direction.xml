@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/events_frame_view"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/choose_dialog_cancel"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="#FFFFFF"
+        android:gravity="bottom|center_horizontal"
+        android:text="Cancel"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/events_frame_view" />
+
+    <TextView
+        android:id="@+id/choose_second_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="By Location"
+        android:background="#FFFFFF"
+        android:gravity="center"
+
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/events_frame_view"
+        app:layout_constraintEnd_toEndOf="@+id/events_frame_view"
+        app:layout_constraintStart_toStartOf="@+id/events_frame_view"
+        app:layout_constraintTop_toBottomOf="@+id/choose_first_text" />
+
+    <TextView
+        android:id="@+id/choose_first_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FFFFFF"
+        android:gravity="center"
+        android:text="By Time"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/events_diveder_view"
+        app:layout_constraintEnd_toEndOf="@+id/events_frame_view"
+        app:layout_constraintStart_toStartOf="@+id/events_frame_view"
+        app:layout_constraintTop_toTopOf="@+id/events_frame_view" />
+
+    <ImageView
+        android:id="@+id/choose_first_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/events_diveder_view"
+        app:layout_constraintStart_toStartOf="@+id/events_frame_view"
+        app:layout_constraintTop_toTopOf="@+id/events_frame_view"
+        app:srcCompat="@drawable/calendar_reminder_icon" />
+
+    <ImageView
+        android:id="@+id/choose_second_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/events_frame_view"
+        app:layout_constraintStart_toStartOf="@+id/events_frame_view"
+        app:srcCompat="@drawable/location_reminder_icon" />
+
+    <View
+        android:id="@+id/events_diveder_view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#AFAFAF"
+        app:layout_constraintBottom_toBottomOf="@+id/events_frame_view"
+        app:layout_constraintEnd_toEndOf="@+id/events_frame_view"
+        app:layout_constraintStart_toStartOf="@+id/events_frame_view"
+        app:layout_constraintTop_toTopOf="@+id/events_frame_view" />
+
+    <View
+        android:id="@+id/events_diveder_view2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#AFAFAF"
+        app:layout_constraintBottom_toBottomOf="@+id/events_frame_view"
+        app:layout_constraintEnd_toEndOf="@+id/events_frame_view"
+        app:layout_constraintStart_toStartOf="@+id/events_frame_view"
+        app:layout_constraintTop_toBottomOf="@+id/events_frame_view" />
+</androidx.constraintlayout.widget.ConstraintLayout>

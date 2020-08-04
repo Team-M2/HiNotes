@@ -1,8 +1,20 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.huawei.agconnect'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
+    signingConfigs{
+        release{
+            storeFile file('hinotesJKS.jks')
+            storePassword 'android123'
+            keyAlias 'hinotesKey'
+            keyPassword 'android123'
+        }
+    }
+
+
     compileSdkVersion 29
 
     defaultConfig {
@@ -11,7 +23,6 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -19,6 +30,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -39,11 +53,55 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.navigation:navigation-fragment:2.1.0'
     implementation 'androidx.navigation:navigation-ui:2.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "com.android.support:support-compat:29.0.0"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    //Auth Service
+    implementation 'com.huawei.agconnect:agconnect-auth:1.3.1.300'
+    implementation 'com.facebook.android:facebook-android-sdk:4.20.0'
+    implementation 'com.huawei.hms:hwid:4.0.1.300'
+
+    //Locaiton Service
+    implementation 'com.huawei.hms:maps:4.0.1.301'
+    implementation 'com.huawei.hms:location:4.0.3.301'
+    implementation 'com.huawei.hms:site:4.0.2.300'
+
+
+    implementation 'com.huawei.agconnect:agconnect-database:1.2.1.301'
+    // Koin AndroidX ViewModel features
+    implementation "org.koin:koin-androidx-viewmodel:2.1.0"
+    // Koin AndroidX Experimental features
+    implementation "org.koin:koin-androidx-ext:2.1.0"
+    // Third party section recyclerview features
+    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
+    //Swipe refresh layout
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    // Import the base SDK.
+    implementation 'com.huawei.hms:ml-computer-vision-ocr:2.0.0.300'
+    // Import speech to text SDK.
+    implementation "com.huawei.hms:ml-computer-voice-asr-plugin:2.0.0.300"
+
+    implementation "com.squareup.retrofit2:retrofit:2.7.0"
+
+    implementation "com.squareup.retrofit2:converter-gson:2.7.0"
+
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.2"
+
+    implementation "com.squareup.retrofit2:converter-scalars:2.5.0"
+
+    implementation "com.squareup.moshi:moshi-kotlin:1.9.3"
+
+    implementation "com.squareup.moshi:moshi-adapters:1.5.0"
+
+    implementation "com.github.quickpermissions:quickpermissions-kotlin:0.4.0"
+
+    implementation 'com.github.judemanutd:autostarter:1.0.8'
+
+    implementation 'com.github.javiersantos:BottomDialogs:1.2.1'
 }
