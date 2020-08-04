@@ -48,18 +48,17 @@ class ReminderByTimeFragment(var item:Item) : ItemDetailBottomSheetFragment() {
         view.tabLayout.setupWithViewPager(view.viewPager)
 
         view.save_text.setOnClickListener {
-            scheduleNotification(getNotification("Notification")!!,60000)
+            scheduleNotification(getNotification("Notification")!!)
             (activity as? ItemDetailBaseActivity)?.timeReminderSelected(reminderStaticCalendar?.time!!)
             this.dismiss()
         }
 
         view.delete_text.setOnClickListener {
             this.dismiss()
-            (activity as? ItemDetailBaseActivity)?.bottomSheetDeleteButtonClicked(itemDetailBottomSheetType)
         }
     }
 
-    private fun scheduleNotification(notification: Notification, delay: Int) {
+    private fun scheduleNotification(notification: Notification) {
         val notificationIntent = Intent(this.activity, BroadcastReceiver::class.java)
         notification_ = notification
         notificationIntent.putExtra("notificationId", 1)

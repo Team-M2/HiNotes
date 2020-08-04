@@ -12,12 +12,15 @@ import androidx.core.app.NotificationManagerCompat
 import com.huawei.hms.location.GeofenceData
 import com.huawei.references.hinotes.MainActivity
 import com.huawei.references.hinotes.R
+import com.huawei.references.hinotes.ui.base.getLocalDb
+import com.huawei.references.hinotes.ui.base.saveLocalDb
 
 
 class BroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val reminderType = intent!!.getIntExtra("reminderType", -1)
         val reminderTitle = intent.getStringExtra("reminderTitle")
+        val reminderId = intent.getIntExtra("reminderId",-1)
         var notificationDescription:String?=null
 
         if(reminderType == 1){
@@ -25,14 +28,20 @@ class BroadcastReceiver : BroadcastReceiver() {
             showNotification(context, reminderTitle, notificationDescription)
         }
         else if(reminderType == 0){
-            val action = intent.action
-            if (ACTION_PROCESS_LOCATION == action) {
-                val geofenceData = GeofenceData.getDataFromIntent(intent)
-                if (geofenceData != null) {
-                    notificationDescription=
-                        "You have reached or left the area you have created for the $reminderTitle note."
-                    showNotification(context,reminderTitle,notificationDescription)
+            val isAvailableForNotification = getLocalDb(reminderId, context!!)
+            if(isAvailableForNotification) {
+                val action = intent.action
+                if (ACTION_PROCESS_LOCATION == action) {
+                    val geofenceData = GeofenceData.getDataFromIntent(intent)
+                    if (geofenceData != null) {
+                        notificationDescription =
+                            "You have reached or left the area you have created for the $reminderTitle note."
+                        showNotification(context, reminderTitle, notificationDescription)
+                    }
                 }
+            }
+            else{
+                saveLocalDb(reminderId,true,context)
             }
         }
     }

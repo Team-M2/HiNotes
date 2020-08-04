@@ -22,13 +22,14 @@ class DateFragment(var item:Item):Fragment() {
             setOnDateChangedListener { view, year, monthOfYear, dayOfMonth -> ReminderByTimeFragment.reminderStaticCalendar?.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 ReminderByTimeFragment.reminderStaticCalendar?.set(Calendar.YEAR, year)
                 ReminderByTimeFragment.reminderStaticCalendar?.set(Calendar.MONTH, monthOfYear) }
-                minDate = System.currentTimeMillis() - 1000
-                if(item.reminder!=null && item.reminder?.itemId != -1) {
+                if(item.reminder?.date != null) {
                 updateDate(Integer.parseInt(DateFormat.format("yyyy", item.reminder?.date).toString()),
                     Integer.parseInt(DateFormat.format("MM", item.reminder?.date).toString())-1,
-                    Integer.parseInt(DateFormat.format("dd", item.reminder?.date).toString())
-                )
-            }
+                    Integer.parseInt(DateFormat.format("dd", item.reminder?.date).toString()))
+                }
+                else {
+                    minDate = System.currentTimeMillis() - 1000
+                }
         }
     }
 

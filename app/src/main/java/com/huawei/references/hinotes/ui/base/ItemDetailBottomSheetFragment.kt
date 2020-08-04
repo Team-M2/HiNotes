@@ -3,6 +3,7 @@ package com.huawei.references.hinotes.ui.base
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity

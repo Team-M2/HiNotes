@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:padding="8dp"
-        android:text="Delete"
+        android:text="Cancel"
         android:textColor="@color/colorRecyclerViewText"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/frameLayout"

@@ -2,6 +2,8 @@ package com.huawei.references.hinotes.ui.base
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -103,6 +105,18 @@ fun BaseActivity.customBottomDialogs(firstButtonText : String, secondButtonText 
     mDialogView.choose_dialog_cancel.setOnClickListener {
         bottomDialog.dismiss()
     }
+}
+
+fun saveLocalDb(key:Int, value:Boolean, requiredActivity: Context){
+    val sharedPref: SharedPreferences = requiredActivity.getSharedPreferences("sharedPreferences",Context.MODE_PRIVATE)
+    val editor = sharedPref.edit()
+    editor.putBoolean(key.toString(), value)
+    editor.apply()
+}
+
+fun getLocalDb(key: Int?, context: Context) : Boolean{
+    val sharedPref: SharedPreferences = context.getSharedPreferences("sharedPreferences",Context.MODE_PRIVATE)
+    return sharedPref.getBoolean(key.toString(),false)
 }
 
 

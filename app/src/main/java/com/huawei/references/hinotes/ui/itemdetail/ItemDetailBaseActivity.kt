@@ -8,10 +8,14 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -203,14 +207,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.INTERNET){
-            if (bottomSheetBehavior.state == 3 || bottomSheetBehavior.state == 5) {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                val bottomSheetFragment = ReminderByLocationFragment(itemData)
-                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-            }
-            else {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            }
+            loadFragment(ReminderByLocationFragment(itemData))
         }
 
     override fun onBackPressed() {
@@ -274,7 +271,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
                 ).apply {
                     location = LatLng(site.location.lat, site.location.lng)
                     reminderType = ReminderType.ByGeofence
-                    title = site.name
+                    itemData.poiDescription = site.name
                     this.radius = radius
                 }
                 add_reminder.setColorFilter(ContextCompat.getColor(this, R.color.image_flag),
@@ -353,6 +350,13 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
 
     private fun deleteReminder(){
         bottomSheetDeleteButtonClicked(ItemDetailBottomSheetType.REMINDER)
+    }
+
+    fun loadFragment(fragment:Fragment){
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_frame_layout, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

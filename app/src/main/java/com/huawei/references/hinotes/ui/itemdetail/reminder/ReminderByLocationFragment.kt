@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.huawei.hms.location.Geofence
 import com.huawei.hms.location.GeofenceRequest
 import com.huawei.hms.location.GeofenceService
@@ -26,11 +26,12 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.base.ItemDetailBottomSheetType
+import com.huawei.references.hinotes.ui.base.saveLocalDb
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import kotlinx.android.synthetic.main.reminder_by_location_fragment.view.*
 
 
-class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
+class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item), HuaweiMap.OnMapClickListener {
     var circle: Circle?=null
     var userLocation:Location?=null
     override val mapType: MapType = MapType.GEOFENCE
@@ -59,7 +60,8 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
             selectedPoi.location?.lat?.let { it1 -> getLocationInBackground(it1,
                 selectedPoi.location?.lng!!, currentRadius.toFloat()
             ) }
-            (activity as? ItemDetailBaseActivity)?.poiSelected(selectedPoi!!,MapType.GEOFENCE,currentRadius)
+            saveLocalDb(item.itemId,false,this.requireActivity())
+            (activity as? ItemDetailBaseActivity)?.poiSelected(selectedPoi,MapType.GEOFENCE,currentRadius)
             this.dismiss()
         }
 
@@ -77,18 +79,14 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
 
 
     override fun onMapReady(huaweiMap: HuaweiMap?) {
-        super.onMapReady(huaweiMap)
         hMap=huaweiMap
-        /*
-        if(item.reminder != null && item.reminder?.itemId != -1){
-            addSavedMarker(item.reminder?.location?.latitude!!,item.reminder?.location?.longitude!!)
-            addCircle(item.reminder?.location?.latitude!!,item.reminder?.location?.longitude!!,
-                item.reminder?.radius!!
-            )
-            cameraUpdate(item.reminder?.location?.latitude!!,item.reminder?.location?.longitude!!)
+        hMap?.setOnMapClickListener(this)
+        if(item.reminder?.date == null && item.reminder?.location == null){
+            super.onMapReady(huaweiMap)
         }
-        
-         */
+        else{
+            onMapClick(LatLng(item.reminder?.location?.latitude!!,item.reminder?.location?.longitude!!))
+        }
     }
 
     override fun onLocationGet(location: Location) {
@@ -145,6 +143,7 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
         val intent = Intent(this.activity, BroadcastReceiver::class.java)
         intent.putExtra("reminderType",0)
         intent.putExtra("reminderTitle",item.title)
+        intent.putExtra("reminderId",item.itemId)
         intent.action = BroadcastReceiver.ACTION_PROCESS_LOCATION
         return PendingIntent.getBroadcast(this.activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
@@ -162,6 +161,15 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item) {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onMapClick(p0: LatLng?) {
+        addSavedMarker(p0!!.latitude,p0.longitude)
+        getPoiList(p0.latitude,p0.longitude)
+        selectedPoi.location.lat = p0.latitude
+        selectedPoi.location.lng = p0.longitude
+        addCircle(p0.latitude,p0.longitude,currentRadius)
+        cameraUpdate(p0.latitude,p0.longitude)
     }
 
 }

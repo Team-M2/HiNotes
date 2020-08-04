@@ -162,14 +162,15 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
     }
 
     fun addSavedMarker(lat: Double,lng: Double){
+        hMap?.clear()
             val latlng = LatLng(lat, lng)
             val info = InfoWindowData("-2",
-                "Saved location",
+                "Location Reminder Area",
                 item.poiDescription.toString(),
                 lat, lng)
             val options = MarkerOptions().apply {
                 position(latlng)
-                title(item.poiDescription)
+                title("Location Reminder Area")
                 draggable(false)
                 icon(BitmapDescriptorFactory.fromResource(R.drawable.saved_marker_icon))
                 clusterable(false)
@@ -269,10 +270,10 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         }
     }
 
-    private fun cameraUpdate(lat:Double, lng:Double){
+    fun cameraUpdate(lat:Double, lng:Double){
         val cameraBuild = CameraPosition.Builder().target(
             LatLng(lat, lng)
-        ).zoom(17f).build()
+        ).zoom(16f).build()
         val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraBuild)
         hMap?.animateCamera(cameraUpdate)
     }
