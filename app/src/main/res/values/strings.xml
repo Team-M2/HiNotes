@@ -22,6 +22,7 @@
     <string name="note_successfully_deleted">Changes have been successfully deleted.</string>
     <string name="note_successfully_saved">Changes have been successfully saved.</string>
     <string name="no_recorded_note">No recorded note was found.</string>
+    <string name="no_selected_poi">Please select a POI.</string>
     <string name="failed_get_data">Failed to get data.</string>
     <string name="failed_to_login">Failed to log in.</string>
     <string name="add_reminder_by_time">Add reminder by time</string>

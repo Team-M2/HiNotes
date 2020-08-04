@@ -85,7 +85,7 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
             if(results.sites != null) {
                 addMarker(results.sites)
                 if(item.lat != null && item.lng != null && mapType == MapType.ITEM_LOCATION)
-                    addSavedMarker(item.lat!!, item.lng!!)
+                    addSavedMarker(item.lat!!, item.lng!!,true)
                 poi_recycler_view?.layoutManager =
                     LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 poi_recycler_view?.adapter =
@@ -161,8 +161,7 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         }
     }
 
-    fun addSavedMarker(lat: Double,lng: Double){
-        hMap?.clear()
+    fun addSavedMarker(lat: Double,lng: Double,isSavedLocationMarker : Boolean){
             val latlng = LatLng(lat, lng)
             val info = InfoWindowData("-2",
                 "Location Reminder Area",
@@ -170,7 +169,10 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
                 lat, lng)
             val options = MarkerOptions().apply {
                 position(latlng)
-                title("Location Reminder Area")
+                if(isSavedLocationMarker)
+                title(item.poiDescription)
+                else
+                    title("Location Reminder Area")
                 draggable(false)
                 icon(BitmapDescriptorFactory.fromResource(R.drawable.saved_marker_icon))
                 clusterable(false)

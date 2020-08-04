@@ -10,8 +10,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
+import com.huawei.references.hinotes.ui.base.BaseActivity
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.base.ItemDetailBottomSheetType
+import com.huawei.references.hinotes.ui.base.customToast
 import com.huawei.references.hinotes.ui.itemdetail.reminder.MapType
 import kotlinx.android.synthetic.main.add_location_fragment.view.*
 
@@ -29,8 +31,18 @@ class AddLocationFragment(var item: Item, var bottomSheetBehavior: BottomSheetBe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.save_text.setOnClickListener {
-            (activity as? ItemDetailBaseActivity)?.poiSelected(selectedPoi,MapType.ITEM_LOCATION,0.0)
-            this.dismiss()
+            if (selectedPoi.location?.lat == 0.0 && selectedPoi.location?.lng == 0.0 ){
+                (requireActivity() as? BaseActivity)?.
+                customToast(getString(R.string.no_selected_poi),false)
+            }
+            else {
+                (activity as? ItemDetailBaseActivity)?.poiSelected(
+                    selectedPoi,
+                    MapType.ITEM_LOCATION,
+                    0.0
+                )
+                this.dismiss()
+            }
         }
         view.delete_text.setOnClickListener {
             (activity as? ItemDetailBaseActivity)?.bottomSheetDeleteButtonClicked(itemDetailBottomSheetType)

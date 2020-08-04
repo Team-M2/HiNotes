@@ -164,7 +164,8 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item), Huawei
     }
 
     override fun onMapClick(p0: LatLng?) {
-        addSavedMarker(p0!!.latitude,p0.longitude)
+        hMap?.clear()
+        addSavedMarker(p0!!.latitude,p0.longitude,false)
         getPoiList(p0.latitude,p0.longitude)
         selectedPoi.location.lat = p0.latitude
         selectedPoi.location.lng = p0.longitude
