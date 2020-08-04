@@ -13,9 +13,16 @@ abstract class ItemDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<TextView>(R.id.delete_text)?.setOnClickListener {
-            (activity as? ItemDetailBaseActivity)?.bottomSheetDeleteButtonClicked(itemDetailBottomSheetType)
-            dismiss()
+        view.findViewById<TextView>(R.id.delete_text)?.apply {
+            when(itemDetailBottomSheetType){
+                ItemDetailBottomSheetType.LOCATION->{
+                    setOnClickListener {
+                        (activity as? ItemDetailBaseActivity)?.bottomSheetDeleteButtonClicked(itemDetailBottomSheetType)
+                        dismiss()
+                    }
+                }
+                ItemDetailBottomSheetType.REMINDER-> hide()
+            }
         }
     }
 }

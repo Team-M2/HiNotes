@@ -16,14 +16,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.huawei.agconnect.auth.AGConnectUser
-import com.huawei.hmf.tasks.Task
 import com.huawei.hms.maps.model.LatLng
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureActivity
 import com.huawei.hms.mlplugin.asr.MLAsrCaptureConstants
-import com.huawei.hms.mlsdk.MLAnalyzerFactory
-import com.huawei.hms.mlsdk.common.MLFrame
-import com.huawei.hms.mlsdk.text.MLLocalTextSetting
-import com.huawei.hms.mlsdk.text.MLText
 import com.huawei.hms.site.api.model.Site
 import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.base.DataHolder
@@ -40,7 +35,6 @@ import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import kotlinx.android.synthetic.main.activity_detail_todo_list.*
 import kotlinx.android.synthetic.main.item_detail_toolbar.*
 import java.io.IOException
-import java.sql.Time
 import java.util.*
 
 abstract class ItemDetailBaseActivity : BaseActivity() {
@@ -67,6 +61,9 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
             noteDetailChanged = false
             isNewNote = false
             itemData.itemId = it.itemId
+            it.reminderId?.let {
+                itemData.reminder?.id=it
+            }
             onSaveSuccessful()
             customToast(getString(R.string.note_successfully_saved), false)
         }
@@ -312,7 +309,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
     }
 
     private fun checkReminderExist(){
-        if(itemData.reminder != null && itemData.itemId != -1){
+        if(itemData.reminder != null){
             customBottomDialogs(
                 this.getString(R.string.update_reminder_by_location),
                 this.getString(R.string.delete_reminder_by_time),
@@ -431,13 +428,7 @@ abstract class ItemDetailBaseActivity : BaseActivity() {
         "",
         "",
         "",
-        reminder = Reminder(-1,
-            -1,
-            "reminderTitle",
-            null,
-            null,
-            Date().formattedToString(),
-            ReminderType.ByTime)
+        reminder = null
     )
 
 

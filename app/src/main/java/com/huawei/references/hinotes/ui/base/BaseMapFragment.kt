@@ -34,9 +34,9 @@ import java.net.URLEncoder
 abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFragment(), OnMapReadyCallback,
     IPoiClickListener, HuaweiMap.OnMarkerClickListener {
     protected var hMap:HuaweiMap?=null
-    var mapViewBundle: Bundle? = null
-    var fusedLocationProviderClient : FusedLocationProviderClient ?= null
-    var settingsClient:SettingsClient ?= null
+    private var mapViewBundle: Bundle? = null
+    private var fusedLocationProviderClient : FusedLocationProviderClient ?= null
+    private var settingsClient:SettingsClient ?= null
     private var encodedApiKey:String?=null
     private var searchService: SearchService? = null
     private var markerList : ArrayList<Marker> = arrayListOf()
@@ -142,14 +142,10 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
                 clusterable(false)
             }
 
-
-            // crashed uncaughtException stacktrace is java.lang.IllegalStateException:
-            // Fragment LocationFragment{32e271} (b53af7fb-8182-43e7-b823-7816b764545e)} not attached to an activity.
-
             try {
                 (requireActivity() as? ItemDetailBaseActivity)?.let {
                     val customInfoWindow = CustomInfoWindowAdapter(
-                        it,this,mapType
+                        it
                     )
                     hMap?.apply {
                         setInfoWindowAdapter(customInfoWindow)
@@ -181,9 +177,7 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
 
             try {
                 (requireActivity() as? ItemDetailBaseActivity)?.let {
-                    val customInfoWindow = CustomInfoWindowAdapter(
-                        it,this,mapType
-                    )
+                    val customInfoWindow = CustomInfoWindowAdapter(it)
                     hMap?.apply {
                         setInfoWindowAdapter(customInfoWindow)
                         markerList.add(addMarker(options).apply {
@@ -258,10 +252,7 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         //TODO: call base detail activity map callbacks
     }
 
-    internal class CustomInfoWindowAdapter(itemDetailBaseActivity: ItemDetailBaseActivity,
-                                           private val baseMapFragment: BaseMapFragment,
-                                           private val mapType: MapType
-    ) :
+    internal class CustomInfoWindowAdapter(itemDetailBaseActivity: ItemDetailBaseActivity) :
         HuaweiMap.InfoWindowAdapter {
         private val mWindow: View = itemDetailBaseActivity.
         layoutInflater.inflate(R.layout.custom_info_window, null)
@@ -270,12 +261,6 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
             val mInfoWindow: InfoWindowData? = marker?.tag as InfoWindowData?
             mWindow.infoTile.text = marker?.title
             mWindow.infoAddress.text = mInfoWindow?.siteAddress
-            //val directionText = mWindow.findViewById<TextView>(R.id.infoGetDirections)
-            //directionText.setOnClickListener {
-            //    marker?.position?.let {
-            //        itemDetailBaseActivity.locationSelected(it.latitude,it.longitude,mapType,baseMapFragment.currentRadius)}
-            //}
-            //TODO: call base detail activity map callbacks
             return mWindow
         }
 
@@ -284,7 +269,7 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
         }
     }
 
-    fun cameraUpdate(lat:Double,lng:Double){
+    private fun cameraUpdate(lat:Double, lng:Double){
         val cameraBuild = CameraPosition.Builder().target(
             LatLng(lat, lng)
         ).zoom(17f).build()
@@ -313,7 +298,6 @@ abstract class BaseMapFragment(private var item: Item): ItemDetailBottomSheetFra
     }
 
     companion object{
-        private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
         const val API_KEY="CV8PceXOYopn/ngZDofcwgFkmqYCo+LbAqjSx+uqBmVckaFf0bNgunMln8bncm+K6LjavJR/r/8N1PVf8ZEn1aVLNDZf"
     }
 
