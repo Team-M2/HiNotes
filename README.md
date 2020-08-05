@@ -31,6 +31,8 @@ Huawei's is an advanced reference note application created with HMS kits for pho
 - For this project you have to set enable Map Kit, Site Kit, Auth Service, ML Kit
 - Than go again Project Settings page and click "agconnect-services.json" button for download json file.
 - Move to json file in base "app" folder that under your android project. (https://developer.huawei.com/consumer/en/doc/development/HMS-Guides/69407812#h1-1577692046342)
+- Go to app level gradle file and change application id of your android project. It must be same with app id on AppGallery console you defined.
+
 
 ## :milky_way: Features 
 - Sign up & Sign In with Huawei Id, Email with Password or Email Code.
