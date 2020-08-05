@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
     <application
@@ -39,7 +40,8 @@
         <receiver
             android:name=".ui.itemdetail.reminder.BroadcastReceiver"
             android:exported="false"
-            android:enabled="true">
+            android:enabled="true"
+            android:process=":remote">
         </receiver>
     </application>
 
