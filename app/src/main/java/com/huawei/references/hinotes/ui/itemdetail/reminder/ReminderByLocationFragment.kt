@@ -26,7 +26,6 @@ import com.huawei.references.hinotes.R
 import com.huawei.references.hinotes.data.item.model.Item
 import com.huawei.references.hinotes.ui.base.BaseMapFragment
 import com.huawei.references.hinotes.ui.base.ItemDetailBottomSheetType
-import com.huawei.references.hinotes.ui.base.saveLocalDb
 import com.huawei.references.hinotes.ui.itemdetail.ItemDetailBaseActivity
 import kotlinx.android.synthetic.main.reminder_by_location_fragment.view.*
 
@@ -60,7 +59,6 @@ class ReminderByLocationFragment(var item: Item) : BaseMapFragment(item), Huawei
             selectedPoi.location?.lat?.let { it1 -> getLocationInBackground(it1,
                 selectedPoi.location?.lng!!, currentRadius.toFloat()
             ) }
-            saveLocalDb(item.itemId,false,this.requireActivity())
             (activity as? ItemDetailBaseActivity)?.poiSelected(selectedPoi,MapType.GEOFENCE,currentRadius)
             this.dismiss()
         }

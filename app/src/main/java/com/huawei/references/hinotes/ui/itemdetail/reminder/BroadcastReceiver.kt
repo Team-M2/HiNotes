@@ -12,8 +12,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.huawei.hms.location.GeofenceData
 import com.huawei.references.hinotes.MainActivity
 import com.huawei.references.hinotes.R
-import com.huawei.references.hinotes.ui.base.getLocalDb
-import com.huawei.references.hinotes.ui.base.saveLocalDb
 
 
 class BroadcastReceiver : BroadcastReceiver() {
@@ -28,8 +26,6 @@ class BroadcastReceiver : BroadcastReceiver() {
             showNotification(context, reminderTitle, notificationDescription)
         }
         else if(reminderType == 0){
-            val isAvailableForNotification = getLocalDb(reminderId, context!!)
-            if(isAvailableForNotification) {
                 val action = intent.action
                 if (ACTION_PROCESS_LOCATION == action) {
                     val geofenceData = GeofenceData.getDataFromIntent(intent)
@@ -38,10 +34,7 @@ class BroadcastReceiver : BroadcastReceiver() {
                             "You have reached or left the area you have created for the $reminderTitle note."
                         showNotification(context, reminderTitle, notificationDescription)
                     }
-                }
-            }
-            else{
-                saveLocalDb(reminderId,true,context)
+
             }
         }
     }
