@@ -5,7 +5,7 @@
     <color name="colorAccent">#2196F3</color>
     <color name="text_white">#fff</color>
     <color name="warning_red">#F00505</color>
-    <color name="image_flag">#CC0E0E</color>
+    <color name="image_flag">#EF3A3A</color>
     <color name="btn_blue">#456E94</color>
 
     <color name="colorRecyclerViewLine">#EDEDED</color>

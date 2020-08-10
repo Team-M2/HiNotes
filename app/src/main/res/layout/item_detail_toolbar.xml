@@ -41,7 +41,7 @@
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toStartOf="@+id/add_reminder"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/delete_icon" />
+        app:srcCompat="@drawable/delete_iconv2" />
 
     <ImageView
         android:id="@+id/microphone_icon"
@@ -77,7 +77,7 @@
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toStartOf="@+id/image_icon"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/location_icon" />
+        app:srcCompat="@drawable/location_iconv2" />
 
     <ImageView
         android:id="@+id/back_button"
